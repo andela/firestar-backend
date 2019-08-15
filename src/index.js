@@ -9,6 +9,8 @@ const fs = require("fs"),
     passport = require("passport"),
     errorhandler = require("errorhandler"),
     mongoose = require("mongoose");
+    swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
 
 const isProduction = process.env.NODE_ENV === "production";
 
