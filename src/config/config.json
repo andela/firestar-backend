@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "anuoluwa",
-    "database": "barefoot_nomad",
+    "database": "barefoot",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
