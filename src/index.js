@@ -19,6 +19,10 @@ const app = express();
 
 app.use(cors());
 
+// swagger config middlewares 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/v1', router);
+
 // Normal express config defaults
 app.use(require("morgan")("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
