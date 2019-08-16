@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
-import { Router } from 'express'
-import passport from 'passport'
+import mongoose from 'mongoose';
+import { Router } from 'express';
+import passport from 'passport';
 
 const router = Router();
 const User = mongoose.model("User");
@@ -86,4 +86,4 @@ router.post("/users", function(req, res, next) {
         .catch(next);
 });
 
-export default router
+export default router;

@@ -18,4 +18,4 @@ router.use(function(err, req, res, next) {
     return next(err);
 });
 
-export default router
+export default router;

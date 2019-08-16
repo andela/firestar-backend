@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
-import uniqueValidator from 'mongoose-unique-validator'
-import crypto from 'crypto'
+import mongoose from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
+import crypto from 'crypto';
 import { secret } from '../config';
 
 const UserSchema = new mongoose.Schema(

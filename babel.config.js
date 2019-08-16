@@ -1,5 +1,5 @@
-module.exports = (api) => {
-  api.cache(true)
+module.exports = function (api) {
+  api.cache(true);
   return {
     presets: [
       [
@@ -15,5 +15,5 @@ module.exports = (api) => {
       '@babel/plugin-proposal-nullish-coalescing-operator',
       '@babel/plugin-proposal-optional-chaining',
     ],
-  }
-}
+  };
+};
