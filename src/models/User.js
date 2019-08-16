@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require('crypto');
-const { secret } = require('../config');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -33,25 +32,23 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' });
 
-UserSchema.methods.validPassword = function (password) {
+UserSchema.methods.validPassword = (password) => {
   const hash = crypto
     .pbkdf2Sync(password, this.salt, 10000, 512, 'sha512')
     .toString('hex');
   return this.hash === hash;
 };
 
-UserSchema.methods.setPassword = function (password) {
+UserSchema.methods.setPassword = (password) => {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto
     .pbkdf2Sync(password, this.salt, 10000, 512, 'sha512')
     .toString('hex');
 };
 
-UserSchema.methods.toAuthJSON = function () {
-  return {
-    username: this.username,
-    email: this.email
-  };
-};
+UserSchema.methods.toAuthJSON = () => ({
+  username: this.username,
+  email: this.email
+});
 
 mongoose.model('User', UserSchema);
