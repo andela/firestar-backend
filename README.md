@@ -6,8 +6,11 @@ Make company global travel and accommodation easy and convenient for the strong 
 
 ---
 
+<<<<<<< HEAD
 ### API DOCUMENTATION
  [Endpoint Documentation](http://localhost:3000/api-docs/)
+=======
+>>>>>>> acd75a75f24e69dce9fdbea3fa210dde5f73d91c
 
 
 ### HOW TO USE THE DOTENV PACKAGE TO SET AND GET ENVIRONMENT VARIABLES
