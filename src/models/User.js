@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
-const crypto = require("crypto");
-const secret = require("../config").secret;
+import mongoose from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
+import crypto from 'crypto';
+import { secret } from '../config';
 
 const UserSchema = new mongoose.Schema(
     {
