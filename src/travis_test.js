@@ -1,3 +1,3 @@
-const sayhello = (str) => str;
+var sayhello = (str) => str;
 
 module.exports = sayhello;
