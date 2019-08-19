@@ -3,7 +3,6 @@ import { Router } from 'express';
 import passport from 'passport';
 
 const router = Router();
-const User = mongoose.model("User");
 
 const User = mongoose.model('User');
 

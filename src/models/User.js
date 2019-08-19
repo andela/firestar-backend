@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 import crypto from 'crypto';
-import { secret } from '../config';
 
 const UserSchema = new mongoose.Schema(
   {
@@ -9,26 +8,34 @@ const UserSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       unique: true,
-      required: [true, "can't be blank"],
+      required: [true, 'can\'t be blank'],
       match: [/^[a-zA-Z0-9]+$/, 'is invalid'],
-      index: true
+      index: true,
     },
     email: {
       type: String,
       lowercase: true,
       unique: true,
-      required: [true, "can't be blank"],
+      required: [true, 'can\'t be blank'],
       match: [/\S+@\S+\.\S+/, 'is invalid'],
-      index: true
+      index: true,
     },
     bio: String,
     image: String,
-    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
-    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Article',
+      }],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      }],
     hash: String,
-    salt: String
+    salt: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' });
@@ -41,7 +48,8 @@ UserSchema.methods.validPassword = (password) => {
 };
 
 UserSchema.methods.setPassword = (password) => {
-  this.salt = crypto.randomBytes(16).toString('hex');
+  this.salt = crypto.randomBytes(16)
+    .toString('hex');
   this.hash = crypto
     .pbkdf2Sync(password, this.salt, 10000, 512, 'sha512')
     .toString('hex');
@@ -49,7 +57,7 @@ UserSchema.methods.setPassword = (password) => {
 
 UserSchema.methods.toAuthJSON = () => ({
   username: this.username,
-  email: this.email
+  email: this.email,
 });
 
 mongoose.model('User', UserSchema);

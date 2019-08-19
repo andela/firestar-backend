@@ -1,3 +1,3 @@
-export const sayHello = (str) => str;
+const sayHello = (str) => str;
 
 export default sayHello;

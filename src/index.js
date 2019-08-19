@@ -1,21 +1,17 @@
-import fs from 'fs';
-import http from 'http';
-import path from 'path';
-import methods from 'methods';
-import dotenv from 'dotenv';
+import dotEnv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
-import cors from 'cors';
-import passport from 'passport';
-import errorhandler from 'errorhandler';
+import errorHandler from 'errorhandler';
 import mongoose from 'mongoose';
-import method_override from 'method-override';
+import methodOverride from 'method-override';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
+import Log from 'debug';
 import routes from './routes';
-import models from './models/User';
 import swaggerDocument from '../swagger.json';
+
+const serverLog = Log('server');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -32,14 +28,14 @@ const app = express();
 // swagger config middlewares
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Configure dotenv
-dotenv.config();
+// Configure dotEnv
+dotEnv.config();
 // Normal express config defaults
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(method_override());
+app.use(methodOverride());
 app.use(express.static(`${__dirname}/public`));
 
 app.use(
@@ -47,12 +43,12 @@ app.use(
     secret: 'authorshaven',
     cookie: { maxAge: 60000 },
     resave: false,
-    saveUninitialized: false
-  })
+    saveUninitialized: false,
+  }),
 );
 
 if (!isProduction) {
-  app.use(errorhandler());
+  app.use(errorHandler());
 }
 
 app.use(routes);
@@ -69,33 +65,35 @@ app.use((req, res, next) => {
 // development error handler
 // will print stacktrace
 if (!isProduction) {
+  // eslint-disable-next-line no-unused-vars
   app.use((err, req, res, next) => {
-    console.log(err.stack);
+    serverLog(err.stack);
 
     res.status(err.status || 500);
 
     res.json({
       errors: {
         message: err.message,
-        error: err
-      }
+        error: err,
+      },
     });
   });
 }
 
 // production error handler
 // no stacktraces leaked to user
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({
     errors: {
       message: err.message,
-      error: {}
-    }
+      error: {},
+    },
   });
 });
 
 // finally, let's start our server...
-var server = app.listen(process.env.PORT || 3000, () => {
-  console.log(`Listening on port ${server.address().port}`);
+const server = app.listen(process.env.PORT || 3000, () => {
+  serverLog(`Listening on port ${server.address().port}`);
 });
