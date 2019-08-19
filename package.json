@@ -4,8 +4,8 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha src/__tests__/index.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "test": "cross-env NODE_ENV=development nyc mocha src/__tests__/index.js --require @babel/register --require @babel/polyfill",
     "build": "babel ./src -d dist",
     "start": "node dist/index.js",
     "start:dev": "nodemon --exec babel-node -- src/index.js"
@@ -16,6 +16,7 @@
     "body-parser": "^1.18.3",
     "core-js": "^3.2.1",
     "cors": "^2.8.4",
+    "cross-env": "^5.2.0",
     "dotenv": "^6.0.0",
     "ejs": "^2.6.1",
     "errorhandler": "^1.5.0",
@@ -39,6 +40,7 @@
     "coveralls": "^3.0.6",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
+    "chai": "^4.2.0",
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
