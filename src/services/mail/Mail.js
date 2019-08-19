@@ -43,7 +43,8 @@ class Mail {
 		};
 
 		try {
-			await transporter.sendMail(mailOptions);
+            const response = await transporter.sendMail(mailOptions);
+            console.log(response)
 		} catch (error) {
 			console.log(error.message);
 		}
