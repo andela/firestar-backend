@@ -1,13 +1,13 @@
-const fs = require('fs'),
+var fs = require('fs'),
   http = require('http'),
   path = require('path'),
-  dotenv = require('dotenv')
-  express = require('express');
+  dotenv = require('dotenv'),
+  express = require('express'),
   swaggerUi = require('swagger-ui-express'),
   swaggerDocument = require('../swagger.json');
 
 // Create global app object
-const app = express();
+var app = express();
 
 
 // swagger config middlewares
@@ -17,6 +17,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 dotenv.config();
 
 // finally, let's start our server...
-const server = app.listen(process.env.PORT || 3000, function() {
+var server = app.listen(process.env.PORT || 3000, function() {
   console.log('Listening on port ' + server.address().port);
 });
