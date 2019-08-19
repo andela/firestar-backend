@@ -10,10 +10,10 @@ module.exports = {
     "operatorsAliases": false
   },
   "test": {
-    "username": process.env.DB_USER,
-    "password": process.env.DB_PASS,
-    "database": process.env.DB_NAME,
-    "host": process.env.DB_HOST,
+    "username": process.env.DB_TEST_USER,
+    "password": process.env.DB_TEST_PASS,
+    "database": process.env.DB_TEST_NAME,
+    "host": process.env.DB_TEST_HOST,
     "dialect": "postgres",
     "operatorsAliases": false
   },
