@@ -1,9 +1,9 @@
-var testFunc = require('../src/travis_test');
-var chai = require('chai');
-var assert = chai.assert;
-describe('Travis ', function () {
-    it('Should be equal', function () {
-        assert.equal(testFunc(200), 200, 'The values should be equal');
+import sayHello from '../src/travis_test';
+import chai from 'chai';
+const assert = chai.assert;
+describe('Travis ', () => {
+    it('Should be equal', () => {
+        assert.equal(sayHello(200), 200, 'The values should be equal');
     });
 
 });

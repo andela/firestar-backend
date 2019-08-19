@@ -1,3 +1,3 @@
-var sayhello = (str) => str;
+export const sayHello = (str) => str;
 
-module.exports = sayhello;
+export default sayHello;
