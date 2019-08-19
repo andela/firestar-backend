@@ -1,4 +1,5 @@
 Barefoot Nomad - Making company travel and accomodation easy and convinient.
+[![Coverage Status](https://coveralls.io/repos/github/andela/firestar-backend/badge.svg?branch=stage)](https://coveralls.io/github/andela/firestar-backend?branch=stage)
 =======
 
 ## Vision
