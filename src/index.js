@@ -1,38 +1,39 @@
-import fs from 'fs';
-import http from 'http';
-import path from 'path';
-import methods from 'methods';
-import express from 'express';
-import bodyParser from 'body-parser';
-import session from 'express-session';
-import cors from 'cors';
-import passport from 'passport';
-import errorhandler from 'errorhandler';
-import mongoose from 'mongoose';
-import models from './models/User';
-import routes from './routes';
-import method_override from 'method-override';
-import morgan from 'morgan';
-import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from '../swagger.json';
+import fs from "fs";
+import http from "http";
+import path from "path";
+import methods from "methods";
+import dotenv from "dotenv";
+import express from "express";
+import bodyParser from "body-parser";
+import session from "express-session";
+import cors from "cors";
+import passport from "passport";
+import errorhandler from "errorhandler";
+import mongoose from "mongoose";
+import models from "./models/User";
+import routes from "./routes";
+import method_override from "method-override";
+import morgan from "morgan";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "../swagger.json";
 
 const isProduction = process.env.NODE_ENV === "production";
 
 if (isProduction) {
-    mongoose.connect(process.env.MONGODB_URI);
+  mongoose.connect(process.env.MONGODB_URI);
 } else {
-    mongoose.connect("mongodb://localhost/conduit");
-    mongoose.set("debug", true);
+  mongoose.connect("mongodb://localhost/conduit");
+  mongoose.set("debug", true);
 }
 
 // Create global app object
-const app = express();
-
-app.use(cors());
+var app = express();
 
 // swagger config middlewares
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+// Configure dotenv
+dotenv.config();
 // Normal express config defaults
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -43,22 +44,22 @@ app.use(express.static(__dirname + "/public"));
 
 app.use(
   session({
-    secret: 'authorshaven',
-    cookie: {maxAge: 60000},
+    secret: "authorshaven",
+    cookie: { maxAge: 60000 },
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: false
   })
 );
 
 if (!isProduction) {
-    app.use(errorhandler());
+  app.use(errorhandler());
 }
 
 app.use(routes);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  const err = new Error('Not Found');
+  const err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
@@ -76,8 +77,8 @@ if (!isProduction) {
     res.json({
       errors: {
         message: err.message,
-        error: err,
-      },
+        error: err
+      }
     });
   });
 }
@@ -89,12 +90,12 @@ app.use(function(err, req, res, next) {
   res.json({
     errors: {
       message: err.message,
-      error: {},
-    },
+      error: {}
+    }
   });
 });
 
 // finally, let's start our server...
-const server = app.listen(process.env.PORT || 3000, function() {
-  console.log('Listening on port ' + server.address().port);
+var server = app.listen(process.env.PORT || 3000, function() {
+  console.log("Listening on port " + server.address().port);
 });
