@@ -1,18 +1,29 @@
-const fs = require('fs'),
-  http = require('http'),
-  path = require('path'),
-  methods = require('methods'),
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  session = require('express-session'),
-  cors = require('cors'),
-  passport = require('passport'),
-  errorhandler = require('errorhandler'),
-  mongoose = require('mongoose');
-  swaggerUi = require('swagger-ui-express'),
-  swaggerDocument = require('../swagger.json');
+import fs from 'fs';
+import http from 'http';
+import path from 'path';
+import methods from 'methods';
+import express from 'express';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import cors from 'cors';
+import passport from 'passport';
+import errorhandler from 'errorhandler';
+import mongoose from 'mongoose';
+import method_override from 'method-override';
+import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import routes from './routes';
+import models from './models/User';
+import swaggerDocument from '../swagger.json';
 
 const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction) {
+  mongoose.connect(process.env.MONGODB_URI);
+} else {
+  mongoose.connect('mongodb://localhost/conduit');
+  mongoose.set('debug', true);
+}
 
 // Create global app object
 const app = express();
@@ -23,13 +34,11 @@ app.use(cors());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Normal express config defaults
-app.use(require('morgan')('dev'));
-
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(require('method-override')());
-
+app.use(method_override());
 app.use(express.static(`${__dirname}/public`));
 
 app.use(
@@ -45,16 +54,7 @@ if (!isProduction) {
   app.use(errorhandler());
 }
 
-if (isProduction) {
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect('mongodb://localhost/conduit');
-  mongoose.set('debug', true);
-}
-
-require('./models/User');
-
-app.use(require('./routes'));
+app.use(routes);
 
 // / catch 404 and forward to error handler
 app.use((req, res, next) => {
