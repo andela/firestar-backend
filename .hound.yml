@@ -1,4 +1,2 @@
-eslint:
-  enabled: true
-  config_file: .eslintrc
-  igonre_file: .eslintignore
+jshint:
+  config_file: .jshintrc
