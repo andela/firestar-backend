@@ -1,7 +1,9 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import Debug from 'debug';
 
 dotenv.config();
+const debug = new Debug('dev');
 
 const smtpTransport = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -16,17 +18,18 @@ const smtpTransport = nodemailer.createTransport({
   },
 });
 
+const expiry = (process.env.TOKENEXPIRY)/60/60;
+
 const sendResetMail = (user, resetToken) => {
     const mailOptions = {
       from: process.env.EMAIL,
       to: user.email,
       subject: 'Reset password',
-      html: `${'<h4><b>Reset Password</b></h4>'
-                      + '<p>To reset your password, click link to complete this form:</p>'
-                      + '<a href='}${process.env.CLIENT_URL}/resetpassword/${user.user_id}/${resetToken}">${process.env.CLIENT_URL}/resetpassword/${user.id}/${resetToken}</a>`
-                      + '<p>This link expires in 5 hours<p>'
-                      + '<br><br>'
-                      + '<p>--Team</p>',
+      html: `${'<h4><b>Reset Password</b></h4>' + 
+                '<p>To reset your password, click link to complete this form:</p>' + 
+                '<a href='}${process.env.CLIENT_URL}/resetpassword/${user.user_id}/${resetToken}">${process.env.CLIENT_URL}/resetpassword/${user.id}/${resetToken}</a>` + 
+                '<p>This link expires in ${expiry} hours<p>' + 
+                '<br><br>' + '<p>--Team</p>',
     };
     try {
       await smtpTransport.sendMail(mailOptions, (info) => {
