@@ -8,12 +8,9 @@ Make company global travel and accommodation easy and convenient for the strong 
 ---
 
 [![Build Status](https://travis-ci.com/andela/firestar-backend.svg?branch=stage)](https://travis-ci.com/andela/firestar-backend)
-<<<<<<< HEAD
 [![Coverage Status](https://coveralls.io/repos/github/andela/firestar-backend/badge.svg?branch=stage)](https://coveralls.io/github/andela/firestar-backend?branch=stage)
-=======
 
 [![](https://img.shields.io/badge/Protected_by-Hound-a873d1.svg)](https://houndci.com)
->>>>>>> af8d63453de691dd7ba627e511257f08463be352
 
 ### API DOCUMENTATION
 
