@@ -11,6 +11,10 @@ import Hash from "../../utils/hash";
 const router = Router();
 
 const User = mongoose.model("User");
+const Login = mongoose.model("User");
+const Reset = mongoose.model("User");
+
+
 
 router.get("/user", (req, res, next) => {
   User.findById(req.payload.id)
@@ -173,7 +177,6 @@ router.post("/resetpassword/:user_id/:resetToken", (req, res, next) => {
         moment().isBefore(expireTime) &&
         Hash.compareWithHash(resetToken, user.resetToken)
       ) {
-        const newPassword = Hash.hashPassword(password);
         // Store hash of new password in login
         Hash.hashPassword(password)
           .then(hash => {
@@ -183,15 +186,15 @@ router.post("/resetpassword/:user_id/:resetToken", (req, res, next) => {
               logged_in: false,
               last_login: new Date()
             });
-            // Delete reset request from database
           })
+          // Delete reset request from database
           .then(data => Reset.destroy({ where: { email: data.email } }))
           .catch(error => errorResponse(res, 500, error));
-        return successResponse(res, 200, ["Password Updated successfully"]);
+        return successResponse(res, 200, "Password Updated successfully");
       }
-      return errorResponse(res, 400, ["Invalid or expired reset token"]);
+      return errorResponse(res, 400, "Invalid or expired reset token");
     }
-    return errorResponse(res, 400, ["Invalid or expired reset token"]);
+    return errorResponse(res, 400, "Invalid or expired reset token");
   });
 });
 
