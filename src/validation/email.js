@@ -6,10 +6,10 @@ const validateEmail = ({ email }) => {
 
   email = !isEmpty(email) ? email : "";
 
-  if (Validator.isEmpty(email)) {
+  if (isEmpty(email)) {
     errors.email = "Email is required";
   } else {
-    if (!Validator.isValidEmail(email)) {
+    if (!isValidEmail(email)) {
       errors.email = "Email is not valid";
     }
   }

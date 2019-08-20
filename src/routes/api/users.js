@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
 import { Router } from "express";
 import passport from "passport";
+import moment from "moment";
+import crypto from "crypto";
 import Validation from "../../validation";
 import { sendResetMail, sendSignupMail } from "../../services/sendMail";
 import { errorResponse, successResponse } from "../../utils/response";
+import Hash from "../../utils/hash";
 
 const router = Router();
 
@@ -141,6 +144,54 @@ router.post("/forgotpassword", (req, res, next) => {
           });
         });
       });
+  });
+});
+
+// @route POST /api/v1/users/resetpassword/:id/:restToken
+// @desc Resets a User Password / Returns a new Password
+// @access Public
+router.post("/resetpassword/:user_id/:resetToken", (req, res, next) => {
+  const { errors, isValid } = Validation.validatePassword(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return errorResponse(res, 400, errors);
+  }
+
+  const { user_id, resetToken } = req.params;
+  const { password } = req.body;
+
+  // Find user by email
+  Reset.find({ user_id }).then(user => {
+    // Check if user has requested password reset
+    if (user) {
+      // Check if reset token is not expired
+      const expireTime = moment.utc(user.expire_time);
+
+      // If reset link is valid and not expired
+      if (
+        moment().isBefore(expireTime) &&
+        Hash.compareWithHash(resetToken, user.resetToken)
+      ) {
+        const newPassword = Hash.hashPassword(password);
+        // Store hash of new password in login
+        Hash.hashPassword(password)
+          .then(hash => {
+            Login.update({
+              token: "",
+              password: hash,
+              logged_in: false,
+              last_login: new Date()
+            });
+            // Delete reset request from database
+          })
+          .then(data => Reset.destroy({ where: { email: data.email } }))
+          .catch(error => errorResponse(res, 500, error));
+        return successResponse(res, 200, ["Password Updated successfully"]);
+      }
+      return errorResponse(res, 400, ["Invalid or expired reset token"]);
+    }
+    return errorResponse(res, 400, ["Invalid or expired reset token"]);
   });
 });
 
