@@ -1,4 +1,8 @@
 import { equal } from 'assert';
+import dotenv from 'dotenv';
+
+dotenv.config();
+process.env.NODE_ENV = 'test';
 
 describe('Array', () => {
   describe('#indexOf()', () => {
