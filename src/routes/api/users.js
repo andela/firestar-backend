@@ -1,14 +1,17 @@
-import mongoose from 'mongoose';
-import { Router } from 'express';
-import passport from 'passport';
+import mongoose from "mongoose";
+import { Router } from "express";
+import passport from "passport";
+import Validation from "../../validation";
+import { sendResetMail, sendSignupMail } from "../../services/sendMail";
+import { errorResponse, successResponse } from "../../utils/response";
 
 const router = Router();
 
-const User = mongoose.model('User');
+const User = mongoose.model("User");
 
-router.get('/user', (req, res, next) => {
+router.get("/user", (req, res, next) => {
   User.findById(req.payload.id)
-    .then((user) => {
+    .then(user => {
       if (!user) {
         return res.sendStatus(401);
       }
@@ -17,27 +20,27 @@ router.get('/user', (req, res, next) => {
     .catch(next);
 });
 
-router.put('/user', (req, res, next) => {
+router.put("/user", (req, res, next) => {
   User.findById(req.payload.id)
-    .then((user) => {
+    .then(user => {
       if (!user) {
         return res.sendStatus(401);
       }
 
       // only update fields that were actually passed...
-      if (typeof req.body.user.username !== 'undefined') {
+      if (typeof req.body.user.username !== "undefined") {
         user.username = req.body.user.username;
       }
-      if (typeof req.body.user.email !== 'undefined') {
+      if (typeof req.body.user.email !== "undefined") {
         user.email = req.body.user.email;
       }
-      if (typeof req.body.user.bio !== 'undefined') {
+      if (typeof req.body.user.bio !== "undefined") {
         user.bio = req.body.user.bio;
       }
-      if (typeof req.body.user.image !== 'undefined') {
+      if (typeof req.body.user.image !== "undefined") {
         user.image = req.body.user.image;
       }
-      if (typeof req.body.user.password !== 'undefined') {
+      if (typeof req.body.user.password !== "undefined") {
         user.setPassword(req.body.user.password);
       }
 
@@ -46,7 +49,7 @@ router.put('/user', (req, res, next) => {
     .catch(next);
 });
 
-router.post('/users/login', (req, res, next) => {
+router.post("/users/login", (req, res, next) => {
   if (!req.body.user.email) {
     return res.status(422).json({ errors: { email: "can't be blank" } });
   }
@@ -54,11 +57,7 @@ router.post('/users/login', (req, res, next) => {
   if (!req.body.user.password) {
     return res.status(422).json({ errors: { password: "can't be blank" } });
   }
-  passport.authenticate('local', { session: false }, (
-    err,
-    user,
-    info
-  ) => {
+  passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err) {
       return next(err);
     }
@@ -70,16 +69,79 @@ router.post('/users/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.post('/users', (req, res, next) => {
+router.post("/users", (req, res, next) => {
   const user = new User();
 
   user.username = req.body.user.username;
   user.email = req.body.user.email;
   user.setPassword(req.body.user.password);
 
-  user.save()
+  user
+    .save()
     .then(() => res.json({ user: user.toAuthJSON() }))
     .catch(next);
+});
+
+// @route POST /api/v1/users/forgotpassword
+// @desc Generate User Password Reset / Returning JWT Token
+// @access Public
+router.post("/forgotpassword", (req, res, next) => {
+  const { errors, isValid } = Validation.validateEmail(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return errorResponse(res, 400, errors);
+  }
+
+  const email = req.body.email;
+
+  // Find user by email
+  User.find({ email }).then(user => {
+    // Check for user
+    if (!user) {
+      return sendSignupMail(user);
+    }
+
+    const newReset = new Reset({
+      user_id: user.user_id,
+      email: req.body.email,
+      resetToken: "",
+      created_on: new Date(),
+      expire_time: moment.utc().add(process.env.TOKENEXPIRY, "seconds")
+    });
+
+    // Generate Reset token
+    crypto
+      .randomBytes(32)
+      .toString("hex")
+      .then(resetToken => {
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(resetToken, salt, (err, hash) => {
+            if (err) throw err;
+            newReset.resetToken = hash;
+            // Remove all reset token for this user if it exists
+            Reset.destroy({
+              where: {
+                email: newReset.email
+              }
+            }).then(() =>
+              newReset
+                .save()
+                // Send reset link to user email
+                .then(newReset => sendResetMail(userFound, newReset.resetToken))
+                .then(() =>
+                  successResponse(
+                    res,
+                    200,
+                    "Check your mail further instruction"
+                  )
+                )
+                .catch(error => errorResponse(res, 500, error))
+            );
+          });
+        });
+      });
+  });
 });
 
 export default router;
