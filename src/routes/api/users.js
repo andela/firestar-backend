@@ -1,10 +1,7 @@
-import mongoose from 'mongoose';
 import { Router } from 'express';
 import passport from 'passport';
 
 const router = Router();
-
-const User = mongoose.model('User');
 
 router.get('/user', (req, res, next) => {
   User.findById(req.payload.id)

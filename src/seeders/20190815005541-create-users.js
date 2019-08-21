@@ -1,8 +1,7 @@
 'use strict'
-// import faker from 'faker';
-const faker = require('faker');
+import faker from 'faker';
+// const faker = require('faker');
 
-console.log(faker.name.firstName())
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Users', [{
