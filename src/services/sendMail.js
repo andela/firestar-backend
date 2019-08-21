@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import Debug from "debug";
+import { successResponse } from "../utils/response";
 
 const debug = new Debug("dev");
 
@@ -46,6 +47,12 @@ const sendResetMail = async (user, resetToken) => {
   }
 };
 
-const sendSignupMail = user => {};
+const sendSignupMail = (res, user) => {
+  successResponse(
+    res,
+    200,
+    "Would have sent you a mail but we just encountered a problem"
+  );
+};
 
 export { sendResetMail, sendSignupMail };

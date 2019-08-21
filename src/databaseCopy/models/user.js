@@ -3,6 +3,13 @@
 // define the Users model with its content
 const users = (sequelize, DataTypes) => {
   const User = sequelize.define("user", {
+    user_id: {
+      type: DataTypes.INTEGER,
+      unique: true,
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true
+    },
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -11,14 +18,6 @@ const users = (sequelize, DataTypes) => {
       validate: {
         notEmpty: true,
         isEmail: true
-      }
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [7, 42]
       }
     },
     phoneNumber: {

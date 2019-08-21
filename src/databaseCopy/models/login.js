@@ -11,7 +11,12 @@ const login = (sequelize, DataTypes) => {
       isEmail: true
     },
     password: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [4, 42]
+      }
     },
     last_login: {
       type: DataTypes.DATE

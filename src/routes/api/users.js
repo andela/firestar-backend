@@ -98,13 +98,14 @@ router.post("/forgotpassword", (req, res, next) => {
     return errorResponse(res, 400, errors);
   }
 
-  const email = req.body.email;
+  const { email } = req.body;
+  console.log("email ", email);
 
   // Find user by email
-  User.find({ email }).then(user => {
+  User.findOne({ where: { email } }).then(user => {
     // Check for user
     if (!user) {
-      return sendSignupMail(user);
+      return sendSignupMail(res, user);
     }
 
     const newReset = new Reset({
@@ -122,6 +123,7 @@ router.post("/forgotpassword", (req, res, next) => {
       .then(resetToken => {
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(resetToken, salt, (err, hash) => {
+            console.log("hash", hash);
             if (err) throw err;
             newReset.resetToken = hash;
             // Remove all reset token for this user if it exists
