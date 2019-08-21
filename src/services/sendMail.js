@@ -38,9 +38,7 @@ const sendResetMail = async (user, resetToken) => {
       "<p>--Team</p>"
   };
   try {
-    await smtpTransport.sendMail(mailOptions, info => {
-      debug("INFO", info);
-    });
+    await smtpTransport.sendMail(mailOptions, info);
   } catch (error) {
     debug("ERROR IN SENDING EMAIL", error);
     return "sent";

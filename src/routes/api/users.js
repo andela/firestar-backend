@@ -10,9 +10,9 @@ import models from "../../databaseCopy/models";
 
 const router = Router();
 
-const User = models["User"];
-const Login = models["Login"];
-const Reset = models["Reset"];
+const User = models.User;
+const Login = models.Login;
+const Reset = models.Reset;
 
 router.get("/user", (req, res, next) => {
   User.findById(req.payload.id)
@@ -111,43 +111,41 @@ router.post("/forgotpassword", (req, res, next) => {
     const newReset = new Reset({
       user_id: user.user_id,
       email: req.body.email,
-      resetToken: "",
+      reset_token: "",
       created_on: new Date(),
-      expire_time: moment.utc().add(process.env.TOKENEXPIRY, "seconds")
+      expire_time: moment
+        .utc()
+        .add(process.env.TOKENEXPIRY, "seconds")
+        .toLocaleString()
     });
 
     // Generate Reset token
-    crypto
-      .randomBytes(32)
-      .toString("hex")
-      .then(resetToken => {
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(resetToken, salt, (err, hash) => {
-            console.log("hash", hash);
-            if (err) throw err;
-            newReset.resetToken = hash;
-            // Remove all reset token for this user if it exists
-            Reset.destroy({
-              where: {
-                email: newReset.email
-              }
-            }).then(() =>
-              newReset
-                .save()
-                // Send reset link to user email
-                .then(newReset => sendResetMail(userFound, newReset.resetToken))
-                .then(() =>
-                  successResponse(
-                    res,
-                    200,
-                    "Check your mail further instruction"
-                  )
-                )
-                .catch(error => errorResponse(res, 500, error))
-            );
-          });
-        });
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    Hash.hash(resetToken).then(resetToken => {
+      newReset.reset_token = resetToken;
+      console.log(newReset.dataValues.email);
+      // Remove all reset token for this user if it exists
+      Reset.findOne({
+        where: {
+          email: newReset.dataValues.email
+        }
+      }).then(result => {
+        return Reset.destroy({
+          where: { email: newReset.dataValues.email }
+        })
+          .then(() => {
+            models.Reset.create(newReset)
+              // Send reset link to user email
+              .then(() => {
+                sendResetMail(user.dataValues, newReset.dataValues.reset_token);
+              });
+          })
+          .then(() =>
+            successResponse(res, 200, "Check your mail for further instruction")
+          )
+          .catch(error => errorResponse(res, 500, error));
       });
+    });
   });
 });
 
