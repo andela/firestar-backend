@@ -9,6 +9,9 @@ const emailVerifyToken = id => new Promise((resolve, reject) => {
 	if (!token) reject({ err: 'could not assign a token, make sure you provide a secret key' });
 });
 
+const arrayTest = (array, index) => array.indexOf(index);
 
 
-export { emailVerifyToken };
+
+export { emailVerifyToken, arrayTest };
+
