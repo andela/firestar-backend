@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import {SendEmail} from '../../controllers/user';
-
+import { SendVerificationEmail } from '../../middlewares/mail';
+import { signUp } from '../../controllers/user';
 const router = Router();
 
-router.post('/email-test', SendEmail);
+router.post('/email-test',SendVerificationEmail, signUp);
 
 export default router;

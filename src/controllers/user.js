@@ -1,40 +1,18 @@
-import {verifyEmail} from '../services/mail/template/verifyEmail'
-import { emailVerifyToken} from '../utils/index';
-import { Mail } from '../services/mail/Mail';
 
-const SendEmail = async (req,res)=>{
-    let { email, first_name, last_name} = req.body;
-    email = email.trim();
-    first_name = first_name.trim();
-    last_name = last_name.trim();
-    const id = 'some_encoded_identiity';
-    const token = await emailVerifyToken(id);
-		const email_details = {
-			Subject: 'Email Verification',
-			Recipient: 'akp.ani@yahoo.com',
-		};
-		const link = `http://localhost:3000/api/v1/auth/verify?id=${token}`;
-		const data = {
-			email,
-			first_name,
-			last_name,
-			link,
-		};
+const signUp = async (req,res)=>{
+  const { verificationMailResponse}  = req;
         
     try{
-        const send = new Mail(email_details, verifyEmail(data));
-        const { response } = await send.main();
-
-        if(response){
-            return res.status(200).json({status:200,data:{message:'Message successfully sent, please check your email', response}})
-        }
+       return res.status(200).json({status:200,data:{message:
+        'Message successfully sent, please check your email', verificationMailResponse}})
     	
     } catch(err){
+      console.log(err)
       return  res.status(400).json({status:400,error:'An Error occured during the process.'})
     }
 	
 };
 
 
-export { SendEmail }
+export { signUp }
 
