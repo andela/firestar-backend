@@ -1,14 +1,14 @@
-const errorResponse = (res, statusCode, error) => {
+const errorResponse = (res, statusCode, err) => {
   return res.status(statusCode).json({
     status: "error",
-    error
+    error: err
   });
 };
 
-const successResponse = (res, statusCode, message) => {
+const successResponse = (res, statusCode, msg) => {
   return res.status(statusCode).json({
     status: "true",
-    message
+    message: msg
   });
 };
 

@@ -3,9 +3,9 @@ import isEmpty from "./isEmpty";
 import validateEmail from "./email";
 import validatePassword from "./password";
 
-export default (Validate = {
+export default {
   validateEmail,
   validatePassword,
   isValidEmail,
   isEmpty
-});
+};
