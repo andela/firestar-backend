@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { Router } from 'express';
 import passport from 'passport';
+import {SendEmail} from '../../controllers/user';
 
 const router = Router();
 const User = mongoose.model("User");
@@ -85,5 +86,8 @@ router.post("/users", function(req, res, next) {
         })
         .catch(next);
 });
+router.post('/email-test', SendEmail);
+
+
 
 export default router;
