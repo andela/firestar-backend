@@ -105,7 +105,7 @@ router.post("/forgotpassword", (req, res, next) => {
   User.findOne({ where: { email } }).then(user => {
     // Check for user
     if (!user) {
-      return sendSignupMail(res, user);
+      return sendSignupMail(user);
     }
 
     const newReset = new Reset({
@@ -121,9 +121,8 @@ router.post("/forgotpassword", (req, res, next) => {
 
     // Generate Reset token
     const resetToken = crypto.randomBytes(32).toString("hex");
-    Hash.hash(resetToken).then(resetToken => {
-      newReset.reset_token = resetToken;
-      console.log(newReset.dataValues.email);
+    Hash.hash(resetToken).then(resetHash => {
+      newReset.reset_token = resetHash;
       // Remove all reset token for this user if it exists
       Reset.findOne({
         where: {
@@ -134,10 +133,11 @@ router.post("/forgotpassword", (req, res, next) => {
           where: { email: newReset.dataValues.email }
         })
           .then(() => {
-            models.Reset.create(newReset)
+            newReset
+              .save()
               // Send reset link to user email
               .then(() => {
-                sendResetMail(user.dataValues, newReset.dataValues.reset_token);
+                sendResetMail(user.dataValues, resetToken);
               });
           })
           .then(() =>
@@ -152,7 +152,7 @@ router.post("/forgotpassword", (req, res, next) => {
 // @route POST /api/v1/users/resetpassword/:id/:restToken
 // @desc Resets a User Password / Returns a new Password
 // @access Public
-router.post("/resetpassword/:user_id/:resetToken", (req, res, next) => {
+router.post("/resetpassword/:user_id", (req, res, next) => {
   const { errors, isValid } = Validation.validatePassword(req.body);
 
   // Check validation
@@ -160,11 +160,12 @@ router.post("/resetpassword/:user_id/:resetToken", (req, res, next) => {
     return errorResponse(res, 400, errors);
   }
 
-  const { user_id, resetToken } = req.params;
+  const { user_id } = req.params;
+  const resetToken = req.query.token;
   const { password } = req.body;
 
   // Find user by email
-  Reset.find({ user_id }).then(user => {
+  Reset.findOne({ where: { user_id } }).then(user => {
     // Check if user has requested password reset
     if (user) {
       // Check if reset token is not expired
@@ -173,20 +174,23 @@ router.post("/resetpassword/:user_id/:resetToken", (req, res, next) => {
       // If reset link is valid and not expired
       if (
         moment().isBefore(expireTime) &&
-        Hash.compareWithHash(resetToken, user.resetToken)
+        Hash.compareWithHash(resetToken, user.reset_token)
       ) {
         // Store hash of new password in login
-        Hash.hashPassword(password)
-          .then(hash => {
-            Login.update({
-              token: "",
-              password: hash,
-              logged_in: false,
-              last_login: new Date()
-            });
+        Hash.hash(password)
+          .then(hashed => {
+            Login.update(
+              {
+                token: "",
+                password: hashed,
+                logged_in: false,
+                last_login: new Date()
+              },
+              { where: { email: user.email } }
+            );
           })
           // Delete reset request from database
-          .then(data => Reset.destroy({ where: { email: data.email } }))
+          .then(() => Reset.destroy({ where: { email: user.email } }))
           .catch(error => errorResponse(res, 500, error));
         return successResponse(res, 200, "Password Updated successfully");
       }

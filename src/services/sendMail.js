@@ -1,56 +1,52 @@
-import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 import dotenv from "dotenv";
 import Debug from "debug";
 import { successResponse } from "../utils/response";
 
 const debug = new Debug("dev");
+dotenv.config();
 
-const smtpTransport = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    type: "OAuth2",
-    user: process.env.EMAIL,
-    clientId: process.env.GMAIL_ID,
-    clientSecret: process.env.GMAIL_SECRET,
-    refreshToken: process.env.GMAIL_REFRESH
-  }
-});
+const apiKey = process.env.SENDGRIP_API_KEY;
 
-const expiry = process.env.TOKENEXPIRY / 60 / 60;
+sgMail.setApiKey(apiKey);
 
-const sendResetMail = async (user, resetToken) => {
-  const mailOptions = {
-    from: process.env.EMAIL,
+const expiry = parseInt(process.env.TOKENEXPIRY / 60 / 60) || 3;
+
+const sendResetMail = (user, resetToken) => {
+  const message = {
     to: user.email,
-    subject: "Reset password",
-    html:
-      `${"<h4><b>Reset Password</b></h4>" +
-        "<p>To reset your password, click link to complete this form:</p>" +
-        "<a href="}${process.env.CLIENT_URL}/resetpassword/${
-        user.user_id
-      }/${resetToken}">${process.env.CLIENT_URL}/resetpassword/${
-        user.id
-      }/${resetToken}</a>` +
-      "<p>This link expires in ${expiry} hours<p>" +
-      "<br><br>" +
-      "<p>--Team</p>"
+    from: "firestar@digitalnomad.com",
+    subject: "Reset Password",
+    html: `
+        <p>To reset your password, click link to complete this form:</p>
+        <a href="${process.env.CLIENT_URL}/resetpassword/${
+      user.user_id
+    }?token=${resetToken}">${process.env.CLIENT_URL}/resetpassword/${
+      user.user_id
+    }?token=${resetToken}</a>
+      <p>This link expires in ${expiry} hours<p>
+      <br><br>
+      <p>--Firestar Team</p>`
   };
-  try {
-    await smtpTransport.sendMail(mailOptions, info);
-  } catch (error) {
-    debug("ERROR IN SENDING EMAIL", error);
-    return "sent";
-  }
+  sgMail.send(message).then(sent => {
+    sent ? debug("sent") : debug("delivery fail");
+  });
 };
 
-const sendSignupMail = (res, user) => {
-  successResponse(
-    res,
-    200,
-    "Would have sent you a mail but we just encountered a problem"
-  );
+const sendSignupMail = user => {
+  const message = {
+    to: user.email,
+    from: "firestar@digitalnomad.com",
+    subject: "Sign up on Barefoot Nomad",
+    html: `
+        <p>You recently requested to change your password but we realized you don't have an account yet with this email</p>
+        <a href="${process.env.CLIENT_URL}/">Click this link now to Signup</a>
+        <br><br>
+        <p>--Firestar Team</p>`
+  };
+  sgMail.send(message).then(sent => {
+    sent ? debug("sent") : debug("delivery fail");
+  });
 };
 
 export { sendResetMail, sendSignupMail };

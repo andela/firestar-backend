@@ -15,7 +15,7 @@ const login = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [4, 42]
+        len: [4, 420]
       }
     },
     last_login: {
