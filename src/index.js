@@ -3,7 +3,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import errorHandler from 'errorhandler';
-import mongoose from 'mongoose';
 import methodOverride from 'method-override';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
