@@ -46,8 +46,10 @@ class Mail {
 
 		try {
 			const response = await transporter.sendMail(mailOptions);
+
 			return response;
 		} catch (error) {
+			console.log(error)
 			return error.message;
 		}
 	}

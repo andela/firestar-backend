@@ -3,6 +3,7 @@ import { emailVerifyToken} from '../utils/index';
 import { Mail } from '../services/mail/Mail';
 
 const SendVerificationEmail = async (req,res, next)=>{
+    
     let { email, first_name, last_name} = req.body;
     email = email.trim();
     first_name = first_name.trim();
@@ -24,7 +25,7 @@ const SendVerificationEmail = async (req,res, next)=>{
     try{
         const send = new Mail(email_details, verifyEmail(data));
         const { response } = await send.main();
-        
+        console.log(response)
 
         if( response ){
             req.verificationMailResponse = response;
@@ -32,7 +33,7 @@ const SendVerificationEmail = async (req,res, next)=>{
         }
     	
     } catch(err){
-        req.verificationMailResponse = err;
+        req.verificationMailError = err;
       return  res.status(400).json({status:400,error:'An Error occured during the process.'})
     }
 	

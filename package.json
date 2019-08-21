@@ -11,9 +11,6 @@
     "build": "babel ./src -d dist",
     "start": "node dist/index.js",
     "start:dev": "nodemon --exec babel-node -- src/index.js",
-<<<<<<< HEAD
-    "email-test": "babel-node -- src/services/mail/mailsample.js"
-=======
     "migrate:dev": "sequelize db:migrate",
     "migrate:test": "cross-env NODE_ENV=test sequelize db:migrate",
     "migrate:prod": "cross-env NODE_ENV=production sequelize db:migrate",
@@ -22,7 +19,6 @@
     "undo:prod": "cross-env NODE_ENV=prooduction sequelize db:migrate:undo",
     "seed:dev": "sequelize db:seed:all",
     "seed:test": "cross-env NODE_ENV=test sequelize db:seed:all"
->>>>>>> 6f6432697c4875ae04d40783a2b3d4a962a0569d
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
