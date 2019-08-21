@@ -45,10 +45,10 @@ class Mail {
 		};
 
 		try {
-            const response = await transporter.sendMail(mailOptions);
-            console.log(response)
+			const response = await transporter.sendMail(mailOptions);
+			return response;
 		} catch (error) {
-			console.log(error.message);
+			return error.message;
 		}
 	}
 }

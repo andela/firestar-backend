@@ -1,6 +1,6 @@
-import {verifyEmail} from './template/verifyEmail'
-import { emailVerifyToken} from '../../utils/index'
-import { Mail } from './Mail';
+import {verifyEmail} from '../services/mail/template/verifyEmail'
+import { emailVerifyToken} from '../utils/index';
+import { Mail } from '../services/mail/Mail';
 
 const SendEmail = async (req,res)=>{
     let { email, first_name, last_name} = req.body;
@@ -23,11 +23,14 @@ const SendEmail = async (req,res)=>{
         
     try{
         const send = new Mail(email_details, verifyEmail(data));
-        await send.main();
-        return res.status(200).json({status:200,data:{message:'Message successfully sent, please check your email'}})
-        	
+        const { response } = await send.main();
+
+        if(response){
+            return res.status(200).json({status:200,data:{message:'Message successfully sent, please check your email', response}})
+        }
+    	
     } catch(err){
-        res.status(400).json({status:400,error:'An Error occured during the process.'})
+      return  res.status(400).json({status:400,error:'An Error occured during the process.'})
     }
 	
 };
