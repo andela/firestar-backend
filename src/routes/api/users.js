@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { Router } from "express";
 import passport from "passport";
 import moment from "moment";
@@ -7,14 +6,13 @@ import Validation from "../../validation";
 import { sendResetMail, sendSignupMail } from "../../services/sendMail";
 import { errorResponse, successResponse } from "../../utils/response";
 import Hash from "../../utils/hash";
+import models from "../../databaseCopy/models";
 
 const router = Router();
 
-const User = mongoose.model("User");
-const Login = mongoose.model("User");
-const Reset = mongoose.model("User");
-
-
+const User = models["User"];
+const Login = models["Login"];
+const Reset = models["Reset"];
 
 router.get("/user", (req, res, next) => {
   User.findById(req.payload.id)

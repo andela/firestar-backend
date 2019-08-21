@@ -1,37 +1,31 @@
-import dotEnv from 'dotenv';
-import express from 'express';
-import bodyParser from 'body-parser';
-import session from 'express-session';
-import errorHandler from 'errorhandler';
-import mongoose from 'mongoose';
-import methodOverride from 'method-override';
-import morgan from 'morgan';
-import swaggerUi from 'swagger-ui-express';
-import Log from 'debug';
-import routes from './routes';
-import swaggerDocument from '../swagger.json';
+import dotEnv from "dotenv";
+import express from "express";
+import bodyParser from "body-parser";
+import session from "express-session";
+import errorHandler from "errorhandler";
+import methodOverride from "method-override";
+import morgan from "morgan";
+import swaggerUi from "swagger-ui-express";
+import Log from "debug";
+import routes from "./routes";
+import swaggerDocument from "../swagger.json";
+import models, { sequelize } from "./databaseCopy/models";
+import seedCopyDb from "./databaseCopy/seed";
 
-const serverLog = Log('server');
+const serverLog = Log("server");
 
-const isProduction = process.env.NODE_ENV === 'production';
-
-if (isProduction) {
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect('mongodb://localhost/conduit');
-  mongoose.set('debug', true);
-}
+const isProduction = process.env.NODE_ENV === "production";
 
 // Create global app object
 const app = express();
 
 // swagger config middlewares
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Configure dotEnv
 dotEnv.config();
 // Normal express config defaults
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -40,11 +34,11 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use(
   session({
-    secret: 'authorshaven',
+    secret: "authorshaven",
     cookie: { maxAge: 60000 },
     resave: false,
-    saveUninitialized: false,
-  }),
+    saveUninitialized: false
+  })
 );
 
 if (!isProduction) {
@@ -55,7 +49,7 @@ app.use(routes);
 
 // / catch 404 and forward to error handler
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
+  const err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
@@ -74,8 +68,8 @@ if (!isProduction) {
     res.json({
       errors: {
         message: err.message,
-        error: err,
-      },
+        error: err
+      }
     });
   });
 }
@@ -88,12 +82,18 @@ app.use((err, req, res, next) => {
   res.json({
     errors: {
       message: err.message,
-      error: {},
-    },
+      error: {}
+    }
   });
 });
 
-// finally, let's start our server...
-const server = app.listen(process.env.PORT || 3000, () => {
-  serverLog(`Listening on port ${server.address().port}`);
+// finally, let's connect to the database and start our server...
+sequelize.sync({ force: !isProduction }).then(async () => {
+  if (!isProduction) {
+    seedCopyDb(new Date());
+  }
+
+  const server = app.listen(process.env.PORT || 3000, () => {
+    serverLog(`Listening on port ${server.address().port}`);
+  });
 });

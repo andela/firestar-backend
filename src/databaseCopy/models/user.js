@@ -2,7 +2,7 @@
 
 // define the Users model with its content
 const users = (sequelize, DataTypes) => {
-  const Users = sequelize.define(
+  const User = sequelize.define(
     "user",
     {
       email: {
@@ -33,19 +33,19 @@ const users = (sequelize, DataTypes) => {
     { freezeTableName: true }
   );
 
-  Users.associate = models => {
-    Users.hasOne(models.login, {
+  User.associate = models => {
+    User.hasOne(models.Login, {
       foreignKey: "email",
       as: "loginDetails"
     });
 
-    Users.hasOne(models.reset, {
+    User.hasOne(models.Reset, {
       foreignKey: "email",
       as: "resetDetails"
     });
   };
 
-  return Users;
+  return User;
 };
 
 export default users;
