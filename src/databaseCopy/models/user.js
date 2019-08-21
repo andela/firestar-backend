@@ -7,6 +7,7 @@ const users = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      primaryKey: true,
       validate: {
         notEmpty: true,
         isEmail: true
@@ -31,8 +32,7 @@ const users = (sequelize, DataTypes) => {
 
   User.associate = models => {
     User.hasOne(models.Login, {
-      foreignKey: "email",
-      as: "loginDetails"
+      foreignKey: "email"
     });
 
     User.hasOne(models.Reset, {
