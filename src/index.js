@@ -3,7 +3,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import errorHandler from 'errorhandler';
-import mongoose from 'mongoose';
 import methodOverride from 'method-override';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
@@ -14,13 +13,6 @@ import swaggerDocument from '../swagger.json';
 const serverLog = Log('server');
 
 const isProduction = process.env.NODE_ENV === 'production';
-
-if (isProduction) {
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect('mongodb://localhost/conduit');
-  mongoose.set('debug', true);
-}
 
 // Create global app object
 const app = express();
