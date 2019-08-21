@@ -21,9 +21,11 @@ class Mail {
 		return array;
 	}
 
+	 
+
 
 	async main() {
-		const { subject, recipient, html } = this;
+		const { subject, recipient, content } = this;
 		// create reusable transporter object using the default SMTP transport
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 		const transporter = nodemailer.createTransport({
@@ -39,7 +41,7 @@ class Mail {
 			from: `"Firestar-Backend" <${process.env.email}>`,
 			to: recipient,
 			subject,
-			html,
+			html:content,
 		};
 
 		try {

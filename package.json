@@ -8,7 +8,7 @@
     "build": "babel ./src -d dist",
     "start": "node dist/index.js",
     "start:dev": "nodemon --exec babel-node -- src/index.js",
-    "email-test": "babel-node -- src/services/mailsample.js"
+    "email-test": "babel-node -- src/services/mail/mailsample.js"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
