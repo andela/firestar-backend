@@ -13,7 +13,7 @@ const { expect } = chai;
  describe('/EMAIL VERIFICATION ROUTE', () => {
    it('It shoud return 200 success message', function (done) {
     
-		this.timeout(10000);
+		this.timeout(20000);
     
 
     const body = {
