@@ -1,4 +1,4 @@
-const isValidPassword = password => {
+const isValidPassword = (password) => {
   return password.length >= 4;
 };
 

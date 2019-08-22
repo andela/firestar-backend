@@ -1,19 +1,19 @@
-import isEmpty from "./isEmpty";
-import isValidPassword from "./isValidPassword";
+import isEmpty from './isEmpty';
+import isValidPassword from './isValidPassword';
 
 const validatePassword = ({ password, confirmPassword }) => {
-  let errors = {};
+  const errors = {};
 
-  password = !isEmpty(password) ? password : "";
+  password = !isEmpty(password) ? password : '';
 
   if (isEmpty(password)) {
-    errors.password = "Password is required";
+    errors.password = 'Password is required';
   } else {
     if (!isValidPassword(password)) {
-      errors.password = "Password is not valid";
+      errors.password = 'Password is not valid';
     }
     if (password !== confirmPassword) {
-      errors.password = "Password must match";
+      errors.password = 'Password must match';
     }
   }
 
