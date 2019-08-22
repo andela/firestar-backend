@@ -4,7 +4,7 @@ import { Mail } from '../services/mail/Mail';
 
 const SendVerificationEmail = async (req, res, next) => {
   let { email, firstName, lastName } = req.body;
-  email = email.trim();
+  email = email ? email.trim() : '';
   firstName = firstName.trim();
   lastName = lastName.trim();
   const id = 'some_encoded_identiity';
