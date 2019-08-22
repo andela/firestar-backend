@@ -1,8 +1,9 @@
+/* eslint-disable import/prefer-default-export */
 import { verifyEmail } from '../services/mail/template/verifyEmail';
 import { emailVerifyToken } from '../utils/index';
 import { Mail } from '../services/mail/Mail';
 
-const SendVerificationEmail = async (req, res, next) => {
+export const SendVerificationEmail = async (req, res, next) => {
   let { email, firstName, lastName } = req.body;
   email = email ? email.trim() : '';
   firstName = firstName.trim();
@@ -32,5 +33,3 @@ const SendVerificationEmail = async (req, res, next) => {
     return res.status(400).json({ status: 400, error: err.message });
   }
 };
-
-export default SendVerificationEmail;
