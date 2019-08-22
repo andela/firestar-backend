@@ -1,16 +1,16 @@
-import isEmpty from "./isEmpty";
-import isValidEmail from "./isValidEmail";
+import isEmpty from './isEmpty';
+import isValidEmail from './isValidEmail';
 
 const validateEmail = ({ email }) => {
   let errors = {};
 
-  email = !isEmpty(email) ? email : "";
+  email = !isEmpty(email) ? email : '';
 
   if (isEmpty(email)) {
-    errors.email = "Email is required";
+    errors.email = 'Email is required';
   } else {
     if (!isValidEmail(email)) {
-      errors.email = "Email is not valid";
+      errors.email = 'Email is not valid';
     }
   }
 
