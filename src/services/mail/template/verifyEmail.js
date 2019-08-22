@@ -421,7 +421,7 @@ export const verifyEmail = (data) => `
                   <tr>
                     <td valign="top" style="border-collapse:collapse;">
                       <div mc:edit="std_preheader_content">
-                                                     Welcome <i style="color:blue;">${data.first_name} ${data.last_name}</i>, We are glad to have you, but before you start posting quickly verify your email
+                                                     Welcome <i style="color:blue;">${data.firstName} ${data.lastName}</i>, We are glad to have you, but before you start posting quickly verify your email
                                                   </div>
                                                  
                     </td>
