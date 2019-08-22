@@ -10,25 +10,25 @@ chai.use(sinonChai);
 
 const { expect } = chai;
 
-let request;
+ describe('/EMAIL VERIFICATION ROUTE', () => {
+   it('It shoud return 200 success message', function (done) {
+    
+		this.timeout(10000);
+    
 
-describe('EMAIL ROUTE', () => {
-  before(async () => {
-    request = chai.request(app).keepOpen();
-  });
-
-  afterEach(() => sinon.restore());
-
-  describe('EMAIL VERIFICATION ROUTE', () => {
-    it('should have a status of 200 when message is sent succesfully', async () => {
-      const body = {
-        email: 'akp.ani@yahoo.com',
-        firstName: 'Aniefiok',
-        lastName: 'Akpan'
-      };
-      const response = await request.post('/api/email-test').send(body);
-      expect(response.body.status).to.equal(200);
-      expect(response.body).to.be.a('object');
-    }).timeout(0);
-  });
-});
+    const body = {
+      email: 'akp.ani@yahoo.com',
+      firstName: 'Aniefiok',
+      lastName: 'Akpan'
+    };
+     chai.request(app)
+       .post('/api/email-test')
+       .send(body)
+       .end((err, res) => {
+        expect(res.body.status).to.equal(200);
+        expect(res.body).to.be.a('object');      
+        done();
+       });
+   });
+ });
+ 
