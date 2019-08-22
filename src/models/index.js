@@ -34,7 +34,7 @@ const models = {
 };
 
 // and combine those models and resolve their associations using the Sequelize API
-Object.keys(models).forEach(key => {
+Object.keys(models).forEach((key) => {
   if ('associate' in models[key]) {
     models[key].associate(models);
   }

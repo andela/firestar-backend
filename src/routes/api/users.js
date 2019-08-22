@@ -90,7 +90,7 @@ router.post('/users', (req, res, next) => {
 // @route POST /api/v1/users/forgotpassword
 // @desc Generate User Password Reset / Returning JWT Token
 // @access Public
-router.post('/forgotpassword', (req, res, next) => {
+router.post('/forgotpassword', (req, res) => {
   const { errors, isValid } = Validation.validateEmail(req.body);
 
   // Check validation
@@ -152,7 +152,7 @@ router.post('/forgotpassword', (req, res, next) => {
 // @route POST /api/v1/users/resetpassword/:id/
 // @desc Resets a User Password / Returns a new Password
 // @access Public
-router.post('/resetpassword/:user_id', (req, res, next) => {
+router.post('/resetpassword/:user_id', (req, res) => {
   const { errors, isValid } = Validation.validatePassword(req.body);
 
   // Check validation
@@ -165,7 +165,7 @@ router.post('/resetpassword/:user_id', (req, res, next) => {
   const { password } = req.body;
 
   // Find user by email
-  Reset.findOne({ where: { user_id } }).then(user => {
+  Reset.findOne({ where: { user_id } }).then((user) => {
     // Check if user has requested password reset
     if (user) {
       // Check if reset token is not expired
@@ -178,7 +178,7 @@ router.post('/resetpassword/:user_id', (req, res, next) => {
       ) {
         // Store hash of new password in login
         Hash.hash(password)
-          .then(hashed => {
+          .then((hashed) => {
             Login.update(
               {
                 token: '',

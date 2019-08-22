@@ -19,7 +19,7 @@ const reset = (sequelize, DataTypes) => {
     }
   });
 
-  Reset.associate = models => {
+  Reset.associate = (models) => {
     Reset.belongsTo(models.User, {
       foreignKey: 'email',
       onDelete: 'CASCADE'

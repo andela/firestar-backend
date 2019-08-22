@@ -1,7 +1,6 @@
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 import Debug from 'debug';
-import { successResponse } from '../utils/response';
 
 const debug = new Debug('dev');
 dotenv.config();
@@ -28,12 +27,10 @@ const sendResetMail = (user, resetToken) => {
       <br><br>
       <p>--Firestar Team</p>`
   };
-  sgMail.send(message).then(sent => {
-    sent ? debug('sent') : debug('delivery fail');
-  });
+  sgMail.send(message);
 };
 
-const sendSignupMail = user => {
+const sendSignupMail = (user) => {
   const message = {
     to: user.email,
     from: 'firestar@digitalnomad.com',
@@ -44,9 +41,7 @@ const sendSignupMail = user => {
         <br><br>
         <p>--Firestar Team</p>`
   };
-  sgMail.send(message).then(sent => {
-    sent ? debug('sent') : debug('delivery fail');
-  });
+  sgMail.send(message);
 };
 
 export { sendResetMail, sendSignupMail };
