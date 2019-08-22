@@ -6,7 +6,7 @@ import Validation from "../../validation";
 import { sendResetMail, sendSignupMail } from "../../services/sendMail";
 import { errorResponse, successResponse } from "../../utils/response";
 import Hash from "../../utils/hash";
-import models from "../../databaseCopy/models";
+import models from "../../models";
 
 const router = Router();
 
@@ -149,7 +149,7 @@ router.post("/forgotpassword", (req, res, next) => {
   });
 });
 
-// @route POST /api/v1/users/resetpassword/:id/:restToken
+// @route POST /api/v1/users/resetpassword/:id/
 // @desc Resets a User Password / Returns a new Password
 // @access Public
 router.post("/resetpassword/:user_id", (req, res, next) => {

@@ -9,8 +9,8 @@ import swaggerUi from "swagger-ui-express";
 import Log from "debug";
 import routes from "./routes";
 import swaggerDocument from "../swagger.json";
-import { sequelize } from "./databaseCopy/models";
-import seedCopyDb from "./databaseCopy/seed";
+import { sequelize } from "./models";
+import seedCopyDb from "./database/seed";
 
 const serverLog = Log("server");
 
