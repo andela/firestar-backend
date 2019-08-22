@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 // define the Reset model with its content
 const reset = (sequelize, DataTypes) => {
-  const Reset = sequelize.define("reset", {
+  const Reset = sequelize.define('reset', {
     user_id: {
       type: DataTypes.INTEGER
     },
@@ -21,8 +21,8 @@ const reset = (sequelize, DataTypes) => {
 
   Reset.associate = models => {
     Reset.belongsTo(models.User, {
-      foreignKey: "email",
-      onDelete: "CASCADE"
+      foreignKey: 'email',
+      onDelete: 'CASCADE'
     });
   };
 

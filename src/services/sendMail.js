@@ -1,9 +1,9 @@
-import sgMail from "@sendgrid/mail";
-import dotenv from "dotenv";
-import Debug from "debug";
-import { successResponse } from "../utils/response";
+import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv';
+import Debug from 'debug';
+import { successResponse } from '../utils/response';
 
-const debug = new Debug("dev");
+const debug = new Debug('dev');
 dotenv.config();
 
 const apiKey = process.env.SENDGRIP_API_KEY;
@@ -15,13 +15,13 @@ const expiry = parseInt(process.env.TOKENEXPIRY / 60 / 60) || 3;
 const sendResetMail = (user, resetToken) => {
   const message = {
     to: user.email,
-    from: "firestar@digitalnomad.com",
-    subject: "Reset Password",
+    from: 'firestar@digitalnomad.com',
+    subject: 'Reset Password',
     html: `
         <p>To reset your password, click link to complete this form:</p>
-        <a href="${process.env.CLIENT_URL}/resetpassword/${
+        <a href='${process.env.CLIENT_URL}/resetpassword/${
       user.user_id
-    }?token=${resetToken}">${process.env.CLIENT_URL}/resetpassword/${
+    }?token=${resetToken}'>${process.env.CLIENT_URL}/resetpassword/${
       user.user_id
     }?token=${resetToken}</a>
       <p>This link expires in ${expiry} hours<p>
@@ -29,23 +29,23 @@ const sendResetMail = (user, resetToken) => {
       <p>--Firestar Team</p>`
   };
   sgMail.send(message).then(sent => {
-    sent ? debug("sent") : debug("delivery fail");
+    sent ? debug('sent') : debug('delivery fail');
   });
 };
 
 const sendSignupMail = user => {
   const message = {
     to: user.email,
-    from: "firestar@digitalnomad.com",
-    subject: "Sign up on Barefoot Nomad",
+    from: 'firestar@digitalnomad.com',
+    subject: 'Sign up on Barefoot Nomad',
     html: `
         <p>You recently requested to change your password but we realized you don't have an account yet with this email</p>
-        <a href="${process.env.CLIENT_URL}/">Click this link now to Signup</a>
+        <a href='${process.env.CLIENT_URL}/'>Click this link now to Signup</a>
         <br><br>
         <p>--Firestar Team</p>`
   };
   sgMail.send(message).then(sent => {
-    sent ? debug("sent") : debug("delivery fail");
+    sent ? debug('sent') : debug('delivery fail');
   });
 };
 

@@ -1,31 +1,31 @@
-import dotEnv from "dotenv";
-import express from "express";
-import bodyParser from "body-parser";
-import session from "express-session";
-import errorHandler from "errorhandler";
-import methodOverride from "method-override";
-import morgan from "morgan";
-import swaggerUi from "swagger-ui-express";
-import Log from "debug";
-import routes from "./routes";
-import swaggerDocument from "../swagger.json";
-import { sequelize } from "./models";
-import seedCopyDb from "./database/seed";
+import dotEnv from 'dotenv';
+import express from 'express';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import errorHandler from 'errorhandler';
+import methodOverride from 'method-override';
+import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import Log from 'debug';
+import routes from './routes';
+import swaggerDocument from '../swagger.json';
+import { sequelize } from './models';
+import seedCopyDb from './database/seed';
 
-const serverLog = Log("server");
+const serverLog = Log('server');
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 // Create global app object
 const app = express();
 
 // swagger config middlewares
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Configure dotEnv
 dotEnv.config();
 // Normal express config defaults
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -34,7 +34,7 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use(
   session({
-    secret: "authorshaven",
+    secret: 'authorshaven',
     cookie: { maxAge: 60000 },
     resave: false,
     saveUninitialized: false
@@ -49,7 +49,7 @@ app.use(routes);
 
 // / catch 404 and forward to error handler
 app.use((req, res, next) => {
-  const err = new Error("Not Found");
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });

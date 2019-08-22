@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 // define the Login model with its content
 const login = (sequelize, DataTypes) => {
-  const Login = sequelize.define("login", {
+  const Login = sequelize.define('login', {
     user_id: {
       type: DataTypes.INTEGER
     },
@@ -33,8 +33,8 @@ const login = (sequelize, DataTypes) => {
 
   Login.associate = models => {
     Login.belongsTo(models.User, {
-      foreignKey: "email",
-      onDelete: "CASCADE"
+      foreignKey: 'email',
+      onDelete: 'CASCADE'
     });
   };
 
