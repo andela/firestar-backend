@@ -25,6 +25,7 @@ class Mail {
   async main() {
     const { subject, recipient, content } = this;
     // create reusable transporter object using the default SMTP transport
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     const transporter = nodemailer.createTransport({
       service: process.env.layer,
       auth: {
