@@ -2,7 +2,7 @@ import isEmpty from './isEmpty';
 import isValidEmail from './isValidEmail';
 
 const validateEmail = ({ email }) => {
-  let errors = {};
+  const errors = {};
 
   email = !isEmpty(email) ? email : '';
 

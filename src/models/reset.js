@@ -1,5 +1,3 @@
-'use strict';
-
 // define the Reset model with its content
 const reset = (sequelize, DataTypes) => {
   const Reset = sequelize.define('reset', {

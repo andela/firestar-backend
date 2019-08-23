@@ -1,8 +1,6 @@
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
-import Debug from 'debug';
 
-const debug = new Debug('dev');
 dotenv.config();
 
 const apiKey = process.env.SENDGRIP_API_KEY;
@@ -14,7 +12,7 @@ const expiry = parseInt(process.env.TOKENEXPIRY / 60 / 60) || 3;
 const sendResetMail = (user, resetToken) => {
   const message = {
     to: user.email,
-    from: 'firestar@digitalnomad.com',
+    from: 'firestarbackend@gmail.com',
     subject: 'Reset Password',
     html: `
         <p>To reset your password, click link to complete this form:</p>
@@ -30,7 +28,7 @@ const sendResetMail = (user, resetToken) => {
   sgMail.send(message);
 };
 
-const sendSignupMail = (user) => {
+const sendSignupMail = user => {
   const message = {
     to: user.email,
     from: 'firestar@digitalnomad.com',

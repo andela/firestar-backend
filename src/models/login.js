@@ -1,5 +1,3 @@
-'use strict';
-
 // define the Login model with its content
 const login = (sequelize, DataTypes) => {
   const Login = sequelize.define('login', {
