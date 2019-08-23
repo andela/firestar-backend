@@ -7,9 +7,7 @@ import { errorResponse, successResponse } from '../utils/response';
 import Hash from '../utils/hash';
 import models from '../models';
 
-const User = models.User;
-const Login = models.Login;
-const Reset = models.Reset;
+const { User, Login, Reset } = models;
 
 const forgotPassword = (req, res) => {
   const { errors, isValid } = Validation.validateEmail(req.body);
@@ -63,7 +61,7 @@ const forgotPassword = (req, res) => {
           .then(() =>
             successResponse(res, 200, 'Check your mail for further instruction')
           )
-          .catch((error) => errorResponse(res, 500, error));
+          .catch(error => errorResponse(res, 500, error));
       });
     });
   });

@@ -1,6 +1,6 @@
 import models from '../models';
 
-const seedCopyDb = async() => {
+const seedCopyDb = async () => {
   await models.User.create({
     email: 'youremail@andela.com',
     role: 'passenger'

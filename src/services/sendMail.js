@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const apiKey = process.env.SENDGRIP_API_KEY;
+const env = process.env;
+const apiKey = env.SENDGRIP_API_KEY;
+const CLIENT_URL = env.NODE_ENV === "test" || "development" ? `http://localhost:${env.PORT}/api` : env.CLIENT_URL;
 
 sgMail.setApiKey(apiKey);
 
@@ -16,9 +18,9 @@ const sendResetMail = (user, resetToken) => {
     subject: 'Reset Password',
     html: `
       <p>To reset your password, click link to complete this form:</p>
-      <a href='${process.env.CLIENT_URL}/resetpassword/${
+      <a href='${CLIENT_URL}/resetpassword/${
       user.id
-    }?token=${resetToken}'>${process.env.CLIENT_URL}/resetpassword/${
+    }?token=${resetToken}'>${CLIENT_URL}/resetpassword/${
       user.id
     }?token=${resetToken}</a>
       <p>This link expires in ${expiry} hours<p>
