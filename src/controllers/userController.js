@@ -22,7 +22,7 @@ const forgotPassword = (req, res) => {
   const { email } = req.body;
 
   // Find user by email
-  User.findOne({ where: { email } }).then(user => {
+  User.findOne({ where: { email } }).then((user) => {
     // Check for user
     if (!user) {
       return sendSignupMail(user);
@@ -41,14 +41,14 @@ const forgotPassword = (req, res) => {
 
     // Generate Reset token
     const resetToken = crypto.randomBytes(32).toString('hex');
-    Hash.hash(resetToken).then(resetHash => {
+    Hash.hash(resetToken).then((resetHash) => {
       newReset.reset_token = resetHash;
       // Remove all reset token for this user if it exists
       Reset.findOne({
         where: {
           email: newReset.dataValues.email
         }
-      }).then(result => {
+      }).then(() => {
         return Reset.destroy({
           where: { email: newReset.dataValues.email }
         })
@@ -63,7 +63,7 @@ const forgotPassword = (req, res) => {
           .then(() =>
             successResponse(res, 200, 'Check your mail for further instruction')
           )
-          .catch(error => errorResponse(res, 500, error));
+          .catch((error) => errorResponse(res, 500, error));
       });
     });
   });

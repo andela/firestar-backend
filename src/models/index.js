@@ -1,7 +1,5 @@
 'use strict';
 
-import fs from 'fs';
-import path from 'path';
 import Sequelize from 'sequelize';
 
 const env = process.env.NODE_ENV || 'development';
@@ -9,8 +7,6 @@ const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
 let sequelize;
-console.log('config', config);
-console.log('env', env);
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {

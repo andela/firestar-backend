@@ -1,4 +1,3 @@
-'use strict';
 const users = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
     id: {
@@ -28,7 +27,7 @@ const users = (sequelize, DataTypes) => {
     }
   });
 
-  User.associate = models => {
+  User.associate = (models) => {
     User.hasOne(models.Login, {
       foreignKey: 'id'
     });

@@ -1,7 +1,6 @@
 import models from '../models';
-import dotenv from 'dotenv';
 
-const seedCopyDb = async date => {
+const seedCopyDb = async() => {
   await models.User.create({
     email: 'youremail@andela.com',
     role: 'passenger'

@@ -15,8 +15,8 @@ const sendResetMail = (user, resetToken) => {
     from: 'firestarbackend@gmail.com',
     subject: 'Reset Password',
     html: `
-        <p>To reset your password, click link to complete this form:</p>
-        <a href='${process.env.CLIENT_URL}/resetpassword/${
+      <p>To reset your password, click link to complete this form:</p>
+      <a href='${process.env.CLIENT_URL}/resetpassword/${
       user.id
     }?token=${resetToken}'>${process.env.CLIENT_URL}/resetpassword/${
       user.id
@@ -34,10 +34,10 @@ const sendSignupMail = user => {
     from: 'firestar@digitalnomad.com',
     subject: 'Sign up on Barefoot Nomad',
     html: `
-        <p>You recently requested to change your password but we realized you don't have an account yet with this email</p>
-        <a href='${process.env.CLIENT_URL}/'>Click this link now to Signup</a>
-        <br><br>
-        <p>--Firestar Team</p>`
+      <p>You recently requested to change your password but we realized you don't have an account yet with this email</p>
+      <a href='${process.env.CLIENT_URL}/'>Click this link now to Signup</a>
+      <br><br>
+      <p>--Firestar Team</p>`
   };
   sgMail.send(message);
 };
