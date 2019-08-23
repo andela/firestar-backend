@@ -1,42 +1,39 @@
-import Sequelize from 'sequelize';
+"use strict";
 
-// create a Sequelize instance
+import fs from "fs";
+import path from "path";
+import Sequelize from "sequelize";
+
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || "development";
+const config = require(__dirname + "/../config/config.js")[env];
+const db = {};
 
 let sequelize;
-if (process.env.DATABASE_URL && process.env.NODE_ENV !== 'test') {
-  sequelize = new Sequelize(process.env.DATABASE_URL, {
-    dialect: 'postgres',
-    operatorsAliases: false
-  });
+console.log("config", config);
+console.log("env", env);
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  if (process.env.DATABASE_URL_TEST && process.env.NODE_ENV === 'test') {
-    sequelize = new Sequelize(process.env.DATABASE_URL_TEST, {
-      dialect: 'postgres',
-      operatorsAliases: false
-    });
-  } else {
-    sequelize = new Sequelize(
-      process.env.DATABASE_URL || process.env.DATABASE,
-      process.env.DATABASE_USER,
-      process.env.DATABASE_PASSWORD,
-      {
-        dialect: 'postgres'
-      }
-    );
-  }
+  sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
 }
 
 // Import the models
 const models = {
-  User: sequelize.import('./user.js'),
-  Login: sequelize.import('./login.js'),
-  Reset: sequelize.import('./reset.js')
+  User: sequelize.import("./user.js"),
+  Login: sequelize.import("./login.js"),
+  Reset: sequelize.import("./reset.js")
 };
 
 // and combine those models and resolve their associations using the Sequelize API
-Object.keys(models).forEach((key) => {
-  if ('associate' in models[key]) {
-    models[key].associate(models);
+Object.keys(db).forEach(modelName => {
+  if (models[modelName].associate) {
+    models[modelName].associate(db);
   }
 });
 

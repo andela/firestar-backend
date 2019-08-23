@@ -14,14 +14,12 @@ const seedCopyDb = async date => {
 
   await models.Login.create({
     email: 'youremail@andela.com',
-    password: 'password',
-    token: 'passe43434343nger'
+    password: 'password'
   });
 
   await models.Login.create({
     email: process.env.YOUR_EMAIL,
-    password: process.env.SOME_PASSWORD,
-    token: '2passe43434343nger'
+    password: process.env.SOME_PASSWORD
   });
 
   await models.Reset.create({

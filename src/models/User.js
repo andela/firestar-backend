@@ -1,7 +1,7 @@
 'use strict';
 const users = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
-    user_id: {
+    id: {
       type: DataTypes.INTEGER,
       unique: true,
       allowNull: false,
@@ -14,7 +14,6 @@ const users = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
-      primaryKey: true,
       validate: {
         notEmpty: true,
         isEmail: true
@@ -31,11 +30,11 @@ const users = (sequelize, DataTypes) => {
 
   User.associate = models => {
     User.hasOne(models.Login, {
-      foreignKey: 'email'
+      foreignKey: 'id'
     });
 
     User.hasOne(models.Reset, {
-      foreignKey: 'email'
+      foreignKey: 'id'
     });
   };
 

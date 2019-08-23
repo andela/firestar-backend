@@ -3,8 +3,10 @@
 // define the Reset model with its content
 const reset = (sequelize, DataTypes) => {
   const Reset = sequelize.define('reset', {
-    user_id: {
-      type: DataTypes.INTEGER
+    reset_id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
     },
     email: {
       type: DataTypes.STRING,
@@ -21,7 +23,7 @@ const reset = (sequelize, DataTypes) => {
 
   Reset.associate = (models) => {
     Reset.belongsTo(models.User, {
-      foreignKey: 'email',
+      foreignKey: 'id',
       onDelete: 'CASCADE'
     });
   };

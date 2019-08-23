@@ -19,9 +19,9 @@ const sendResetMail = (user, resetToken) => {
     html: `
         <p>To reset your password, click link to complete this form:</p>
         <a href='${process.env.CLIENT_URL}/resetpassword/${
-      user.user_id
+      user.id
     }?token=${resetToken}'>${process.env.CLIENT_URL}/resetpassword/${
-      user.user_id
+      user.id
     }?token=${resetToken}</a>
       <p>This link expires in ${expiry} hours<p>
       <br><br>
