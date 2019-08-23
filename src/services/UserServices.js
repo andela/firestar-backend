@@ -3,12 +3,18 @@
 import db from '../models';
 
 class UserService {
-  static async getAuser(id) {
+  static async updateUser(id, updateduser) {
     try {
-      const theUser = await db.Users.findOne({
-        where: { id: Number(id) }
+      const userToUpdate = await db.Users.findOne({
+        where: { id }
       });
-      return theUser;
+      if (userToUpdate) {
+        await db.Users.update(updateduser, {
+          where: { id }
+        });
+        return updateduser;
+      }
+      return null;
     } catch (error) {
       throw error;
     }
