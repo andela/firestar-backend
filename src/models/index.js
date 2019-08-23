@@ -4,7 +4,6 @@ import Sequelize from 'sequelize';
 
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
-const db = {};
 
 let sequelize;
 if (config.use_env_variable) {
@@ -20,15 +19,15 @@ if (config.use_env_variable) {
 
 // Import the models
 const models = {
-  User: sequelize.import('./user.js'),
-  Login: sequelize.import('./login.js'),
-  Reset: sequelize.import('./reset.js')
+  User: sequelize.import("./user.js"),
+  Login: sequelize.import("./login.js"),
+  Reset: sequelize.import("./reset.js")
 };
 
 // and combine those models and resolve their associations using the Sequelize API
-Object.keys(db).forEach(modelName => {
-  if (models[modelName].associate) {
-    models[modelName].associate(db);
+Object.keys(models).forEach(key => {
+  if ("associate" in models[key]) {
+    models[key].associate(models);
   }
 });
 
