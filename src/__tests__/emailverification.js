@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '../index';
 
-import { signUp, confirmVerificaionToken } from '../controllers/user';
+import { signUp, confirmEmailVerificaionToken } from '../controllers/user';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -84,7 +84,7 @@ describe('EMAIL ROUTE', () => {
 
       sinon.stub(res, 'status').returnsThis();
 
-      await confirmVerificaionToken(req, res);
+      await confirmEmailVerificaionToken(req, res);
       expect(res.status).to.have.been.calledWith(422);
     });
   });

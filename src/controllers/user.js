@@ -16,7 +16,7 @@ export const signUp = async (req, res) => {
   });
 };
 
-export const confirmVerificaionToken = (req, res) => {
+export const confirmEmailVerificaionToken = (req, res) => {
   const token = req.query.id;
 
   try {
