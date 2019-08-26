@@ -47,7 +47,7 @@ class Mail {
 
       return response;
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 }
