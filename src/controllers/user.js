@@ -21,10 +21,7 @@ export const confirmEmailVerificaionToken = (req, res) => {
   const { id } = url.parse(req.url, true).query;
 
   try {
-    const checkTokenBoolean = jwt.verify(id, process.env.SECRET_KEY_EMAIL_VERIFY_TOKEN);
-    if (!checkTokenBoolean) {
-      return res.status(422).json({ status: 422, error: 'Your token can\'t be verified at this time' });
-    }
+    jwt.verify(id, process.env.SECRET_KEY_EMAIL_VERIFY_TOKEN);
     return res.status(422).json({
       status: 200,
       message: 'You Account has been successfully verified, you would be redirected in few seconds to your dashboard'

@@ -5,6 +5,7 @@ import sinonChai from 'sinon-chai';
 import app from '../index';
 
 import { signUp, confirmEmailVerificaionToken } from '../controllers/user';
+import { emailVerifyToken } from '../utils/index';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -30,6 +31,18 @@ describe('EMAIL ROUTE', () => {
       const response = await request.post('/api/email/test').send(body);
       expect(response.body.status).to.equal(200);
       expect(response.body).to.be.a('object');
+    }).timeout(0);
+  });
+  describe('UTILS/ EMAIL TOKEN', () => {
+    it('it should assign a token to newly registered users', async () => {
+      const id = 'some_secret_identification_number_or_string';
+      const token = await emailVerifyToken(id);
+      expect(token).to.equal(token);
+    }).timeout(0);
+    it('it should not assign token, or fail', async () => {
+      const id = 'some_secret_identification_number_or_string';
+      const token = await emailVerifyToken(id);
+      expect(token).to.equal(token);
     }).timeout(0);
   });
 
