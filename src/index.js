@@ -1,9 +1,6 @@
 import dotEnv from 'dotenv';
 import express from 'express';
-import bodyParser from 'body-parser';
-import session from 'express-session';
 import errorHandler from 'errorhandler';
-import methodOverride from 'method-override';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import Log from 'debug';
@@ -24,33 +21,19 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 dotEnv.config();
 // Normal express config defaults
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-app.use(methodOverride());
 app.use(express.static(`${__dirname}/public`));
-
-app.use(
-  session({
-    secret: 'authorshaven',
-    cookie: { maxAge: 60000 },
-    resave: false,
-    saveUninitialized: false,
-  }),
-);
 
 if (!isProduction) {
   app.use(errorHandler());
 }
 
-app.use(routes);
+app.use('/api/v1', routes);
 
 // / catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+
 
 // / error handlers
 
@@ -89,3 +72,5 @@ app.use((err, req, res, next) => {
 const server = app.listen(process.env.PORT || 3000, () => {
   serverLog(`Listening on port ${server.address().port}`);
 });
+
+export default server;
