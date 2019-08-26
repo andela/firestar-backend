@@ -80,6 +80,9 @@ const resetPassword = (req, res) => {
 
   // Check validation
   if (!isValid) {
+    if (errors.password && errors.password === "Passwords must match") {
+      return errorResponse(res, 409, errors);
+  }
     return errorResponse(res, 400, errors);
   }
 

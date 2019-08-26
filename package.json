@@ -4,7 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=development nyc mocha --require @babel/register ./src/__tests__/*.js",
+    "test": "cross-env NODE_ENV=development nyc mocha --require @babel/register ./src/__tests__/*.js --timeout 45000 --exit",
     "coverage": "nyc report --reporter=text",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/ --fix",
@@ -16,7 +16,7 @@
     "migrate:prod": "cross-env NODE_ENV=production sequelize db:migrate",
     "undo:dev": "sequelize db:migrate:undo",
     "undo:test": "cross-env NODE_ENV=test sequelize db:migrate:undo",
-    "undo:prod": "cross-env NODE_ENV=prooduction sequelize db:migrate:undo",
+    "undo:prod": "cross-env NODE_ENV=production sequelize db:migrate:undo",
     "seed:dev": "sequelize db:seed:all",
     "seed:test": "cross-env NODE_ENV=test sequelize db:seed:all"
   },
@@ -26,6 +26,7 @@
     "@sendgrid/mail": "^6.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "chai-http": "^4.3.0",
     "core-js": "^3.2.1",
     "cors": "^2.8.4",
     "cross-env": "^5.2.0",
@@ -52,6 +53,8 @@
     "request": "^2.87.0",
     "sequelize": "^5.15.2",
     "sequelize-cli": "^5.5.0",
+    "sinon": "^7.4.1",
+    "sinon-chai": "^3.3.0",
     "swagger-ui-express": "^4.0.7",
     "underscore": "^1.9.1"
   },

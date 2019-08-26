@@ -97,3 +97,5 @@ sequelize.sync({ force: !isProduction }).then(async () => {
     serverLog(`Listening on port ${server.address().port}`);
   });
 });
+
+export default app;

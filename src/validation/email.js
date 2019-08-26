@@ -9,7 +9,7 @@ const validateEmail = ({ email }) => {
   if (isEmpty(email)) {
     errors.email = 'Email is required';
   } else {
-    !isValidEmail(email) ? errors.email = 'Email is not valid' : null;
+    !isValidEmail(email) ? errors.email = 'Email is invalid' : null;
   }
 
   return {

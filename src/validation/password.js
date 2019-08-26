@@ -10,10 +10,10 @@ const validatePassword = ({ password, confirmPassword }) => {
     errors.password = 'Password is required';
   } else {
     if (!isValidPassword(password)) {
-      errors.password = 'Password is not valid';
+      errors.password = 'Password is invalid';
     }
     if (password !== confirmPassword) {
-      errors.password = 'Password must match';
+      errors.password = 'Passwords must match';
     }
   }
 
