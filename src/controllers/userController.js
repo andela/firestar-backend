@@ -1,11 +1,11 @@
-import { Router } from "express";
-import moment from "moment";
-import crypto from "crypto";
-import Validation from "../validation";
-import { sendResetMail, sendSignupMail } from "../services/sendMail";
-import { errorResponse, successResponse } from "../utils/response";
-import Hash from "../utils/hash";
-import models from "../models";
+import { Router } from 'express';
+import moment from 'moment';
+import crypto from 'crypto';
+import Validation from '../validation';
+import { sendResetMail, sendSignupMail } from '../services/sendMail';
+import { errorResponse, successResponse } from '../utils/response';
+import Hash from '../utils/hash';
+import models from '../models';
 
 const { User, Login, Reset } = models;
 
@@ -22,7 +22,7 @@ export default class UserController {
       const { email } = req.body;
 
       // Find user by email
-      let user = await User.findOne({ where: { email } });
+      const user = await User.findOne({ where: { email } });
       // Check for user
       if (!user) {
         return sendSignupMail(user);
@@ -31,16 +31,16 @@ export default class UserController {
       const newReset = new Reset({
         id: user.id,
         email: req.body.email,
-        reset_token: "",
+        reset_token: '',
         created_on: new Date(),
         expire_time: moment
           .utc()
-          .add(process.env.TOKENEXPIRY, "seconds")
+          .add(process.env.TOKENEXPIRY, 'seconds')
           .toLocaleString()
       });
 
       // Generate Reset token
-      const resetToken = await crypto.randomBytes(32).toString("hex");
+      const resetToken = await crypto.randomBytes(32).toString('hex');
       newReset.reset_token = await Hash.hash(resetToken);
       // Remove all reset token for this user if it exists
       await Reset.destroy({
@@ -49,7 +49,7 @@ export default class UserController {
       await newReset.save();
       // Send reset link to user email
       await sendResetMail(user.dataValues, resetToken);
-      successResponse(res, 200, "Check your mail for further instruction");
+      successResponse(res, 200, 'Check your mail for further instruction');
     } catch (error) {
       return errorResponse(res, 500, error);
     }
@@ -69,7 +69,7 @@ export default class UserController {
 
       // Check validation
       if (!isValid) {
-        if (errors.password && errors.password === "Passwords must match") {
+        if (errors.password && errors.password === 'Passwords must match') {
           return errorResponse(res, 409, errors);
         }
         return errorResponse(res, 400, errors);
@@ -95,7 +95,7 @@ export default class UserController {
           const hashed = await Hash.hash(password);
           await Login.update(
             {
-              token: "",
+              token: '',
               password: hashed,
               logged_in: false,
               last_login: new Date()
@@ -104,11 +104,11 @@ export default class UserController {
           );
           // Delete reset request from database
           await Reset.destroy({ where: { email: user.email } });
-          return successResponse(res, 200, "Password Updated successfully");
+          return successResponse(res, 200, 'Password Updated successfully');
         }
-        return errorResponse(res, 400, "Invalid or expired reset token");
+        return errorResponse(res, 400, 'Invalid or expired reset token');
       }
-      return errorResponse(res, 400, "Invalid or expired reset token");
+      return errorResponse(res, 400, 'Invalid or expired reset token');
     } catch (error) {
       return errorResponse(res, 500, error);
     }
