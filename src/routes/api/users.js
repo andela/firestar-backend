@@ -6,6 +6,6 @@ const router = Router();
 
 router.post('/email/test', SendVerificationEmail, signUp);
 
-router.get('email/verify', confirmEmailVerificaionToken);
+router.get('/email/verify', confirmEmailVerificaionToken);
 
 export default router;

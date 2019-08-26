@@ -1,6 +1,7 @@
 
 /* eslint-disable import/prefer-default-export */
 import jwt from 'jsonwebtoken';
+import url from 'url';
 
 
 export const signUp = async (req, res) => {
@@ -17,10 +18,10 @@ export const signUp = async (req, res) => {
 };
 
 export const confirmEmailVerificaionToken = (req, res) => {
-  const token = req.query.id;
+  const { id } = url.parse(req.url, true).query;
 
   try {
-    const checkTokenBoolean = jwt.verify(token, process.env.SECRET_KEY_EMAIL_VERIFY_TOKEN);
+    const checkTokenBoolean = jwt.verify(id, process.env.SECRET_KEY_EMAIL_VERIFY_TOKEN);
     if (!checkTokenBoolean) {
       return res.status(422).json({ status: 422, error: 'Your token can\'t be verified at this time' });
     }

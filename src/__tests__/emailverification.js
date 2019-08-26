@@ -27,7 +27,7 @@ describe('EMAIL ROUTE', () => {
         firstName: 'Aniefiok',
         lastName: 'Akpan'
       };
-      const response = await request.post('/api/email-test').send(body);
+      const response = await request.post('/api/email/test').send(body);
       expect(response.body.status).to.equal(200);
       expect(response.body).to.be.a('object');
     }).timeout(0);
@@ -35,7 +35,7 @@ describe('EMAIL ROUTE', () => {
 
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 200 when valid token is sent as query string', async () => {
-      const id = 'token';
+      const id = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNvbWVfZW5jb2RlZF9pZGVudGlpdHkiLCJpYXQiOjE1NjY4MTE1OTcsImV4cCI6MTU2Njg5Nzk5N30.oCXhqT4Ri-k7RIqlgIHVFvGGwmxIzBwyzqbXIG0JwyE';
       const response = await request.get(`/api/email/verify?id=${id}`);
       expect(response.body.status).to.equal(200);
       expect(response.body).to.be.a('object');
@@ -44,9 +44,9 @@ describe('EMAIL ROUTE', () => {
 
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 404 when invalid token is sent as query string', async () => {
-      const id = 'somewrongtokenprovided';
+      const id = 'eyJhbGciOiJIUzI1NiIsInR5cCI6bkpXVCJ9.eyJpZCI6InNvbWVfZW5jb2RlZF9pZGVudGlpdHkiLCJpYXQiOjE1NjY4MTE1OTcsImV4cCI6MTU2Njg5Nzk5N30.oCXhqT4Ri-k7RIqlgIHVFvGGwmxIzBwyzqbXIG0JwyE';
       const response = await request.get(`/api/email/verify?id=${id}`);
-      expect(response.body.status).to.equal(404);
+      expect(response.body.status).to.equal(400);
       expect(response.body).to.be.a('object');
     }).timeout(0);
   });
@@ -71,11 +71,9 @@ describe('EMAIL ROUTE', () => {
       await signUp(req, res);
       expect(res.status).to.have.been.calledWith(200);
     });
-    it('fakes server response for email cnfirmation', async () => {
+    it('fakes server response for email confirmation', async () => {
       const req = {
-        query: {
-          id: '12121fdfdfdfdfd'
-        }
+        url: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNvbWVfZW5jb2RlZF9pZGVudGlpdHkiLCJpYXQiOjE1NjY4MTE1OTcsImV4cCI6MTU2Njg5Nzk5N30.oCXhqT4Ri-k7RIqlgIHVFvGGwmxIzBwyzqbXIG0JwyE'
       };
       const res = {
         status() {},
@@ -85,7 +83,7 @@ describe('EMAIL ROUTE', () => {
       sinon.stub(res, 'status').returnsThis();
 
       await confirmEmailVerificaionToken(req, res);
-      expect(res.status).to.have.been.calledWith(422);
+      expect(res.status).to.have.been.calledWith(400);
     });
   });
 });
