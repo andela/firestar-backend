@@ -29,7 +29,7 @@ describe('EMAIL ROUTE', () => {
         firstName: 'Aniefiok',
         lastName: 'Akpan'
       };
-      const response = await request.post('/api/email/test').send(body);
+      const response = await request.post('/api/v1/email/test').send(body);
       expect(response.body.status).to.equal(200);
       expect(response.body).to.be.a('object');
     }).timeout(0);
@@ -50,7 +50,7 @@ describe('EMAIL ROUTE', () => {
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 200 when valid token is sent as query string', async () => {
       const id = idCorrect;
-      const response = await request.get(`/api/email/verify?id=${id}`);
+      const response = await request.get(`/api/v1/email/verify?id=${id}`);
       expect(response.body.status).to.equal(200);
       expect(response.body).to.be.a('object');
     }).timeout(0);
@@ -59,7 +59,7 @@ describe('EMAIL ROUTE', () => {
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 404 when invalid token is sent as query string', async () => {
       const id = idWrong;
-      const response = await request.get(`/api/email/verify?id=${id}`);
+      const response = await request.get(`/api/v1/email/verify?id=${id}`);
       expect(response.body.status).to.equal(400);
       expect(response.body).to.be.a('object');
     }).timeout(0);
