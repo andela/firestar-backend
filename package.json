@@ -2,9 +2,9 @@
   "name": "express-authorshaven",
   "version": "1.0.0",
   "description": "A Social platform for the creative at heart",
-  "main": "index.js",
+  "main": "index.js", 
   "scripts": {
-    "test": "cross-env NODE_ENV=development nyc mocha --require @babel/register ./src/__tests__/*.js",
+    "test": "cross-env NODE_ENV=development nyc mocha --require sequelize db:migrate:undo:all  && sequelize db:migrate @babel/register ./src/__tests__/*.js",
     "coverage": "nyc report --reporter=text",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/ --fix",
