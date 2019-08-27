@@ -5,7 +5,7 @@ dotenv.config();
 
 const emailVerifyToken = (id) => new Promise((resolve) => {
   const token = jwt.sign({ id }, process.env.SECRET_KEY_EMAIL_VERIFY_TOKEN, { expiresIn: '24h' });
-  if (token) resolve(token);
+  if (token) return resolve(token);
 });
 
 const arrayTest = (array, index) => array.indexOf(index);

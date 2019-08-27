@@ -38,7 +38,7 @@ export default class emailVerificationController {
       jwt.verify(id, process.env.SECRET_KEY_EMAIL_VERIFY_TOKEN);
       return res.status(422).json({
         status: 200,
-        message: 'You Account has been successfully verified, you would be redirected in few seconds to your dashboard'
+        data: { message: 'You Account has been successfully verified, you would be redirected in few seconds to your dashboard' }
       });
     } catch (err) {
       return res.status(400).json({
