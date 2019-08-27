@@ -20,6 +20,6 @@ export const findByEmail = async (email) => {
       email
     }
   });
-  if (!user) throw new Error('User does not exist');
+  if (!user) throw new Error('User with the given email does not exist');
   return user.dataValues;
 };

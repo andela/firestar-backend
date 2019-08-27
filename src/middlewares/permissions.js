@@ -13,7 +13,7 @@ const checkPermission = async (roleId, resourceId, permission) => {
         resourceId
       }
     });
-    if (!foundPermission.dataValues[permission]) {
+    if (!foundPermission || !foundPermission.dataValues[permission]) {
       throw new Error('You are not authorized to perform this operation');
     }
     // If Permission exists return the value of the permission
@@ -50,7 +50,7 @@ export const permit = async (req, res, next) => {
   const { roleId } = req.user;
   const permission = permissiontype(req);
   try {
-    // Find resource by  in the db if it exists
+    // Find resource by name in the db if it exists
     const resource = await Resource.findOne({
       where: {
         name: req.url.split('/')[1]
@@ -58,7 +58,6 @@ export const permit = async (req, res, next) => {
     });
     const resourceId = resource.dataValues.id;
     const authorized = await checkPermission(roleId, resourceId, permission);
-    console.log(roleId, authorized)
     if (authorized) {
       return next();
     }
@@ -101,7 +100,8 @@ const setPermissionSchema = Joi.object().keys({
 });
 
 export const validateSetPermission = async (req, res, next) => {
-  const { resourceId, roleId } = req.body;
+  const { resourceId } = req.body;
+  const { roleId } = req.params;
   try {
     if (!resourceId) throw new Error('Resource not provided');
     if (!roleId) throw new Error('No Role provided');

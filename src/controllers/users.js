@@ -1,4 +1,4 @@
-import { findByEmail, checkIfExistsInDb } from '../utils/checkDb';
+import { findByEmail, checkIfExistsInDb } from '../utils/searchDb';
 import { User, Role } from '../models';
 
 /**

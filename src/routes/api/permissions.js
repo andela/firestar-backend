@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import Permssions from '../../controllers/permissions';
 import { validateSetPermission, permit } from '../../middlewares/permissions';
-import isLoggedIn from '../../middlewares/req.user';
+import isLoggedIn from '../../middlewares/login';
 
 const router = Router();
 

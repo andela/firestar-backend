@@ -2,7 +2,7 @@ import { Router } from 'express';
 import Users from '../../controllers/users';
 import validateSetRole from '../../middlewares/userRole';
 import { permit } from '../../middlewares/permissions';
-import isLoggedIn from '../../middlewares/req.user';
+import isLoggedIn from '../../middlewares/login';
 
 const router = Router();
 

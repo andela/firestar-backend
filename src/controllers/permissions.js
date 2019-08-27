@@ -1,4 +1,4 @@
-import { checkIfExistsInDb } from '../utils/checkDb';
+import { checkIfExistsInDb } from '../utils/searchDb';
 import { Resource, Permission, Role } from '../models';
 /**
  * @class
@@ -15,6 +15,7 @@ class Permissions {
    * @type {object}
    */
   static async setPermissions(req, res) {
+    let updatedPermissions;
     const { roleId } = req.params;
     const { resourceId, ...permissions } = req.body;
     try {
@@ -22,21 +23,37 @@ class Permissions {
       await checkIfExistsInDb(Role, roleId, 'Role does not exist');
       // Check if Resource Exists
       await checkIfExistsInDb(Resource, resourceId, 'Resource does not exist');
-      // Update Permission
-
-      const updatedPermissions = await Permission.update({
-        edit: permissions.edit,
-        read: permissions.read
-      }, {
-        returning: true,
+      // Check If Permission alreday exists in Db
+      const userPermission = await Permission.findOne({
         where: {
+          roleId,
           resourceId,
-          roleId
+          ...permissions
         }
       });
+      console.log(userPermission, !userPermission.dataValues)
+      // Update Permission
+      if (!userPermission.dataValues) {
+        updatedPermissions = await Permission.create({
+          resourceId,
+          roleId,
+          ...permissions
+        });
+      } else {
+        updatedPermissions = await Permission.update({
+          ...permissions
+        }, {
+          returning: true,
+          where: {
+            resourceId,
+            roleId
+          }
+        });
+      }
+console.log(updatedPermissions)
       return res.status(200).json({
         status: 'success',
-        data: updatedPermissions[1][0]
+        data: updatedPermissions.dataValues
       });
     } catch (error) {
       res.status(404).json({

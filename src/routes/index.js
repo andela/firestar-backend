@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
-import { findByEmail } from '../utils/checkDb';
+import { findByEmail } from '../utils/searchDb';
 import permissions from './api/permissions';
 import userRole from './api/roles';
 
