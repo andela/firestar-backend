@@ -1,5 +1,6 @@
+/* eslint-disable camelcase */
 /* eslint-disable valid-jsdoc */
-/* eslint-disable require-jsdoc */
+import Helper from '../helpers/helperUtils';
 import userService from '../services/userService';
 /**
  * @class UsersController
@@ -7,25 +8,35 @@ import userService from '../services/userService';
 class UserController {
   /** Login User
    * @static
-   * @returns {object} loginUsers
    * @params {*} req
    * @params {*} res
+   * @returns {object} loginUsers
    */
   static async loginAUser(req, res) {
     const { email } = req.body;
     try {
       const loggedUser = await userService.loginAUser(email);
-      // console.log(loggedUser.dataValues);
-      if (!loggedUser) {
-        return res.status(404).json({
-          status: 404,
-          message: `cannot find user with this ${email}`,
+      if (loggedUser) {
+        const validatePassword = Helper.verifyPassword(loggedUser.password, req.body.password);
+        if (validatePassword) {
+          const token = Helper.generateToken(loggedUser.dataValues);
+          const { first_name, last_name } = loggedUser.dataValues;
+          return res.status(200).json({
+            status: 200,
+            data: {
+              token,
+              first_name,
+              last_name,
+              email,
+              message: `Welcome back ${loggedUser.first_name}, your login was successful`,
+            },
+          });
+        }
+        return res.status(401).json({
+          status: 401,
+          error: 'Password does not match.',
         });
       }
-      return res.status(200).json({
-        status: 200,
-        message: `Welcome back ${loggedUser.first_name}, your login was successful`,
-      });
     } catch (error) {
       res.status(500).json({ status: 500, error: error.message });
     }
