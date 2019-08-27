@@ -30,9 +30,9 @@ const sendResetMail = (user, resetToken) => {
   sgMail.send(message);
 };
 
-const sendSignupMail = user => {
+const sendSignupMail = email => {
   const message = {
-    to: user.email,
+    to: email,
     from: 'firestar@digitalnomad.com',
     subject: 'Sign up on Barefoot Nomad',
     html: `

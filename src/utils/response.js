@@ -1,13 +1,13 @@
 const errorResponse = (res, statusCode, err) => {
   return res.status(statusCode).json({
-    status: "error",
+    status: 'error',
     error: err
   });
 };
 
 const successResponse = (res, statusCode, msg) => {
   return res.status(statusCode).json({
-    status: "true",
+    status: 'success',
     message: msg
   });
 };
