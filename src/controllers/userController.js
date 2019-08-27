@@ -9,6 +9,15 @@ import models from '../models';
 const { User, Login, Reset } = models;
 
 export default class UserController {
+
+  /**
+   * @description Generate link to reset a user password
+   * @static
+   * @param {*} req
+   * @param {*} res
+   * @returns Promise {UserController} A reset link for new password
+   * @memberof UserController
+   */
   static async forgotPassword(req, res) {
     try {
       const { errors, isValid } = Validation.validateEmail(req.body);
