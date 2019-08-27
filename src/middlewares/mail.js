@@ -28,6 +28,7 @@ export const SendVerificationEmail = async (req, res, next) => {
 
     if (response) {
       req.verificationMailResponse = response;
+      req.emailToken = token;
       next();
     }
     if (!response) {

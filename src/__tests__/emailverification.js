@@ -6,7 +6,7 @@ import app from '../index';
 
 import emailverification from '../controllers/emailController';
 import { emailVerifyToken } from '../utils/index';
-import { idUnset, idCorrect, idWrong } from '../__mocks__/emailVerification';
+import { idUnset, idWrong } from '../__mocks__/emailVerification';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -14,6 +14,7 @@ chai.use(sinonChai);
 const { expect } = chai;
 
 let request;
+let tokenEmail;
 
 describe('EMAIL ROUTE', () => {
   before(async () => {
@@ -30,6 +31,7 @@ describe('EMAIL ROUTE', () => {
         lastName: 'Akpan'
       };
       const response = await request.post('/api/v1/email/test').send(body);
+      tokenEmail = response.body.data.token;
       expect(response.body.status).to.equal(200);
       expect(response.body).to.be.a('object');
     }).timeout(0);
@@ -40,16 +42,11 @@ describe('EMAIL ROUTE', () => {
       const token = await emailVerifyToken(id);
       expect(token).to.equal(token);
     }).timeout(0);
-    it('it should not assign token, or fail', async () => {
-      const id = idUnset;
-      const token = await emailVerifyToken(id);
-      expect(token).to.equal(token);
-    }).timeout(0);
   });
 
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 200 when valid token is sent as query string', async () => {
-      const id = idCorrect;
+      const id = tokenEmail;
       const response = await request.get(`/api/v1/email/verify?id=${id}`);
       expect(response.body.status).to.equal(200);
       expect(response.body).to.be.a('object');
@@ -87,7 +84,7 @@ describe('EMAIL ROUTE', () => {
     });
     it('fakes server response for email confirmation', async () => {
       const req = {
-        url: idCorrect
+        url: tokenEmail
       };
       const res = {
         status() {},

@@ -13,11 +13,12 @@ export default class emailVerificationController {
  * @returns {object} Success email response for email token sent to mail
  */
   static signUp(req, res) {
-    const { verificationMailResponse } = req;
+    const { verificationMailResponse, emailToken } = req;
 
     return res.status(200).json({
       status: 200,
       data: {
+        token: emailToken,
         message:
         'Message successfully sent, please check your email',
         verificationMailResponse

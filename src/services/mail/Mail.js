@@ -41,10 +41,10 @@ class Mail {
     // create reusable transporter object using the default SMTP transport
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     const transporter = nodemailer.createTransport({
-      service: process.env.layer,
+      service: process.env.LAYER,
       auth: {
-        user: process.env.email,
-        pass: process.env.password,
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
       },
     });
 
