@@ -30,7 +30,7 @@ const sendResetMail = (user, resetToken) => {
   sgMail.send(message);
 };
 
-const sendSignupMail = email => {
+const sendSignupMail = (email) => {
   const message = {
     to: email,
     from: 'firestar@digitalnomad.com',

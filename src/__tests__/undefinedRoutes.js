@@ -12,7 +12,6 @@ describe('Test for getting undefined routes', () => {
       .post('/')
       .end((err, res) => {
         expect(res.status).to.equal(404);
-        console.log(res.errors);
         expect(res.body.errors.message).to.equal('Not Found');
       });
   });

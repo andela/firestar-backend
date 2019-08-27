@@ -10,7 +10,6 @@ import Log from 'debug';
 import routes from './routes';
 import swaggerDocument from '../swagger.json';
 import { sequelize } from './models';
-import seedCopyDb from './database/seed';
 
 const serverLog = Log('server');
 

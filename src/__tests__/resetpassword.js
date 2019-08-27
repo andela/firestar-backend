@@ -53,7 +53,7 @@ describe('Forgot Password', () => {
   // afterEach(() => sinon.restore());
 
   describe('POST /api/forgetpassword', () => {
-    it('should not generate reset link without an email of an existing user', done => {
+    it('should not generate reset link without an email of an existing user', (done) => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
@@ -65,7 +65,7 @@ describe('Forgot Password', () => {
           done();
         });
     });
-    it('should send reset mail to the email of an existing user', done => {
+    it('should send reset mail to the email of an existing user', (done) => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
@@ -81,7 +81,7 @@ describe('Forgot Password', () => {
           done();
         });
     });
-    it('should send signup mail to the email of a non user', done => {
+    it('should send signup mail to the email of a non user', (done) => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
@@ -91,14 +91,12 @@ describe('Forgot Password', () => {
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body.status).to.be.equal('success');
-          expect(res.body.message).to.be.equal(
-            'Check your mail for further instruction'
-          );
+          expect(res.body.message).to.be.equal('Check your mail for further instruction');
           done();
         });
     });
 
-    it('should not generate reset link without a valid email', done => {
+    it('should not generate reset link without a valid email', (done) => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
@@ -115,7 +113,7 @@ describe('Forgot Password', () => {
   });
 
   describe('POST /api/resetpassword', () => {
-    it('should not reset password without new password from existing user', done => {
+    it('should not reset password without new password from existing user', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -130,7 +128,7 @@ describe('Forgot Password', () => {
         });
     });
 
-    it('should not reset password without valid password', done => {
+    it('should not reset password without valid password', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -146,7 +144,7 @@ describe('Forgot Password', () => {
         });
     });
 
-    it('should not reset password if passwords do not match', done => {
+    it('should not reset password if passwords do not match', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -162,7 +160,7 @@ describe('Forgot Password', () => {
         });
     });
 
-    it('should not reset password if reset password link is invalid', done => {
+    it('should not reset password if reset password link is invalid', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -171,14 +169,13 @@ describe('Forgot Password', () => {
           confirmPassword: 'password10'
         })
         .end((err, res) => {
-          console.log('err', err);
           expect(res).to.have.status(400);
           expect(res.body.status).to.be.equal('error');
           expect(res.body.error).to.be.equal('Invalid or expired reset token');
           done();
         });
     });
-    it('should return invalid reset token', done => {
+    it('should return invalid reset token', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -197,39 +194,25 @@ describe('Forgot Password', () => {
 });
 
 describe('Reset Password', () => {
-  let resetToken = '';
+  let resetTokenLink = '';
   let userId = '';
-  // beforeEach(done => {
-  //   seedTestDb();
-  //   chai
-  //     .request(app)
-  //     .post(`${forgotPasswordURL}`)
-  //     .send({ email: 'youremail@andela.com' })
-  //     .end((err, res) => {
-  //       done();
-  //       console.log('res', res);
-  //       resetToken = res.body.resetToken;
-  //       console.log(resetToken);
-  //     });
-  // });
   beforeEach(async () => {
     const res = await chai
       .request(app)
       .post(`${forgotPasswordURL}`)
       .send({ email: 'youremail@andela.com' });
-    resetToken = res.body.data.resetToken;
+    resetTokenLink = res.body.data.resetToken;
     userId = res.body.data.id;
   });
-  it('should return reset user password', done => {
+  it('should return reset user password', (done) => {
     chai
       .request(app)
-      .post(`${resetPasswordURL}/${userId}?token=${resetToken}`)
+      .post(`${resetPasswordURL}/${userId}?token=${resetTokenLink}`)
       .send({
         password: 'password10',
         confirmPassword: 'password10'
       })
       .end((err, res) => {
-        console.log('res', res.body);
         expect(res).to.have.status(200);
         expect(res.body.status).to.be.equal('success');
         expect(res.body.message).to.be.equal('Password updated successfully');
