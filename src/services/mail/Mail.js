@@ -50,7 +50,7 @@ class Mail {
 
 
     const mailOptions = {
-      from: `"Firestar-Backend" <${process.env.email}>`,
+      from: `"Firestar-Backend" <${process.env.EMAIL}>`,
       to: recipient,
       subject,
       html: content,
