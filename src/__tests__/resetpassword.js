@@ -61,13 +61,11 @@ describe('Forgot Password', () => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
-        .send({email: 'youremail@andela.com'})
+        .send({ email: 'youremail@andela.com' })
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body.status).to.be.equal('success');
-          expect(res.body.message).to.be.equal(
-            'Check your mail for further instruction'
-          );
+          expect(res.body.message).to.be.equal('Check your mail for further instruction');
           done();
         });
     });
@@ -75,7 +73,7 @@ describe('Forgot Password', () => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
-        .send({email: 'youremail2@andela.com'})
+        .send({ email: 'youremail2@andela.com' })
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body.status).to.be.equal('success');
@@ -88,7 +86,7 @@ describe('Forgot Password', () => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
-        .send({email: '123xy'})
+        .send({ email: '123xy' })
         .end((err, res) => {
           expect(res).to.have.status(400);
           expect(res.body.status).to.be.equal('error');
@@ -103,7 +101,7 @@ describe('Forgot Password', () => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
-        .send({confirmPassword: ''})
+        .send({ confirmPassword: '' })
         .end((err, res) => {
           expect(res).to.have.status(400);
           expect(res.body.status).to.be.equal('error');
