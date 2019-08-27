@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { verifyEmail } from '../services/mail/template/verifyEmail';
 import { emailVerifyToken } from '../utils/index';
-import { Mail } from '../services/mail/Mail';
+import Mail from '../services/mail/Mail';
 
 export const SendVerificationEmail = async (req, res, next) => {
   let { email, firstName, lastName } = req.body;

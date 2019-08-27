@@ -4,8 +4,9 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '../index';
 
-import { signUp, confirmEmailVerificaionToken } from '../controllers/user';
+import emailverification from '../controllers/emailController';
 import { emailVerifyToken } from '../utils/index';
+import { idUnset, idCorrect, idWrong } from '../__mocks__/emailVerification';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -35,12 +36,12 @@ describe('EMAIL ROUTE', () => {
   });
   describe('UTILS/ EMAIL TOKEN', () => {
     it('it should assign a token to newly registered users', async () => {
-      const id = 'some_secret_identification_number_or_string';
+      const id = idUnset;
       const token = await emailVerifyToken(id);
       expect(token).to.equal(token);
     }).timeout(0);
     it('it should not assign token, or fail', async () => {
-      const id = 'some_secret_identification_number_or_string';
+      const id = idUnset;
       const token = await emailVerifyToken(id);
       expect(token).to.equal(token);
     }).timeout(0);
@@ -48,7 +49,7 @@ describe('EMAIL ROUTE', () => {
 
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 200 when valid token is sent as query string', async () => {
-      const id = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNvbWVfZW5jb2RlZF9pZGVudGlpdHkiLCJpYXQiOjE1NjY4MTE1OTcsImV4cCI6MTU2Njg5Nzk5N30.oCXhqT4Ri-k7RIqlgIHVFvGGwmxIzBwyzqbXIG0JwyE';
+      const id = idCorrect;
       const response = await request.get(`/api/email/verify?id=${id}`);
       expect(response.body.status).to.equal(200);
       expect(response.body).to.be.a('object');
@@ -57,7 +58,7 @@ describe('EMAIL ROUTE', () => {
 
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 404 when invalid token is sent as query string', async () => {
-      const id = 'eyJhbGciOiJIUzI1NiIsInR5cCI6bkpXVCJ9.eyJpZCI6InNvbWVfZW5jb2RlZF9pZGVudGlpdHkiLCJpYXQiOjE1NjY4MTE1OTcsImV4cCI6MTU2Njg5Nzk5N30.oCXhqT4Ri-k7RIqlgIHVFvGGwmxIzBwyzqbXIG0JwyE';
+      const id = idWrong;
       const response = await request.get(`/api/email/verify?id=${id}`);
       expect(response.body.status).to.equal(400);
       expect(response.body).to.be.a('object');
@@ -81,12 +82,12 @@ describe('EMAIL ROUTE', () => {
 
       sinon.stub(res, 'status').returnsThis();
 
-      await signUp(req, res);
+      await emailverification.signUp(req, res);
       expect(res.status).to.have.been.calledWith(200);
     });
     it('fakes server response for email confirmation', async () => {
       const req = {
-        url: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNvbWVfZW5jb2RlZF9pZGVudGlpdHkiLCJpYXQiOjE1NjY4MTE1OTcsImV4cCI6MTU2Njg5Nzk5N30.oCXhqT4Ri-k7RIqlgIHVFvGGwmxIzBwyzqbXIG0JwyE'
+        url: idCorrect
       };
       const res = {
         status() {},
@@ -95,7 +96,7 @@ describe('EMAIL ROUTE', () => {
 
       sinon.stub(res, 'status').returnsThis();
 
-      await confirmEmailVerificaionToken(req, res);
+      await emailverification.confirmEmailVerificaionToken(req, res);
       expect(res.status).to.have.been.calledWith(400);
     });
   });
