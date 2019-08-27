@@ -58,6 +58,7 @@ export const permit = async (req, res, next) => {
     });
     const resourceId = resource.dataValues.id;
     const authorized = await checkPermission(roleId, resourceId, permission);
+    console.log(roleId, authorized)
     if (authorized) {
       return next();
     }

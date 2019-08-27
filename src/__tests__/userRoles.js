@@ -8,7 +8,7 @@ const { assert } = chai;
 
 describe('Users', () => {
   describe('Set User Role', () => {
-    let validInfo, unauthorisedUser, invalidInfo1, invalidInfo2;
+    let validInfo, unauthorisedUser, invalidInfo1, invalidInfo2, invalidInfo3;
     beforeEach(() => {
       validInfo = {
         id: 1,
@@ -16,7 +16,7 @@ describe('Users', () => {
         email: 'abc123@gmail.com'
       };
       unauthorisedUser = {
-        id: 4,
+        id: 2,
         roleId: 1,
         email: 'abc123@gmail.com'
       };
@@ -30,11 +30,16 @@ describe('Users', () => {
         roleId: null,
         email: 'abc123@gmail.com'
       };
+      invalidInfo3 = {
+        id: 1,
+        roleId: 2,
+        email: 'samsung123@gmail.com'
+      };
     });
     it('Should return an error for unauthorised users', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/roles/user/role')
         .send(unauthorisedUser);
 
       assert.equal(res.status, 401, 'Should return 401 for unauthorized users');
@@ -44,7 +49,7 @@ describe('Users', () => {
     it('Should return an error for missing role field', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/roles/user/role')
         .send(invalidInfo2);
 
       assert.equal(
@@ -58,7 +63,7 @@ describe('Users', () => {
     it('Should return an error for missing email field', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/roles/user/role')
         .send(invalidInfo1);
 
       assert.equal(
@@ -69,10 +74,20 @@ describe('Users', () => {
       assert.equal(res.body.status, 'error', 'Should equal error');
     });
 
+    it('Should return an error if email doesnt exist in database', async () => {
+      const res = await chai
+        .request(server)
+        .patch('/api/v1/roles/user/role')
+        .send(invalidInfo3);
+
+      assert.equal(res.status, 404, 'Should return 401 for unauthorized users');
+      assert.equal(res.body.status, 'error', 'Should equal error');
+    });
+
     it("Should update user's roleId", async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/roles/user/role')
         .send(validInfo);
 
       assert.equal(

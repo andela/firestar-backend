@@ -6,7 +6,7 @@ import isLoggedIn from '../../middlewares/req.user';
 
 const router = Router();
 
-router.patch('/users/user/role', [isLoggedIn, validateSetRole, permit], Users.changeRole);
+router.patch('/roles/user/role', [isLoggedIn, validateSetRole, permit], Users.changeRole);
 
 
 export default router;

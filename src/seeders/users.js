@@ -6,14 +6,16 @@ module.exports = {
     first_name: faker.name.firstName(),
     last_name: faker.name.lastName(),
     roleId: 1,
-    email: faker.internet.email(),
+    password: 'password',
+    email: 'barefoot@gmail.com',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     first_name: faker.name.firstName(),
     last_name: faker.name.lastName(),
-    email: faker.internet.email(),
+    email: 'abc123@gmail.com',
+    password: 'password',
     roleId: 2,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -22,6 +24,7 @@ module.exports = {
     first_name: faker.name.firstName(),
     last_name: faker.name.lastName(),
     email: faker.internet.email(),
+    password: 'password',
     roleId: 3,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -29,7 +32,8 @@ module.exports = {
   {
     first_name: faker.name.firstName(),
     last_name: faker.name.lastName(),
-    email: 'abc123@gmail.com',
+    password: 'password',
+    email: faker.internet.email(),
     roleId: 4,
     createdAt: new Date(),
     updatedAt: new Date()
