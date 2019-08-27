@@ -1,17 +1,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import user from '../controllers/userController';
 import models from '../models';
 import app from '../index';
 
 // const app = `localhost:${process.env.PORT}`;
 const { expect } = chai;
 chai.use(chaiHttp);
-chai.use(sinonChai);
-
-const { forgotPassword, resetPassword } = user;
 
 const apiVersion = '/api/v1';
 const forgotPasswordURL = `${apiVersion}/forgotpassword`;
@@ -44,8 +38,6 @@ before(async () => {
   }
 });
 
-let request;
-
 describe('Forgot Password', () => {
   // before(async () => {
   //   request = chai.request(app).keepOpen();
@@ -69,9 +61,7 @@ describe('Forgot Password', () => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
-        .send({
-          email: 'youremail@andela.com'
-        })
+        .send({email: 'youremail@andela.com'})
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body.status).to.be.equal('success');
@@ -85,9 +75,7 @@ describe('Forgot Password', () => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
-        .send({
-          email: 'youremail2@andela.com'
-        })
+        .send({email: 'youremail2@andela.com'})
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body.status).to.be.equal('success');
@@ -100,9 +88,7 @@ describe('Forgot Password', () => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
-        .send({
-          email: '123xy'
-        })
+        .send({email: '123xy'})
         .end((err, res) => {
           expect(res).to.have.status(400);
           expect(res.body.status).to.be.equal('error');
@@ -117,9 +103,7 @@ describe('Forgot Password', () => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
-        .send({
-          confirmPassword: ''
-        })
+        .send({confirmPassword: ''})
         .end((err, res) => {
           expect(res).to.have.status(400);
           expect(res.body.status).to.be.equal('error');
