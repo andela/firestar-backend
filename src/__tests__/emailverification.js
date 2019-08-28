@@ -35,6 +35,12 @@ describe('EMAIL ROUTE', () => {
       expect(response.body.status).to.equal(200);
       expect(response.body).to.be.a('object');
     }).timeout(0);
+
+    it('should have a status of 409 when BODY is not present', async () => {
+      const response = await request.post('/api/v1/users/email/test');
+      expect(response.body.status).to.equal(409);
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
   });
   describe('UTILS/ EMAIL TOKEN', () => {
     it('it should assign a token to newly registered users', async () => {

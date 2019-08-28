@@ -35,15 +35,18 @@ export const SendVerificationEmail = async (req, res, next) => {
 
   try {
     const send = new Mail(emaildDetails, verifyEmailTemplate(data));
-    const { response } = await send.main();
+    const response = await send.main();
+    if (!response) {
+      return res.status(400).json({ status: 400, error: 'Network error occured, please check your network' });
+    }
 
+    if (response.message === 'No recipients defined') {
+      return res.status(409).json({ status: 409, error: response.message });
+    }
     if (response) {
       req.verificationMailResponse = response;
       req.emailToken = token;
       next();
-    }
-    if (!response) {
-      return res.status(400).json({ status: 400, error: 'Network error occured, please check your network' });
     }
   } catch (err) {
     return res.status(400).json({ status: 400, error: err });
