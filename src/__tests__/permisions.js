@@ -120,7 +120,7 @@ describe('Set Role Permissions', () => {
     assert.equal(res.body.status, 'error', 'Should equal error');
   });
 
-  it('Should create the permission of a given Role', async () => {
+  it('Should Create the permission of a given Role', async () => {
     const res = await chai
       .request(server)
       .patch(`/api/v1/roles/${validInput.roleId}/permissions`)
@@ -128,13 +128,13 @@ describe('Set Role Permissions', () => {
       .send(validInput);
     assert.equal(
       res.status,
-      200,
+      201,
       'It should return a response status of 200'
     );
     assert.equal(res.body.status, 'success', 'Should equal success');
   });
 
-  it('Should create the permission of a given Role', async () => {
+  it('Should Set the permission of a given Role', async () => {
     const res = await chai
       .request(server)
       .patch(`/api/v1/roles/${validInput.roleId}/permissions`)
