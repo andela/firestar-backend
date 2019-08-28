@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 /**
+ * @class
+ * @description Class based Mail for sending emails and formating as well
  * @param {object} emailDetails The Email details such as subject and recipients.
  * @param {string} html content to be rendered.
  */
