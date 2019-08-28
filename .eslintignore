@@ -1,4 +1,3 @@
-src/models/index.js
-src/models/User.js
-src/models/users.js
+src/models/*
 src/migrations/*
+src/seeders/*

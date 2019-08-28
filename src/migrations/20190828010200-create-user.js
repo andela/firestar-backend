@@ -8,9 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id: {
-        type: Sequelize.INTEGER
-      },
       firstname: {
         type: Sequelize.STRING
       },
@@ -22,6 +19,15 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING
+      },
+      gender: {
+        type: Sequelize.STRING
+      },
+      role: {
+        type: Sequelize.STRING
+      },
+      verification: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
