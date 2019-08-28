@@ -4,6 +4,26 @@ import Util from '../utils/index';
 
 const util = new Util();
 class UserController {
+  static async getUser(req, res) {
+    const { id } = req.params;
+    if (!Number(id)) {
+      util.setError(401, `User with the ${id} is not valid`);
+      return util.send(res);
+    }
+    try {
+      const theUser = await UserService.getAuser(id);
+      if (!theUser) {
+        util.setError(401, `User with id ${id} does not exist`);
+        return util.send(res);
+      }
+      util.setSuccess(200, 'Succesfully found user', theUser);
+      return util.send(res);
+    } catch (error) {
+      util.setError(401, error);
+      return util.send(res);
+    }
+  }
+
   static async updateProfile(req, res) {
     const newValues = req.body;
     const { id } = req.params;
