@@ -29,5 +29,5 @@ const sync = async () => {
 };
 
 export default sequelize.sync({ force: true }).then(async () => {
-  await sync()
+  await sync();
 });
