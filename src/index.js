@@ -73,19 +73,6 @@ if (!isProduction) {
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
-// eslint-disable-next-line no-unused-vars
-// app.use((err, req, res, next) => {
-//   res.status(err.status || 500);
-//   res.json({
-//     errors: {
-//       message: err.message,
-//       error: {}
-//     }
-//   });
-// });
-
 // finally, let's connect to the database and start our server...
 sequelize.sync({ force: false }).then(async () => {
   const server = app.listen(process.env.PORT || 3000, () => {

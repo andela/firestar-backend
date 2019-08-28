@@ -56,14 +56,6 @@ export default class UserController {
         await newReset.save();
         // Send reset link to user email
         await sendResetMail(user.dataValues, resetToken);
-        // return res.status(200).json({
-        //   status: 'success',
-        //   message: 'Check your mail for further instruction',
-        //   data: {
-        //     id: user.id,
-        //     resetToken
-        //   }
-        // });
       }
       successResponse(res, 200, 'Check your mail for further instruction');
     } catch (error) {
