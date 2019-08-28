@@ -13,7 +13,7 @@ router.post('/auth/login', async (req, res) => {
     const user = await findByEmail(req.body.email);
     if (!user) throw new Error('No user found');
     const { id, roleId } = user;
-    const token = await jwt.sign({ id, roleId }, process.env.secret);
+    const token = await jwt.sign({ id, roleId }, process.env.SECRET);
     res
       .status(200)
       .header('x-access-auth', token)
