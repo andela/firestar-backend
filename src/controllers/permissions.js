@@ -35,20 +35,23 @@ class Permissions {
           roleId,
           ...permissions
         });
-      } else {
-        updatedPermissions = await Permission.update({
-          ...permissions
-        }, {
-          returning: true,
-          where: {
-            resourceId,
-            roleId
-          }
+        return res.status(201).json({
+          status: 'success',
+          data: updatedPermissions.dataValues
         });
       }
+      updatedPermissions = await Permission.update({
+        ...permissions
+      }, {
+        returning: true,
+        where: {
+          resourceId,
+          roleId
+        }
+      });
       return res.status(200).json({
         status: 'success',
-        data: updatedPermissions.dataValues
+        data: updatedPermissions[1][0].dataValues
       });
     } catch (error) {
       res.status(404).json({
