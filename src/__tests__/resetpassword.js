@@ -2,10 +2,8 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import request from 'request';
 import models from '../models';
 import app from '../index';
-import userController from '../controllers/userController';
 import { sendResetMail, sendSignupMail } from '../services/sendMail';
 import UserController from '../controllers/userController';
 
@@ -50,7 +48,7 @@ before(async () => {
 
 describe('Forgot Password validations', () => {
   describe('POST /api/forgetpassword', () => {
-    it('should not generate reset link without an email of an existing user', done => {
+    it('should not generate reset link without an email of an existing user', (done) => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
@@ -62,7 +60,7 @@ describe('Forgot Password validations', () => {
           done();
         });
     });
-    it('should send reset mail to the email of an existing user', done => {
+    it('should send reset mail to the email of an existing user', (done) => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
@@ -70,14 +68,12 @@ describe('Forgot Password validations', () => {
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body.status).to.be.equal('success');
-          expect(res.body.message).to.be.equal(
-            'Check your mail for further instruction'
-          );
+          expect(res.body.message).to.be.equal('Check your mail for further instruction');
           done();
         });
     });
 
-    it('should not generate reset link without a valid email', done => {
+    it('should not generate reset link without a valid email', (done) => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
@@ -92,7 +88,7 @@ describe('Forgot Password validations', () => {
   });
 
   describe('POST /api/resetpassword', () => {
-    it('should not reset password without new password from existing user', done => {
+    it('should not reset password without new password from existing user', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -105,7 +101,7 @@ describe('Forgot Password validations', () => {
         });
     });
 
-    it('should not reset password without valid password', done => {
+    it('should not reset password without valid password', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -121,7 +117,7 @@ describe('Forgot Password validations', () => {
         });
     });
 
-    it('should not reset password if passwords do not match', done => {
+    it('should not reset password if passwords do not match', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -137,7 +133,7 @@ describe('Forgot Password validations', () => {
         });
     });
 
-    it('should not reset password if reset password link is invalid', done => {
+    it('should not reset password if reset password link is invalid', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -152,7 +148,7 @@ describe('Forgot Password validations', () => {
           done();
         });
     });
-    it('should return invalid reset token', done => {
+    it('should return invalid reset token', (done) => {
       chai
         .request(app)
         .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
@@ -171,21 +167,21 @@ describe('Forgot Password validations', () => {
 });
 
 describe('Forgot Password validations', () => {
-  let user = {
+  const user = {
     id: 1,
     email: 'youremail@andela.com',
     reset_token: 'theResetToken'
   };
 
-  let user2 = {
+  const user2 = {
     id: 1,
     email: 'youremail2@andela.com',
     reset_token: 'theResetToken'
   };
 
-  it('should send reset mail to the email of an existing user', done => {
+  it('should send reset mail to the email of an existing user', (done) => {
     // stub send mail functions
-    let resetMailStub = sinon.stub(sendResetMail(user, user.reset_token));
+    const resetMailStub = sinon.stub(sendResetMail(user, user.reset_token));
 
     resetMailStub.yields();
 
@@ -196,14 +192,12 @@ describe('Forgot Password validations', () => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.status).to.be.equal('success');
-        expect(res.body.message).to.be.equal(
-          'Check your mail for further instruction'
-        );
+        expect(res.body.message).to.be.equal('Check your mail for further instruction');
         done();
       });
   });
-  it('should send signup mail to the email of a non user', done => {
-    let signupMailStub = sinon.stub(sendSignupMail(user2.email));
+  it('should send signup mail to the email of a non user', (done) => {
+    const signupMailStub = sinon.stub(sendSignupMail(user2.email));
     signupMailStub.yields();
     chai
       .request(app)
@@ -212,9 +206,7 @@ describe('Forgot Password validations', () => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.status).to.be.equal('success');
-        expect(res.body.message).to.be.equal(
-          'Check your mail for further instruction'
-        );
+        expect(res.body.message).to.be.equal('Check your mail for further instruction');
         done();
       });
   });
@@ -227,7 +219,7 @@ describe('Reset Password', () => {
   const user2Id = 3;
 
   it('should reset user password', async () => {
-    const mockRequest = body => {
+    const mockRequest = (body) => {
       return {
         data: { userRequest: body.userRequest, validReset: body.validReset },
         params: { id: body.id },

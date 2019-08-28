@@ -30,7 +30,7 @@ export default class UserController {
 
       // Find user by email
       req.user = await User.findOne({ where: { email } });
-      const user = req.user;
+      const { user } = req;
       // Check for user
       if (!user) {
         sendSignupMail(email);
@@ -103,7 +103,7 @@ export default class UserController {
 
       if (userRequest) {
         // Check if reset token is not expired
-        const expire_time = userRequest.expire_time;
+        const { expire_time } = userRequest;
         const expireTime = moment.utc(expire_time);
 
         // If reset link is valid and not expired
