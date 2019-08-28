@@ -7,7 +7,6 @@ import app from '../index';
 import { sendResetMail, sendSignupMail } from '../services/sendMail';
 import UserController from '../controllers/userController';
 
-// const app = `localhost:${process.env.PORT}`;
 const { expect } = chai;
 chai.use(chaiHttp);
 chai.use(sinonChai);
