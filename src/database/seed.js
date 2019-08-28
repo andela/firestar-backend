@@ -1,7 +1,6 @@
 import models from '../models';
 import { sequelize } from '../models';
-console.log(process.env.SOME_PASSWORD);
-console.log(process.env.YOUR_EMAIL);
+
 const sync = async () => {
   if (process.env.YOUR_EMAIL && process.env.SOME_PASSWORD) {
     await models.User.create({
