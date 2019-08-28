@@ -11,6 +11,7 @@ router.use(permissions);
 router.post('/auth/login', async (req, res) => {
   try {
     const user = await findByEmail(req.body.email);
+    if (!user) throw new Error('No user found');
     const { id, roleId } = user;
     const token = await jwt.sign({ id, roleId }, process.env.secret);
     res
@@ -21,7 +22,7 @@ router.post('/auth/login', async (req, res) => {
         data: user
       });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(404).send(error);
   }
 });
 

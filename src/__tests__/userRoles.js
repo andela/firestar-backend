@@ -1,6 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../index';
+import { unauthorizedToken, authorizedToken } from '../__mocks__/testVariables';
 
 chai.use(chaiHttp);
 
@@ -11,27 +12,22 @@ describe('Users', () => {
     let validInfo, unauthorisedUser, invalidInfo1, invalidInfo2, invalidInfo3;
     beforeEach(() => {
       validInfo = {
-        id: 1,
         roleId: 4,
         email: 'abc123@gmail.com'
       };
       unauthorisedUser = {
-        id: 2,
         roleId: 1,
         email: 'abc123@gmail.com'
       };
       invalidInfo1 = {
-        id: 1,
         roleId: 2,
         email: ''
       };
       invalidInfo2 = {
-        id: 1,
         roleId: null,
         email: 'abc123@gmail.com'
       };
       invalidInfo3 = {
-        id: 1,
         roleId: 2,
         email: 'samsung123@gmail.com'
       };
@@ -40,6 +36,7 @@ describe('Users', () => {
       const res = await chai
         .request(server)
         .patch('/api/v1/roles/user/role')
+        .set('x-access-auth', unauthorizedToken)
         .send(unauthorisedUser);
 
       assert.equal(res.status, 401, 'Should return 401 for unauthorized users');
@@ -50,6 +47,7 @@ describe('Users', () => {
       const res = await chai
         .request(server)
         .patch('/api/v1/roles/user/role')
+        .set('x-access-auth', authorizedToken)
         .send(invalidInfo2);
 
       assert.equal(
@@ -64,6 +62,7 @@ describe('Users', () => {
       const res = await chai
         .request(server)
         .patch('/api/v1/roles/user/role')
+        .set('x-access-auth', authorizedToken)
         .send(invalidInfo1);
 
       assert.equal(
@@ -78,6 +77,7 @@ describe('Users', () => {
       const res = await chai
         .request(server)
         .patch('/api/v1/roles/user/role')
+        .set('x-access-auth', authorizedToken)
         .send(invalidInfo3);
 
       assert.equal(res.status, 404, 'Should return 401 for unauthorized users');
@@ -88,6 +88,7 @@ describe('Users', () => {
       const res = await chai
         .request(server)
         .patch('/api/v1/roles/user/role')
+        .set('x-access-auth', authorizedToken)
         .send(validInfo);
 
       assert.equal(

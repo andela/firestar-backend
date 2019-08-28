@@ -4,7 +4,7 @@ import { Resource, Role, Permission } from '../models';
 const checkPermission = async (roleId, resourceId, permission) => {
   try {
     // Base case to check if there is no roleId given
-    if (!roleId) return false;
+    if (!roleId) throw new Error('You are not authorized to perform this operation');
     // Find Permission if exists
     const foundPermission = await Permission.findOne({
       attributes: [permission],
@@ -13,7 +13,7 @@ const checkPermission = async (roleId, resourceId, permission) => {
         resourceId
       }
     });
-    if (!foundPermission || !foundPermission.dataValues[permission]) {
+    if (!foundPermission) {
       throw new Error('You are not authorized to perform this operation');
     }
     // If Permission exists return the value of the permission
@@ -78,7 +78,7 @@ const setPermissionSchema = Joi.object().keys({
   resourceId: Joi.number()
     .integer()
     .positive()
-    .max(15)
+    .max(25)
     .error(new Error('Invalid Resource ID Provided')),
   roleId: Joi.number()
     .integer()

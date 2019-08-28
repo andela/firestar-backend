@@ -51,6 +51,13 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        resourceId: 2,
+        roleId: 2,
+        delete: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
         resourceId: 1,
         roleId: 3,
         read: true,

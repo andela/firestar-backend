@@ -1,5 +1,5 @@
 import { checkIfExistsInDb } from '../utils/searchDb';
-import { Resource, Permission, Role } from '../models';
+import { Resource, Permission } from '../models';
 /**
  * @class
  * @description Class based Permissions Controller
@@ -19,8 +19,6 @@ class Permissions {
     const { roleId } = req.params;
     const { resourceId, ...permissions } = req.body;
     try {
-      // Check if Role Exists
-      await checkIfExistsInDb(Role, roleId, 'Role does not exist');
       // Check if Resource Exists
       await checkIfExistsInDb(Resource, resourceId, 'Resource does not exist');
       // Check If Permission alreday exists in Db
@@ -28,12 +26,10 @@ class Permissions {
         where: {
           roleId,
           resourceId,
-          ...permissions
         }
       });
-      console.log(userPermission, !userPermission.dataValues)
       // Update Permission
-      if (!userPermission.dataValues) {
+      if (!userPermission) {
         updatedPermissions = await Permission.create({
           resourceId,
           roleId,
@@ -50,7 +46,6 @@ class Permissions {
           }
         });
       }
-console.log(updatedPermissions)
       return res.status(200).json({
         status: 'success',
         data: updatedPermissions.dataValues
