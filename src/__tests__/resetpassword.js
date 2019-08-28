@@ -175,7 +175,7 @@ describe('Forgot Password validations', () => {
 
   const user2 = {
     id: 1,
-    email: 'youremail2@andela.com',
+    email: 'youremail34@andela.com',
     reset_token: 'theResetToken'
   };
 
