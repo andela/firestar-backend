@@ -14,7 +14,11 @@ class UserController {
         util.setError(401, `User with id: ${id} not found`);
         return util.send(res);
       }
-      util.setSuccess(201, 'You ve successfully updated your profile', updatedUser);
+      util.setSuccess(
+        202,
+        'You ve successfully updated your profile',
+        updatedUser
+      );
       return util.send(res);
     } catch (error) {
       util.setError(401, error);

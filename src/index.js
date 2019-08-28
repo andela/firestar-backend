@@ -89,3 +89,5 @@ app.use((err, req, res, next) => {
 const server = app.listen(process.env.PORT || 3001, () => {
   serverLog(`Listening on port ${server.address().port}`);
 });
+
+module.exports = server;

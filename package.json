@@ -2,9 +2,9 @@
   "name": "express-authorshaven",
   "version": "1.0.0",
   "description": "A Social platform for the creative at heart",
-  "main": "index.js", 
+  "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=development nyc mocha --require sequelize db:migrate:undo:all  && sequelize db:migrate @babel/register ./src/__tests__/*.js",
+    "test": "cross-env NODE_ENV=development nyc mocha --require @babel/register ./src/__tests__/*.js",
     "coverage": "nyc report --reporter=text",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/ --fix",
@@ -24,6 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "chai-http": "^4.3.0",
     "core-js": "^3.2.1",
     "cors": "^2.8.4",
     "cross-env": "^5.2.0",
@@ -47,6 +48,7 @@
     "request": "^2.87.0",
     "sequelize": "^5.15.0",
     "sequelize-cli": "^5.5.0",
+    "sinon": "^7.4.1",
     "swagger-ui-express": "^4.0.7",
     "underscore": "^1.9.1"
   },
