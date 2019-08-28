@@ -1,5 +1,8 @@
 /* eslint-disable import/prefer-default-export */
-
+/**
+ * @param {data} data is an object of email information
+ * @returns {string} string is returned
+ */
 export const verifyEmailTemplate = (data) => `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
