@@ -9,7 +9,6 @@ import models from '../models';
 const { User, Login, Reset } = models;
 
 export default class UserController {
-
   /**
    * @description Generate link to reset a user password
    * @static
@@ -30,7 +29,8 @@ export default class UserController {
       const { email } = req.body;
 
       // Find user by email
-      const user = await User.findOne({ where: { email } });
+      req.user = await User.findOne({ where: { email } });
+      const user = req.user;
       // Check for user
       if (!user) {
         sendSignupMail(email);
@@ -56,14 +56,14 @@ export default class UserController {
         await newReset.save();
         // Send reset link to user email
         await sendResetMail(user.dataValues, resetToken);
-        return res.status(200).json({
-          status: 'success',
-          message: 'Check your mail for further instruction',
-          data: {
-            id: user.id,
-            resetToken
-          }
-        });
+        // return res.status(200).json({
+        //   status: 'success',
+        //   message: 'Check your mail for further instruction',
+        //   data: {
+        //     id: user.id,
+        //     resetToken
+        //   }
+        // });
       }
       successResponse(res, 200, 'Check your mail for further instruction');
     } catch (error) {
@@ -94,19 +94,25 @@ export default class UserController {
       const { id } = req.params;
       const resetToken = req.query.token;
       const { password } = req.body;
-
       // Find user reset request by email
-      const userRequest = await Reset.findOne({ where: { id } });
+      req.data = {};
+      req.data.userRequest = await Reset.findOne({ where: { id } });
+
+      const { userRequest } = req.data;
       // Check if user has requested password reset
+
       if (userRequest) {
         // Check if reset token is not expired
-        const expireTime = moment.utc(userRequest.expire_time);
+        const expire_time = userRequest.expire_time;
+        const expireTime = moment.utc(expire_time);
 
         // If reset link is valid and not expired
-        if (
+        req.data.validReset =
           moment().isBefore(expireTime) &&
-          Hash.compareWithHash(resetToken, userRequest.reset_token)
-        ) {
+          Hash.compareWithHash(resetToken, req.data.userRequest.reset_token);
+        const { validReset } = req.data;
+
+        if (validReset) {
           // Store hash of new password in login
           const hashed = await Hash.hash(password);
           await Login.update(
