@@ -28,8 +28,8 @@ class UserController {
               first_name,
               last_name,
               email,
-              message: `Welcome back ${loggedUser.first_name}, your login was successful`,
             },
+            message: 'Welcome back, your login was successful',
           });
         }
         return res.status(401).json({

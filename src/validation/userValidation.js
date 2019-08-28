@@ -9,7 +9,7 @@ import userService from '../services/userService';
 
 class UsersValidation {
   /**
-   * @returns {object} ValidateUserSignInInput
+   * @returns {object} ValidateUserSignIn
    * @param {*} req
    * @param {*} res
    * @param {*} next
@@ -17,8 +17,8 @@ class UsersValidation {
   static async ValidateUserSignIn(req, res, next) {
     let { email, password } = req.body;
     const constraint = {
-      email: 'required|email',
-      password: 'required',
+      email: 'required|email|min:12|max:30',
+      password: 'required|min:8|max:14|alpha_num',
     };
 
     // eslint-disable-next-line new-cap
@@ -36,7 +36,7 @@ class UsersValidation {
       if (!findIfUserExist) {
         return res.status(401).json({
           status: 401,
-          error: `${req.body.email} does not exist, Please register an account or signup`,
+          error: 'Email does not exist, Please register an account or signup',
         });
       }
       password = password.trim();
