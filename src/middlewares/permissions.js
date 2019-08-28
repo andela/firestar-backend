@@ -1,54 +1,10 @@
 import Joi from '@hapi/joi';
-import { Resource, Role, Permission } from '../models';
+import { Resource } from '../models';
+import { permissionType, checkPermission, setPermissionSchema } from '../validation/permissions';
 
-const checkPermission = async (roleId, resourceId, permission) => {
-  try {
-    // Base case to check if there is no roleId given
-    if (!roleId) throw new Error('You are not authorized to perform this operation');
-    // Find Permission if exists
-    const foundPermission = await Permission.findOne({
-      attributes: [permission],
-      where: {
-        roleId,
-        resourceId
-      }
-    });
-    if (!foundPermission) {
-      throw new Error('You are not authorized to perform this operation');
-    }
-    // If Permission exists return the value of the permission
-    const isPermitted = foundPermission.dataValues[permission];
-    if (isPermitted) return isPermitted;
-    // If permission does not exist
-    // Get Role's ParentId
-    const role = await Role.findOne({
-      where: {
-        id: roleId
-      }
-    });
-    const { parentId } = role.dataValues;
-    // Check via recursion if parent role has the permission
-    return checkPermission(parentId, resourceId, permission);
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
-
-const permissiontype = (param) => {
-  switch (param.method.toLowerCase()) {
-    case 'get':
-      return 'read';
-    case 'post':
-      return 'add';
-    case 'delete':
-      return 'delete';
-    default:
-      return 'edit';
-  }
-};
 export const permit = async (req, res, next) => {
   const { roleId } = req.user;
-  const permission = permissiontype(req);
+  const permission = permissionType(req);
   try {
     // Find resource by name in the db if it exists
     const resource = await Resource.findOne({
@@ -70,34 +26,6 @@ export const permit = async (req, res, next) => {
   }
 };
 
-const setPermissionSchema = Joi.object().keys({
-  id: Joi.number()
-    .integer()
-    .positive()
-    .optional(),
-  resourceId: Joi.number()
-    .integer()
-    .positive()
-    .max(25)
-    .error(new Error('Invalid Resource ID Provided')),
-  roleId: Joi.number()
-    .integer()
-    .positive()
-    .max(5)
-    .error(new Error('Invalid Role ID Provided')),
-  edit: Joi.boolean()
-    .optional()
-    .error(new Error('Invalid permission type')),
-  read: Joi.boolean()
-    .optional()
-    .error(new Error('Invalid permission type')),
-  add: Joi.boolean()
-    .optional()
-    .error(new Error('Invalid permission type')),
-  delete: Joi.boolean()
-    .optional()
-    .error(new Error('Invalid permission type'))
-});
 
 export const validateSetPermission = async (req, res, next) => {
   const { resourceId } = req.body;
