@@ -4,8 +4,8 @@ import emailverification from '../../controllers/emailController';
 
 const router = Router();
 
-router.post('/email/test', SendVerificationEmail, emailverification.signUp);
+router.post('/users/email/test', SendVerificationEmail, emailverification.signUp);
 
-router.get('/email/verify', emailverification.confirmEmailVerificaionToken);
+router.get('/users/email/verify', emailverification.confirmEmailVerificaionToken);
 
 export default router;

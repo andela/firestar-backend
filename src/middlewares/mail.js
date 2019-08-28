@@ -1,20 +1,31 @@
 /* eslint-disable import/prefer-default-export */
-import { verifyEmail } from '../services/mail/template/verifyEmail';
+import { verifyEmailTemplate } from '../services/mail/template/verifyEmail';
 import { emailVerifyToken } from '../utils/index';
 import Mail from '../services/mail/Mail';
 
+
+/**
+ * @param {req} req contains the express object.
+ * @param {res} res contains the express response.
+ * @param {next} next calls the next middleware.
+ * @returns {next-middleware } returns the next middleware or throws an error.
+ * @returns {error} if any error occurs it throws an error.
+ */
 export const SendVerificationEmail = async (req, res, next) => {
   let { email, firstName, lastName } = req.body;
   email = email ? email.trim() : '';
-  firstName = firstName.trim();
-  lastName = lastName.trim();
+  firstName = firstName ? firstName.trim() : '';
+  lastName = lastName ? lastName.trim() : '';
+  /**
+   * @var {id} id is the user unique id from Table column
+   */
   const id = 'some_encoded_identiity';
   const token = await emailVerifyToken(id);
   const emaildDetails = {
     Subject: 'Email Verification',
     Recipient: email,
   };
-  const link = `http://localhost:3000/api/v1/auth/verify?id=${token}`;
+  const link = `${req.protocol}://${req.hostname}${process.env.PORT ? ':' : ''}${process.env.PORT ? process.env.PORT : ''}/api/v1/users/email/verify?id=${token}`;
   const data = {
     email,
     firstName,
@@ -23,7 +34,7 @@ export const SendVerificationEmail = async (req, res, next) => {
   };
 
   try {
-    const send = new Mail(emaildDetails, verifyEmail(data));
+    const send = new Mail(emaildDetails, verifyEmailTemplate(data));
     const { response } = await send.main();
 
     if (response) {
