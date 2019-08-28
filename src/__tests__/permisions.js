@@ -1,7 +1,10 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../index';
-import { unauthorizedToken, authorizedToken } from '../__mocks__/testVariables';
+import {
+  unauthorizedToken, authorizedToken, unauthorised,
+  invalidRoleId, invalidResourceId, validInput, validInput2
+} from '../__mocks__/testVariables';
 
 
 chai.use(chaiHttp);
@@ -9,38 +12,6 @@ chai.use(chaiHttp);
 const { assert } = chai;
 
 describe('Set Role Permissions', () => {
-  let unauthorised, invalidRoleId, invalidResourceId, validInput, validInput2;
-  beforeEach(() => {
-    unauthorised = {
-      roleId: 2,
-      resourceId: 1,
-      edit: true,
-      read: false
-    };
-    invalidRoleId = {
-      roleId: null,
-      resourceId: 1,
-      edit: true,
-      read: false
-    };
-    invalidResourceId = {
-      roleId: 3,
-      resourceId: null,
-      edit: true,
-      read: false
-    };
-    validInput = {
-      roleId: 2,
-      resourceId: 4,
-      edit: true,
-      read: false
-    };
-    validInput2 = {
-      roleId: 2,
-      resourceId: 4,
-      edit: false,
-    };
-  });
   it('Should return an error for unauthorized persons', async () => {
     const res = await chai
       .request(server)
