@@ -17,7 +17,6 @@
     "migrate:prod": "cross-env NODE_ENV=production sequelize db:migrate",
     "undo:dev": "sequelize db:migrate:undo",
     "undo:test": "cross-env NODE_ENV=test sequelize db:migrate:undo",
-    "undo:prod": "cross-env NODE_ENV=production sequelize db:migrate:undo",
     "seed:dev": "sequelize db:seed:all",
     "seed:test": "cross-env NODE_ENV=test sequelize db:seed:all"
   },
