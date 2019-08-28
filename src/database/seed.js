@@ -1,8 +1,9 @@
 import models from '../models';
+import { sequelize } from '../models';
 
-const seedCopyDb = async () => {
+const sync = async () => {
   await models.User.create({
-    email: 'youremail@andela.com',
+    email: 'youremail2@andela.com',
     role: 'passenger'
   });
 
@@ -27,4 +28,6 @@ const seedCopyDb = async () => {
   });
 };
 
-export default seedCopyDb;
+export default sequelize.sync({ force: true }).then(async () => {
+  await sync()
+});
