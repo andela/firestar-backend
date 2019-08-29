@@ -6,6 +6,7 @@ import app from '../index';
 
 import emailverification from '../controllers/emailController';
 import { emailVerifyToken } from '../utils/index';
+import { emailRegex } from '../validation/emailValidation';
 import { idUnset, idWrong } from '../__mocks__/emailVerification';
 
 chai.use(chaiHttp);
@@ -36,9 +37,39 @@ describe('EMAIL ROUTE', () => {
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
-    it('should have a status of 409 when BODY is not present', async () => {
+    it('should have a status of 403 email is not present before sending', async () => {
       const response = await request.post('/api/v1/users/email/test');
-      expect(response.body.status).to.equal(409);
+      expect(response.body.status).to.equal(403);
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 403 when BODY is not present', async () => {
+      const response = await request.post('/api/v1/users/email/test');
+      expect(response.body.status).to.equal(403);
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 403 and a messsage of "please fill in the required inputs"  when some body is not present', async () => {
+      const body = {
+        email: 'akp.ani@yahoo.com',
+        firstName: 'Aniefiok',
+        lastName: ''
+      };
+      const response = await request.post('/api/v1/users/email/test').send(body);
+      expect(response.body.status).to.equal('Please fill in the required inputs');
+      expect(response.body.error).to.equal(403);
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 403 and a messsage of "Please provide a valid email"  when some body is not present', async () => {
+      const body = {
+        email: 'akp.aniyahoo.com',
+        firstName: 'Aniefiok',
+        lastName: 'Akpan'
+      };
+      const response = await request.post('/api/v1/users/email/test').send(body);
+      expect(response.body.status).to.equal('Please provide a valid email');
+      expect(response.body.error).to.equal(403);
       expect(response.body).to.be.a('object');
     }).timeout(0);
   });
@@ -101,6 +132,18 @@ describe('EMAIL ROUTE', () => {
 
       await emailverification.confirmEmailVerificaionToken(req, res);
       expect(res.status).to.have.been.calledWith(400);
+    });
+  });
+  describe('VALIDATION EMAIL VERIFICATION', () => {
+    it('It checks if email is valid', async () => {
+      const email = 'akp.ani@yahoo.com';
+      const test = emailRegex(email);
+      expect(test).to.be.equal(true);
+    });
+    it('It checks if email is not valid', async () => {
+      const email = 'akp.aniyahoo.com';
+      const test = emailRegex(email);
+      expect(test).to.be.equal(false);
     });
   });
 });

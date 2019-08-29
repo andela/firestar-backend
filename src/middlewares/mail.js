@@ -42,7 +42,7 @@ export const SendVerificationEmail = async (req, res, next) => {
     }
 
     if (response.message === 'No recipients defined') {
-      return res.status(409).json({ status: 409, error: response.message });
+      return res.status(403).json({ status: 403, error: response.message });
     }
     if (response.message === 'queryA ECONNREFUSED smtp.gmail.com') {
       return res.status(409).json({ status: 409, error: response.message });
