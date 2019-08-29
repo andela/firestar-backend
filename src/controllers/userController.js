@@ -1,10 +1,10 @@
 /* eslint-disable require-jsdoc */
-import UserService from '../services/profileServices';
+import UserService from '../services/userServices';
 import Util from '../utils/index';
 
 const util = new Util();
 class UserController {
-  static async getUser(req, res) {
+  static async getUserProfile(req, res) {
     const { id } = req.params;
     if (!Number(id)) {
       util.setError(401, `User with the ${id} is not valid`);
@@ -24,7 +24,7 @@ class UserController {
     }
   }
 
-  static async updateProfile(req, res) {
+  static async updateUserProfile(req, res) {
     const newValues = req.body;
     const { id } = req.params;
 

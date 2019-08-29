@@ -35,8 +35,8 @@ app.use(
     secret: 'authorshaven',
     cookie: { maxAge: 60000 },
     resave: false,
-    saveUninitialized: false,
-  }),
+    saveUninitialized: false
+  })
 );
 
 if (!isProduction) {
@@ -66,8 +66,8 @@ if (!isProduction) {
     res.json({
       errors: {
         message: err.message,
-        error: err,
-      },
+        error: err
+      }
     });
   });
 }
@@ -80,14 +80,14 @@ app.use((err, req, res, next) => {
   res.json({
     errors: {
       message: err.message,
-      error: {},
-    },
+      error: {}
+    }
   });
 });
 
 // finally, let's start our server...
-const server = app.listen(process.env.PORT || 3001, () => {
-  serverLog(`Listening on port ${server.address().port}`);
+const server = app.listen(process.env.PORT || 3000, () => {
+  console.log(`Listening on port ${server.address().port}`);
 });
 
 module.exports = server;
