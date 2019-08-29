@@ -10,11 +10,12 @@ class Users {
  * @static
  * @param {object} req object
  * @param {object} res object
+ * @param {method} next method
  * @returns {object } Sets Role for a given user
  * @memberof Roles
  * @type {object}
  */
-  static async changeRole(req, res) {
+  static async changeRole(req, res, next) {
     const { email, roleId } = req.body;
     try {
       await findByEmail(email);
@@ -33,13 +34,10 @@ class Users {
         data: updatedUser[1][0]
       });
     } catch (error) {
-      res.status(404).json({
-        status: 'error',
-        message: error.message
-      });
+      error.status = 404;
+      next(error);
     }
   }
 }
-
 
 export default Users;

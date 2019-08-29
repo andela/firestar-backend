@@ -10,11 +10,12 @@ class Permissions {
    * @static
    * @param {object} req object
    * @param {object} res object
+   * @param {method} next method
    * @returns {object } Updated Role information
    * @memberof Permissions
    * @type {object}
    */
-  static async setPermissions(req, res) {
+  static async setPermissions(req, res, next) {
     let updatedPermissions;
     const { roleId } = req.params;
     const { resourceId, ...permissions } = req.body;
@@ -54,10 +55,8 @@ class Permissions {
         data: updatedPermissions[1][0].dataValues
       });
     } catch (error) {
-      res.status(404).json({
-        status: 'error',
-        mesage: error.message
-      });
+      error.status = 404;
+      next(error);
     }
   }
 }

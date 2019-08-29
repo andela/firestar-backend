@@ -8,21 +8,22 @@ const router = Router();
 
 router.use(userRole);
 router.use(permissions);
-router.post('/auth/login', async (req, res) => {
+router.post('/auth/login', async (req, res, next) => {
   try {
     const user = await findByEmail(req.body.email);
-    if (!user) throw new Error('No user found');
     const { id, roleId } = user;
-    const token = await jwt.sign({ id, roleId }, process.env.SECRET);
+    let token = await jwt.sign({ id, roleId }, process.env.SECRET);
+    token = `Bearer ${token}`;
     res
       .status(200)
-      .header('x-access-auth', token)
+      .header('x-auth-access', token)
       .json({
         token,
         data: user
       });
   } catch (error) {
-    res.status(404).send(error);
+    error.status = 404;
+    next(error);
   }
 });
 

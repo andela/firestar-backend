@@ -55,7 +55,6 @@ export const setPermissionSchema = Joi.object().keys({
   resourceId: Joi.number()
     .integer()
     .positive()
-    .max(25)
     .error(new Error('Invalid Resource ID Provided')),
   roleId: Joi.number()
     .integer()

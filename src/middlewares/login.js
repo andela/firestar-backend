@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 
 const isLoggedIn = async (req, res, next) => {
-  const token = req.headers['x-access-auth'];
+  let token = req.headers['x-auth-access'];
+  console.log(token);
   if (!token) {
     return res.status(401).json({
       status: 'error',
@@ -9,6 +10,7 @@ const isLoggedIn = async (req, res, next) => {
     });
   }
   try {
+    token = token.slice(7);
     const decoded = await jwt.decode(token, process.env.SECRET);
     if (decoded) {
       req.user = decoded;
