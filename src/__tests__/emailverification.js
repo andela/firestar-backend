@@ -61,7 +61,7 @@ describe('EMAIL ROUTE', () => {
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
-    it('should have a status of 403 and a messsage of "Please provide a valid email"  when some body is not present', async () => {
+    it('should have a status of 403 and a messsage of "Please provide a valid email"  when some bemail is invalid', async () => {
       const body = {
         email: 'akp.aniyahoo.com',
         firstName: 'Aniefiok',
