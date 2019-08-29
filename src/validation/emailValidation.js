@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { regexForEmail } from '../helper/default';
+import { regexForEmail } from '../helpers/default';
 
 export const emailRegex = (email) => {
   // eslint-disable-next-line no-useless-escape
