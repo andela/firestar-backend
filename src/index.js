@@ -30,7 +30,7 @@ if (!isProduction) {
   app.use(errorHandler());
 }
 
-app.use('/api/v1', routes);
+app.use(routes);
 
 // / catch 404 and forward to error handler
 

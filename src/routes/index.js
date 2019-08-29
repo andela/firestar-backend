@@ -1,14 +1,12 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { findByEmail } from '../utils/searchDb';
-import permissions from './api/permissions';
-import userRole from './api/roles';
+import routes from './api';
 
 const router = Router();
 
-router.use(userRole);
-router.use(permissions);
-router.post('/auth/login', async (req, res, next) => {
+router.use('/api/v1', routes);
+router.post('/api/v1/auth/login', async (req, res, next) => {
   try {
     const user = await findByEmail(req.body.email);
     const { id, roleId } = user;
