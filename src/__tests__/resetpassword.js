@@ -22,17 +22,17 @@ const resetToken = '12ererfbuib23iub328o7rg8hbiuva';
 // Create table and seed database
 const seedTestDb = async () => {
   await models.User.create({
-    email: 'youremail@andela.com',
+    email: 'youremail2@andela.com',
     role: 'passenger'
   });
 
   await models.Login.create({
-    email: 'youremail@andela.com',
+    email: 'youremail2@andela.com',
     password: 'password'
   });
 
   await models.Reset.create({
-    email: 'youremail@andela.com',
+    email: 'youremail2@andela.com',
     password: 'password'
   });
 };
@@ -41,7 +41,7 @@ before(async () => {
   try {
     await seedTestDb();
   } catch (err) {
-    //
+    throw err;
   }
 });
 
