@@ -91,7 +91,7 @@ describe('EMAIL ROUTE', () => {
   });
 
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
-    it('should have a status of 404 when invalid token is sent as query string', async () => {
+    it('should have a status of 400 when invalid token is sent as query string', async () => {
       const id = idWrong;
       const response = await request.get(`/api/v1/users/email/verify?id=${id}`);
       expect(response.body.status).to.equal(400);

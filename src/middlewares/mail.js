@@ -74,7 +74,7 @@ export const handleEmptyEmailBody = (req, res, next) => {
       lastName = lastName.trim();
       next();
     } else {
-      res.status(403).json({ status: 403, error: 'Please fill in the required inputs' });
+      res.status(403).json({ status: 403, error: 'Email, firstName and lastName is required' });
     }
   }
 };
