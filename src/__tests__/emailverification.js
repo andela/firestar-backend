@@ -56,8 +56,8 @@ describe('EMAIL ROUTE', () => {
         lastName: ''
       };
       const response = await request.post('/api/v1/users/email/test').send(body);
-      expect(response.body.status).to.equal('Please fill in the required inputs');
-      expect(response.body.error).to.equal(403);
+      expect(response.body.error).to.equal('Please fill in the required inputs');
+      expect(response.body.status).to.equal(403);
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -68,8 +68,8 @@ describe('EMAIL ROUTE', () => {
         lastName: 'Akpan'
       };
       const response = await request.post('/api/v1/users/email/test').send(body);
-      expect(response.body.status).to.equal('Please provide a valid email');
-      expect(response.body.error).to.equal(403);
+      expect(response.body.error).to.equal('Please provide a valid email');
+      expect(response.body.status).to.equal(403);
       expect(response.body).to.be.a('object');
     }).timeout(0);
   });
