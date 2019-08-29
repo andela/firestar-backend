@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { regexForEmail } from '../__mocks__/emailVerification';
+import { regexForEmail } from '../helper/default';
 
 export const emailRegex = (email) => {
   // eslint-disable-next-line no-useless-escape
