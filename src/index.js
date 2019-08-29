@@ -9,7 +9,6 @@ import swaggerUi from 'swagger-ui-express';
 import Log from 'debug';
 import routes from './routes';
 import swaggerDocument from '../swagger.json';
-import { sequelize } from './models';
 
 const serverLog = Log('server');
 
@@ -74,9 +73,9 @@ if (!isProduction) {
 }
 
 // finally, let's start our server...
-const port = process.env.PORT || 3000
-  app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-  });
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
 
 export default app;
