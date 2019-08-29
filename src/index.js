@@ -73,11 +73,10 @@ if (!isProduction) {
   });
 }
 
-// finally, let's connect to the database and start our server...
-sequelize.sync({ force: false }).then(async () => {
-  const server = app.listen(process.env.PORT || 3000, () => {
-    serverLog(`Listening on port ${server.address().port}`);
+// finally, let's start our server...
+const port = process.env.PORT || 3000
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
   });
-});
 
 export default app;

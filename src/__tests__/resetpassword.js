@@ -6,6 +6,7 @@ import models from '../models';
 import app from '../index';
 import { sendResetMail, sendSignupMail } from '../services/sendMail';
 import UserController from '../controllers/userController';
+import { sequelize } from '../models';
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -21,25 +22,37 @@ const resetToken = '12ererfbuib23iub328o7rg8hbiuva';
 
 // Create table and seed database
 const seedTestDb = async () => {
-  await models.User.create({
-    email: 'youremail2@andela.com',
-    role: 'passenger'
-  });
+    await models.User.create({
+      email: 'youremail@andela.com',
+      role: 'passenger'
+    });
 
-  await models.Login.create({
-    email: 'youremail2@andela.com',
-    password: 'password'
-  });
+    await models.User.create({
+      email: process.env.YOUR_EMAIL,
+      role: 'driver'
+    });
 
-  await models.Reset.create({
-    email: 'youremail2@andela.com',
-    password: 'password'
-  });
+    await models.Login.create({
+      email: 'youremail@andela.com',
+      password: 'password'
+    });
+
+    await models.Login.create({
+      email: process.env.YOUR_EMAIL,
+      password: process.env.SOME_PASSWORD
+    });
+
+    await models.Reset.create({
+      email: 'youremail@andela.com',
+      password: 'password'
+    });
 };
 
 before(async () => {
   try {
-    await seedTestDb();
+    sequelize.sync({ force: false }).then(async () => {
+      await seedTestDb();
+    });
   } catch (err) {
     throw err;
   }
@@ -141,6 +154,7 @@ describe('Forgot Password validations', () => {
           confirmPassword: 'password10'
         })
         .end((err, res) => {
+          console.log('err1: ', res.body);
           expect(res).to.have.status(400);
           expect(res.body.status).to.be.equal('error');
           expect(res.body.error).to.be.equal('Invalid or expired reset token');
@@ -156,6 +170,7 @@ describe('Forgot Password validations', () => {
           confirmPassword: 'password10'
         })
         .end((err, res) => {
+          console.log('error', res.body);
           expect(res).to.have.status(400);
           expect(res.body.status).to.be.equal('error');
           expect(res.body.error).to.be.equal('Invalid or expired reset token');

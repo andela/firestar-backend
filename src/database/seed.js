@@ -4,7 +4,7 @@ import { sequelize } from '../models';
 const sync = async () => {
   if (process.env.YOUR_EMAIL && process.env.SOME_PASSWORD) {
     await models.User.create({
-      email: 'youremail2@andela.com',
+      email: 'youremail@andela.com',
       role: 'passenger'
     });
 
