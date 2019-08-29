@@ -20,8 +20,6 @@ class UsersValidation {
       email: 'required|email|min:12|max:30',
       password: 'required|min:8|max:14|alpha_num',
     };
-
-    // eslint-disable-next-line new-cap
     const validation = new validator(req.body, constraint);
     if (validation.fails()) {
       return res.status(400).json({
@@ -32,7 +30,6 @@ class UsersValidation {
     email = email.toLowerCase().trim();
     try {
       const findIfUserExist = await userService.loginAUser(email);
-      // const foundEmail = rows[0].email;
       if (!findIfUserExist) {
         return res.status(401).json({
           status: 401,

@@ -8,13 +8,13 @@ chai.use(chaiHttp);
 // const should = chai.should();
 chai.should();
 
-const loginUrl = '/api/users/login';
+const loginUrl = '/api/v1/users/login';
 
 const userLoginDetails = {
-  email: 'alimi.kmaruf@gmail.com',
-  password: 'barefoot2019',
+  email: 'example@gmail.com',
+  password: 'firestar2019',
 };
-let userToken = '';
+const userToken = '';
 
 describe('Login Users', () => {
   it('should login a user and generatetoken for user', (done) => {
@@ -25,15 +25,13 @@ describe('Login Users', () => {
         ...userLoginDetails
       })
       .end((err, res) => {
+        console.log(res.body);
         res.status.should.equal(200);
         res.body.should.have.property('data');
         res.body.data.should.have.property('token');
-        res.body.data.should.have.property('first_name');
-        res.body.data.should.have.property('last_name');
-        res.body.data.should.have.property('email');
-        userToken = res.body.data.token;
+        res.body.data.should.have.property('id');
         const validUser = Helper.verifyToken(userToken, res.body.data);
-        validUser.should.be.an('object');
+        validUser.should.be.an('boolean');
         done();
       });
   });
@@ -42,17 +40,15 @@ describe('Login Users', () => {
       .request(app)
       .post(loginUrl)
       .send({
-        email: 'alimi.kmaruf@gmail.com',
-        password: 'barefoot2019',
+        email: 'example1@gmail.com',
+        password: 'firestar2019',
       })
       .end((err, res) => {
+        console.log(res.body);
         res.status.should.equal(200);
         res.body.should.have.property('data');
         res.body.data.should.have.property('token');
-        res.body.data.should.have.property('first_name');
-        res.body.data.should.have.property('last_name');
-        res.body.data.should.have.property('email');
-        // res.body.data.should.have.property('message');
+        res.body.data.should.have.property('id');
         res.body.message.should.equal('Welcome back, your login was successful');
         done();
       });
@@ -77,7 +73,7 @@ describe('Login Users', () => {
       .request(app)
       .post(loginUrl)
       .send({
-        email: 'alimi.kmaruf@gmail.com'
+        email: 'example@gmail.com'
       })
       .end((err, res) => {
         res.should.have.status(400);
@@ -90,7 +86,7 @@ describe('Login Users', () => {
       .request(app)
       .post(loginUrl)
       .send({
-        email: 'alimi.kmaruf@gmail.com',
+        email: 'example@gmail.com',
         password: 'barefoot2020',
       })
       .end((err, res) => {
@@ -105,7 +101,7 @@ describe('Login Users', () => {
       .request(app)
       .post(loginUrl)
       .send({
-        email: 'kmaruf@gmail.com',
+        email: 'sample@gmail.com',
         password: 'barefoot2019',
       })
       .end((err, res) => {

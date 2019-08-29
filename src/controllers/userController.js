@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 /* eslint-disable valid-jsdoc */
 import Helper from '../helpers/helperUtils';
 import userService from '../services/userService';
@@ -20,14 +19,12 @@ class UserController {
         const validatePassword = Helper.verifyPassword(loggedUser.password, req.body.password);
         if (validatePassword) {
           const token = Helper.generateToken(loggedUser.dataValues);
-          const { first_name, last_name } = loggedUser.dataValues;
+          const { id } = loggedUser.dataValues;
           return res.status(200).json({
             status: 200,
             data: {
               token,
-              first_name,
-              last_name,
-              email,
+              id
             },
             message: 'Welcome back, your login was successful',
           });
