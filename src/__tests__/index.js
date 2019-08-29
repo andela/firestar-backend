@@ -1,10 +1,17 @@
-import { equal } from 'assert';
-import arrayTest from '../utils/index';
+import { should, use, request } from 'chai';
+import chaiHttp from 'chai-http';
+import server from '../index';
 
-describe('Array', () => {
-  describe('#indexOf()', () => {
-    it('should return -1 when the value is not present', () => {
-      equal(arrayTest([1, 2, 3], 4), -1);
-    });
+should();
+use(chaiHttp);
+
+describe('Server', () => {
+  it('on success get the root', (done) => {
+    request(server)
+      .get('/')
+      .end((err, res) => {
+        res.should.have.status(201);
+        done();
+      });
   });
 });

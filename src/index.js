@@ -7,7 +7,8 @@ import methodOverride from 'method-override';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import Log from 'debug';
-import routes from './routes';
+import root from './routes/api/index';
+import requests from './routes/api/requests';
 import swaggerDocument from '../swagger.json';
 
 const serverLog = Log('server');
@@ -42,8 +43,9 @@ app.use(
 if (!isProduction) {
   app.use(errorHandler());
 }
+app.use('/api/v1/requests', requests);
+app.use(root);
 
-app.use(routes);
 
 // / catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -89,3 +91,5 @@ app.use((err, req, res, next) => {
 const server = app.listen(process.env.PORT || 3000, () => {
   serverLog(`Listening on port ${server.address().port}`);
 });
+
+export default server;
