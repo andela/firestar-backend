@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 import dotEnv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -14,10 +16,8 @@ const serverLog = Log('server');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// Create global app object
 const app = express();
 
-// swagger config middlewares
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Configure dotEnv
@@ -45,19 +45,13 @@ if (!isProduction) {
 
 app.use(routes);
 
-// / catch 404 and forward to error handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// / error handlers
-
-// development error handler
-// will print stacktrace
 if (!isProduction) {
-  // eslint-disable-next-line no-unused-vars
   app.use((err, req, res, next) => {
     serverLog(err.stack);
 
@@ -72,9 +66,6 @@ if (!isProduction) {
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({
@@ -85,9 +76,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// finally, let's start our server...
 const server = app.listen(process.env.PORT || 3000, () => {
-  serverLog(`Listening on port ${server.address().port}`);
+  console.log(`Listening on port ${server.address().port}`);
 });
 
 export default app;

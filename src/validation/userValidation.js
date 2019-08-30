@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import validator from 'validatorjs';
+import Validator from 'validatorjs';
 import userService from '../services/userService';
 
 
@@ -20,10 +20,9 @@ class UsersValidation {
       email: 'required|email|min:12|max:30',
       password: 'required|min:8|max:14|alpha_num',
     };
-    const validation = new validator(req.body, constraint);
+    const validation = new Validator(req.body, constraint);
     if (validation.fails()) {
       return res.status(400).json({
-        status: 400,
         error: validation.errors.errors,
       });
     }
@@ -32,14 +31,12 @@ class UsersValidation {
       const findIfUserExist = await userService.loginAUser(email);
       if (!findIfUserExist) {
         return res.status(401).json({
-          status: 401,
           error: 'Email does not exist, Please register an account or signup',
         });
       }
       password = password.trim();
     } catch (error) {
       return res.status(500).json({
-        status: 500,
         error: error.message,
       });
     }

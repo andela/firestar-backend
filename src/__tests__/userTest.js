@@ -5,7 +5,6 @@ import Helper from '../helpers/helperUtils';
 import app from '../index';
 
 chai.use(chaiHttp);
-// const should = chai.should();
 chai.should();
 
 const loginUrl = '/api/v1/users/login';
@@ -25,7 +24,6 @@ describe('Login Users', () => {
         ...userLoginDetails
       })
       .end((err, res) => {
-        console.log(res.body);
         res.status.should.equal(200);
         res.body.should.have.property('data');
         res.body.data.should.have.property('token');
@@ -44,7 +42,6 @@ describe('Login Users', () => {
         password: 'firestar2019',
       })
       .end((err, res) => {
-        console.log(res.body);
         res.status.should.equal(200);
         res.body.should.have.property('data');
         res.body.data.should.have.property('token');

@@ -12,16 +12,15 @@ class UserController {
    * @returns {object} loginUsers
    */
   static async loginAUser(req, res) {
-    const { email } = req.body;
+    const { email, password } = req.body;
     try {
       const loggedUser = await userService.loginAUser(email);
       if (loggedUser) {
-        const validatePassword = Helper.verifyPassword(loggedUser.password, req.body.password);
-        if (validatePassword) {
+        const validPassword = Helper.verifyPassword(loggedUser.password, password);
+        if (validPassword) {
           const token = Helper.generateToken(loggedUser.dataValues);
           const { id } = loggedUser.dataValues;
           return res.status(200).json({
-            status: 200,
             data: {
               token,
               id
@@ -30,7 +29,6 @@ class UserController {
           });
         }
         return res.status(401).json({
-          status: 401,
           error: 'Password does not match.',
         });
       }
