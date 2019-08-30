@@ -88,8 +88,8 @@ app.use((err, req, res, next) => {
 });
 
 // finally, let's start our server...
-const server = app.listen(process.env.PORT || 3000, () => {
-  serverLog(`Listening on port ${server.address().port}`);
-});
-
+const port = process.env.PORT || 3000;
+// eslint-disable-next-line no-console
+const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
+// serverLog(`Listening on port ${server.address().port}`);
 export default server;

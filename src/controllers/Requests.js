@@ -1,4 +1,4 @@
-import { Request } from '../models/index';
+import db from '../models/index';
 import ValidateParams from '../validation/ValidateParams';
 /**
  * class Requests defines travel requests endpoints
@@ -23,7 +23,7 @@ class Requests {
       });
     }
 
-    const data = await Request.findAll({ where: { id: userId } });
+    const data = await db.Request.findAll({ where: { requesterId: userId } });
     res.send({
       status: 200,
       data,

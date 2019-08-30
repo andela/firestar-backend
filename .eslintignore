@@ -1,4 +1,1 @@
-src/models/*
-src/migrations/*
-src/seeders/*
 src/database/*
