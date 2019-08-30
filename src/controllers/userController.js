@@ -1,6 +1,5 @@
 import moment from 'moment';
 import crypto from 'crypto';
-import Validation from '../validation';
 import { sendResetMail, sendSignupMail } from '../services/sendMail';
 import { errorResponse, successResponse } from '../utils/response';
 import Hash from '../utils/hash';
@@ -19,13 +18,6 @@ export default class UserController {
    */
   static async forgotPassword(req, res) {
     try {
-      const { errors, isValid } = Validation.validateEmail(req.body);
-
-      // Check validation
-      if (!isValid) {
-        return errorResponse(res, 400, errors);
-      }
-
       const { email } = req.body;
 
       // Find user by email
@@ -73,16 +65,6 @@ export default class UserController {
    */
   static async resetPassword(req, res) {
     try {
-      const { errors, isValid } = Validation.validatePassword(req.body);
-
-      // Check validation
-      if (!isValid) {
-        if (errors.password && errors.password === 'Passwords must match') {
-          return errorResponse(res, 401, errors);
-        }
-        return errorResponse(res, 400, errors);
-      }
-
       const { id } = req.params;
       const resetToken = req.query.token;
       const { password } = req.body;
