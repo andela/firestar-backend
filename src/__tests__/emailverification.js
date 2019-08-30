@@ -49,14 +49,14 @@ describe('EMAIL ROUTE', () => {
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
-    it('should have a status of 403 and a messsage of "please fill in the required inputs"  when some body is not present', async () => {
+    it('should have a status of 403 and a messsage of "Email, firstName and lastName is required"  when some body is not present', async () => {
       const body = {
         email: 'akp.ani@yahoo.com',
         firstName: 'Aniefiok',
         lastName: ''
       };
       const response = await request.post('/api/v1/users/email/test').send(body);
-      expect(response.body.error).to.equal('Please fill in the required inputs');
+      expect(response.body.error).to.equal('Email, firstName and lastName is required');
       expect(response.body.status).to.equal(403);
       expect(response.body).to.be.a('object');
     }).timeout(0);

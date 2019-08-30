@@ -26,9 +26,10 @@ export const SendVerificationEmail = async (req, res, next) => {
     Subject: 'Email Verification',
     Recipient: email,
   };
+  const domain = 'firestar-backend-staging-pr-24.herokuapp.com';
   const linkProd = `${req.protocol}://${req.hostname}/api/v1/users/email/verify?id=${token}`;
   const linkLocal = `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/email/verify?id=${token}`;
-  const link = req.protocol === 'https' ? linkProd : linkLocal;
+  const link = req.hostname === domain ? linkProd : linkLocal;
   const data = {
     email,
     firstName,
