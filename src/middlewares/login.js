@@ -10,7 +10,7 @@ const isLoggedIn = async (req, res, next) => {
   }
   try {
     token = token.slice(7);
-    const decoded = await jwt.decode(token, process.env.SECRET);
+    const decoded = await jwt.decode(token, process.env.JWT_SECRET);
     if (decoded) {
       req.user = decoded;
       return next();
