@@ -26,7 +26,9 @@ export const SendVerificationEmail = async (req, res, next) => {
     Subject: 'Email Verification',
     Recipient: email,
   };
-  const link = `${req.protocol}://${req.hostname}/api/v1/users/email/verify?id=${token}`;
+  const linkProd = `${req.protocol}://${req.hostname}/api/v1/users/email/verify?id=${token}`;
+  const linkLocal = `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/email/verify?id=${token}`;
+  const link = req.protocol === 'http' ? linkLocal : linkProd;
   const data = {
     email,
     firstName,
