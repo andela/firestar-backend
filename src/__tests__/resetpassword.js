@@ -15,8 +15,8 @@ chai.use(sinonChai);
 const { resetPassword } = UserController;
 
 const apiVersion = '/api/v1';
-const forgotPasswordURL = `${apiVersion}/forgotpassword`;
-const resetPasswordURL = `${apiVersion}/resetpassword`;
+const forgotPasswordURL = `${apiVersion}/users/passwords/forgot`;
+const resetPasswordURL = `${apiVersion}/users/passwords/reset`;
 const validId = 2;
 const resetToken = '12ererfbuib23iub328o7rg8hbiuva';
 
@@ -101,7 +101,7 @@ describe('Forgot Password validations', () => {
     });
   });
 
-  describe('POST /api/resetpassword', () => {
+  describe('POST /api/users/passwords/reset', () => {
     it('should not reset password without new password from existing user', done => {
       chai
         .request(app)
@@ -140,7 +140,7 @@ describe('Forgot Password validations', () => {
           confirmPassword: 'password9'
         })
         .end((err, res) => {
-          expect(res).to.have.status(409);
+          expect(res).to.have.status(401);
           expect(res.body.status).to.be.equal('error');
           expect(res.body.error.password).to.be.equal('Passwords must match');
           done();

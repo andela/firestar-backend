@@ -18,9 +18,9 @@ const sendResetMail = (user, resetToken) => {
     subject: 'Reset Password',
     html: `
       <p>To reset your password, click link to complete this form:</p>
-      <a href='${CLIENT_URL}/resetpassword/${
+      <a href='${CLIENT_URL}/users/passwords/reset/${
       user.id
-    }?token=${resetToken}'>${CLIENT_URL}/resetpassword/${
+    }?token=${resetToken}'>${CLIENT_URL}/users/passwords/reset/${
       user.id
     }?token=${resetToken}</a>
       <p>This link expires in ${expiry} hours<p>

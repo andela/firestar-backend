@@ -4,12 +4,10 @@ import isValidEmail from './isValidEmail';
 const validateEmail = ({ email }) => {
   const errors = {};
 
-  email = !isEmpty(email) ? email : '';
-
   if (isEmpty(email)) {
     errors.email = 'Email is required';
-  } else {
-    !isValidEmail(email) ? errors.email = 'Email is invalid' : null;
+  } else if (!isValidEmail(email)) {
+     errors.email = 'Email is invalid';
   }
 
   return {
