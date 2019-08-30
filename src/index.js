@@ -19,6 +19,7 @@ const app = express();
 
 // swagger config middlewares
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.enable('trust proxy');
 
 // Configure dotEnv
 dotEnv.config();
@@ -89,3 +90,5 @@ app.use((err, req, res, next) => {
 const server = app.listen(process.env.PORT || 3000, () => {
   serverLog(`Listening on port ${server.address().port}`);
 });
+
+export default app;
