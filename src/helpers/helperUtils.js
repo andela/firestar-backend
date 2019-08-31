@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 
 dotenv.config();
-const secretKey = process.env.SECRET_KEY;
+const secretKey = process.env.JWT_SECRET_KEY;
 const salt = +process.env.SALT;
 
 /**
