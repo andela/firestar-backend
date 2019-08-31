@@ -1,11 +1,11 @@
 
 export default (sequelize, DataTypes) => {
   const Users = sequelize.define('Users', {
-     firstNname: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    lastNname: {
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -21,7 +21,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-     {});
+  },);
   Users.associate = (models) => {
     // associations can be defined here
   };
