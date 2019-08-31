@@ -8,7 +8,7 @@ import userMock from './mocks/userMock';
 chai.use(chaiHttp);
 const { expect } = chai;
 
-const BASE_URL = '/api';
+const BASE_URL = '/api/v1';
 
 let request;
 
@@ -19,11 +19,11 @@ describe('User Profile Route', () => {
 
   afterEach(() => sinon.restore());
 
-  describe('GET /editprofile/:id', () => {
+  describe('GET /users/:id', () => {
     it('should get user details', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/editprofile/${userMock.userId}`)
+        .patch(`${BASE_URL}/users/${userMock.userId}`)
         .set('Content-Type', 'application/json')
         .send(userMock.updateUser);
       expect(response.status).to.equal(202);
@@ -31,11 +31,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('GET /editprofile/:id', () => {
+  describe('GET /users/:id', () => {
     it('It should throw error response invalid user', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/editprofile/${userMock.wrongId}`)
+        .patch(`${BASE_URL}/users/${userMock.wrongId}`)
         .set('Content-Type', 'application/json')
         .send(userMock.updateUser);
       expect(response.status).to.equal(401);
@@ -46,11 +46,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('PATCH /editprofile/:id', () => {
+  describe('PATCH /users/:id', () => {
     it('should update users profile', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/editprofile/${userMock.userId}`)
+        .patch(`${BASE_URL}/users/${userMock.userId}`)
         .set('Content-Type', 'application/json')
         .send(userMock.updateUser);
       expect(response.status).to.equal(202);
@@ -61,11 +61,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('PATCH /editprofile/:id', () => {
+  describe('PATCH /users/:id', () => {
     it('It should give a successful message', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/editprofile/${userMock.userId}`)
+        .patch(`${BASE_URL}/users/${userMock.userId}`)
         .set('Content-Type', 'application/json')
         .send(userMock.updateUser);
       expect(response.status).to.equal(202);
@@ -76,11 +76,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('PATCH /editprofile/:id', () => {
+  describe('PATCH /users/:id', () => {
     it('It should throw error User is not in db', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/editprofile/${userMock.wrongId}`)
+        .patch(`${BASE_URL}/users/${userMock.wrongId}`)
         .set('Content-Type', 'application/json')
         .send(userMock.updateUser);
       expect(response.status).to.equal(401);

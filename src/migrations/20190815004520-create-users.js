@@ -25,10 +25,10 @@ module.exports = {
       role: {
         type: Sequelize.STRING
       },
-      prefferedLanguage: {
+      preferredLanguage: {
         type: Sequelize.STRING
       },
-      prefferedCurrency: {
+      preferredCurrency: {
         type: Sequelize.STRING
       },
       residentialLocation: {
