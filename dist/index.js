@@ -31,16 +31,16 @@ var _swagger = _interopRequireDefault(require("../swagger.json"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-/* eslint-disable no-console */
+// Configure dotEnv
+_dotenv["default"].config();
 
-/* eslint-disable no-unused-vars */
 var serverLog = (0, _debug["default"])('server');
-var isProduction = process.env.NODE_ENV === 'production';
-var app = (0, _express["default"])();
-app.use('/api-docs', _swaggerUiExpress["default"].serve, _swaggerUiExpress["default"].setup(_swagger["default"])); // Configure dotEnv
+var isProduction = process.env.NODE_ENV === 'production'; // Create global app object
 
-_dotenv["default"].config(); // Normal express config defaults
+var app = (0, _express["default"])(); // swagger config middlewares
 
+app.use('/api-docs', _swaggerUiExpress["default"].serve, _swaggerUiExpress["default"].setup(_swagger["default"]));
+app.enable('trust proxy'); // Normal express config defaults
 
 app.use((0, _morgan["default"])('dev'));
 app.use(_bodyParser["default"].urlencoded({
@@ -62,14 +62,18 @@ if (!isProduction) {
   app.use((0, _errorhandler["default"])());
 }
 
-app.use(_routes["default"]);
+app.use(_routes["default"]); // / catch 404 and forward to error handler
+
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
-});
+}); // / error handlers
+// development error handler
+// will print stacktrace
 
 if (!isProduction) {
+  // eslint-disable-next-line no-unused-vars
   app.use(function (err, req, res, next) {
     serverLog(err.stack);
     res.status(err.status || 500);
@@ -80,7 +84,10 @@ if (!isProduction) {
       }
     });
   });
-}
+} // production error handler
+// no stacktraces leaked to user
+// eslint-disable-next-line no-unused-vars
+
 
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
@@ -90,7 +97,8 @@ app.use(function (err, req, res, next) {
       error: {}
     }
   });
-});
+}); // finally, let's start our server...
+
 var server = app.listen(process.env.PORT || 3000, function () {
   console.log("Listening on port ".concat(server.address().port));
 });
