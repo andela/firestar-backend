@@ -1,4 +1,3 @@
-/* eslint-disable valid-jsdoc */
 import Helper from '../helpers/helperUtils';
 import userService from '../services/userService';
 /**
@@ -7,18 +6,22 @@ import userService from '../services/userService';
 class UserController {
   /** Login User
    * @static
-   * @params {*} req
-   * @params {*} res
-   * @returns {object} loginUsers
+   * @param {object} req - HTTP Request
+   * @param {object} res - HTTP Response
+   * @returns {string} loginUsers
    */
   static async loginAUser(req, res) {
     const { email, password } = req.body;
     try {
       const loggedUser = await userService.loginAUser(email);
+      const userDetail = {
+        id: loggedUser.dataValues.id,
+        email: loggedUser.dataValues.email
+      };
       if (loggedUser) {
         const validPassword = Helper.verifyPassword(loggedUser.password, password);
         if (validPassword) {
-          const token = Helper.generateToken(loggedUser.dataValues);
+          const token = Helper.generateToken(userDetail);
           const { id } = loggedUser.dataValues;
           return res.status(200).json({
             data: {
