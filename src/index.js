@@ -16,6 +16,7 @@ const app = express();
 
 // swagger config middlewares
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.enable('trust proxy');
 
 // Configure dotEnv
 dotEnv.config();

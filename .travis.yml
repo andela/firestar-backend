@@ -9,4 +9,4 @@ services:
 before_script:
   - psql -c 'create database firestar_backend_test;' -U postgres
 after_success:
-   - npm run coveralls
+  - npm run coveralls
