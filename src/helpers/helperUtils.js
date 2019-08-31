@@ -1,4 +1,3 @@
-/* eslint-disable valid-jsdoc */
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -16,7 +15,7 @@ export default class Helper {
   /**
    * @method generateToken
    * @param {string} payload
-   * @returns token
+   * @returns {string} token
    */
   static generateToken(payload) {
     const token = jwt.sign(payload, secretKey);
@@ -26,7 +25,7 @@ export default class Helper {
   /**
    * @method verifyToken
    * @param {string} token
-   * @returns payload
+   * @returns {string} payload
    */
   static verifyToken(token) {
     try {
@@ -48,9 +47,9 @@ export default class Helper {
 
   /**
    * @method verifyPassword
+   * @param {string} hashPassword
    * @param {string} password
-   * @param hash
-   * @returns
+   * @returns {sring} verify password
    */
   static verifyPassword(hashPassword, password) {
     return bcrypt.compareSync(password, hashPassword);
