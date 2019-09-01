@@ -1,5 +1,5 @@
-/* eslint-disable no-useless-catch */
 /* eslint-disable require-jsdoc */
+/* eslint-disable no-useless-catch */
 import datastore from '../models';
 
 const { Users } = datastore;
@@ -8,7 +8,7 @@ const { Users } = datastore;
  */
 class UserService {
   /**
-   * @param {*} email
+   * @param {string} email
    */
 
   static async loginAUser(email) {
