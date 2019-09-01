@@ -18,6 +18,7 @@
     "undo:test": "cross-env NODE_ENV=test sequelize db:migrate:undo",
     "undo:prod": "cross-env NODE_ENV=prooduction sequelize db:migrate:undo",
     "seed:dev": "cross-env NODE_ENV=development sequelize db:seed:all",
+    "createdb:dev": "cross-env NODE_ENV=development sequelize db:create",
     "createdb:test": "cross-env NODE_ENV=test sequelize db:create",
     "seed:test": "cross-env NODE_ENV=test sequelize db:seed:all",
     "undo:seed": "cross-env NODE_ENV=development npx sequelize-cli db:seed:undo:all"
