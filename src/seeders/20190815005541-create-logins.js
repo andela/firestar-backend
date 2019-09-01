@@ -1,33 +1,28 @@
 'use strict'
-// import faker from 'faker';
-const faker = require('faker');
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('users', [{
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
+    return queryInterface.bulkInsert('logins', [{
       email: 'youremail@andela.com',
+      password: 'password',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
       email: 'youremail2@andela.com',
+      password: 'password',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
       email: process.env.YOUR_EMAIL,
+      password: process.env.SOME_PASSWORD,
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('users', null, {});
+    return queryInterface.bulkDelete('logins', null, {});
   }
 }

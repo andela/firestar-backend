@@ -28,11 +28,9 @@ export default class UserController {
         sendSignupMail(email);
       } else {
         const newReset = new Reset({
-          id: user.id,
-          email: req.body.email,
-          reset_token: '',
-          created_on: new Date(),
-          expire_time: moment
+          email: user.email,
+          resetToken: '',
+          expireTime: moment
             .utc()
             .add(process.env.TOKENEXPIRY, 'seconds')
             .toLocaleString()
@@ -40,14 +38,14 @@ export default class UserController {
 
         // Generate Reset token
         const resetToken = await crypto.randomBytes(32).toString('hex');
-        newReset.reset_token = await Hash.hash(resetToken);
+        newReset.resetToken = await Hash.hash(resetToken);
         // Remove all reset token for this user if it exists
         await Reset.destroy({
           where: { email: newReset.dataValues.email }
         });
-        await newReset.save();
+        const resetDetails = await newReset.save();
         // Send reset link to user email
-        await sendResetMail(user.dataValues, resetToken);
+        await sendResetMail(resetDetails, resetToken);
       }
       successResponse(res, 200, 'Check your mail for further instruction');
     } catch (error) {
@@ -77,13 +75,13 @@ export default class UserController {
 
       if (userRequest) {
         // Check if reset token is not expired
-        const { expire_time } = userRequest;
-        const expireTime = moment.utc(expire_time);
+        const { expireTime } = userRequest;
+        const tokenExpireTime = moment.utc(expireTime);
 
         // If reset link is valid and not expired
         req.data.validReset =
-          moment().isBefore(expireTime) &&
-          Hash.compareWithHash(resetToken, req.data.userRequest.reset_token);
+          moment().isBefore(tokenExpireTime) &&
+          Hash.compareWithHash(resetToken, userRequest.resetToken);
         const { validReset } = req.data;
 
         if (validReset) {
@@ -94,7 +92,7 @@ export default class UserController {
               token: '',
               password: hashed,
               logged_in: false,
-              last_login: new Date()
+              lastLogin: new Date()
             },
             { where: { email: userRequest.email } }
           );

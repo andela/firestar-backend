@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const { env } = process;
-const apiKey = env.SENDGRIP_API_KEY;
+const apiKey = env.SENDGRID_API_KEY;
 const CLIENT_URL = env.NODE_ENV === 'test' || 'development' ? `http://localhost:${env.PORT}/api/v1` : env.CLIENT_URL;
 
 sgMail.setApiKey(apiKey);
