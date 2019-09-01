@@ -38,9 +38,9 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        firstName: 'alimi3',
-        lastName: 'marusoft3',
-        email: 'example3@gmail.com',
+        firstName: 'alimi4',
+        lastName: 'marusoft4',
+        email: 'example4@gmail.com',
         password: '$2a$10$f7CWmXI07w5Y3JtsYNe8jeExmw5sbZxTSyAPONHXq/Jbp7/OpzmEy',
         verified: false,
         createdAt: new Date(),

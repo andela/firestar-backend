@@ -11,7 +11,11 @@ export default (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: {
+        args: true,
+        msg: 'Email already exist'
+      }
     },
     password: {
       type: DataTypes.STRING,
