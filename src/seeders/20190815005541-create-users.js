@@ -24,7 +24,7 @@ module.exports = {
         lastName: 'marusoft2',
         email: 'example2@gmail.com',
         password: '$2a$10$f7CWmXI07w5Y3JtsYNe8jeExmw5sbZxTSyAPONHXq/Jbp7/OpzmEy',
-        verified: true,
+        verified: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -33,7 +33,7 @@ module.exports = {
         lastName: 'marusoft3',
         email: 'example3@gmail.com',
         password: '$2a$10$f7CWmXI07w5Y3JtsYNe8jeExmw5sbZxTSyAPONHXq/Jbp7/OpzmEy',
-        verified: true,
+        verified: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
