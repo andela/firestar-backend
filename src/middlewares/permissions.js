@@ -1,5 +1,5 @@
 import Joi from '@hapi/joi';
-import { Resource } from '../models';
+import { resource } from '../models';
 import { permissionType, checkPermission, setPermissionSchema } from '../validation/permissions';
 
 export const permit = async (req, res, next) => {
@@ -7,12 +7,12 @@ export const permit = async (req, res, next) => {
   const permission = permissionType(req);
   try {
     // Find resource by name in the db if it exists
-    const resource = await Resource.findOne({
+    const foundResource = await resource.findOne({
       where: {
         name: req.url.split('/')[1]
       }
     });
-    const resourceId = resource.dataValues.id;
+    const resourceId = foundResource.dataValues.id;
     const authorized = await checkPermission(roleId, resourceId, permission);
     if (authorized) {
       return next();

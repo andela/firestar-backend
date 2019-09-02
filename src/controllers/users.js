@@ -1,5 +1,5 @@
 import { findByEmail, checkIfExistsInDb } from '../utils/searchDb';
-import { User, Role } from '../models';
+import { user, role } from '../models';
 
 /**
  * @description Class based Controller for Roles
@@ -19,8 +19,8 @@ class Users {
     const { email, roleId } = req.body;
     try {
       await findByEmail(email);
-      await checkIfExistsInDb(Role, roleId, 'Role does not exist');
-      const updatedUser = await User.update(
+      await checkIfExistsInDb(role, roleId, 'Role does not exist');
+      const updatedUser = await user.update(
         { roleId },
         {
           returning: true,

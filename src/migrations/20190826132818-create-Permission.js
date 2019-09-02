@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Permissions', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('permissions', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -10,7 +10,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       onDelete: 'CASCADE',
       references: {
-        model: 'Roles',
+        model: 'roles',
         key: 'id',
         as: 'role',
       }
@@ -19,7 +19,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       onDelete: 'CASCADE',
       references: {
-        model: 'Resources',
+        model: 'resources',
         key: 'id',
         as: 'resource',
       }
@@ -49,5 +49,5 @@ module.exports = {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface) => queryInterface.dropTable('Permissions')
+  down: (queryInterface) => queryInterface.dropTable('permissions')
 };

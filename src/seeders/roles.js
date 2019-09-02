@@ -1,7 +1,7 @@
 module.exports = {
   // eslint-disable-next-line no-unused-vars
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert(
-    'Roles',
+    'roles',
     [
       {
         name: 'Super Administrator',
@@ -34,5 +34,5 @@ module.exports = {
     {}
   ),
 
-  down: (queryInterface) => queryInterface.bulkDelete('Roles', null, {})
+  down: (queryInterface) => queryInterface.bulkDelete('roles', null, {})
 };

@@ -1,12 +1,12 @@
 export default (sequelize, DataTypes) => {
-  const Resource = sequelize.define('Resource', {
+  const Resource = sequelize.define('resource', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
     }
   });
   Resource.associate = (models) => {
-    Resource.hasMany(models.Permission, {
+    Resource.hasMany(models.permission, {
       foreignKey: 'resourceId'
     });
   };

@@ -60,7 +60,7 @@ if (!isProduction) {
 
 // finally, let's start our server...
 const server = app.listen(process.env.PORT, () => {
-  serverLog(`Listening on port ${server.address().port}`);
+  console.log(`Listening on port ${server.address().port}`);
 });
 
 export default server;

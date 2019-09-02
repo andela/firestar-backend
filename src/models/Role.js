@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-  const Role = sequelize.define('Role', {
+  const Role = sequelize.define('role', {
     name: {
       type: DataTypes.STRING,
       allowNull: false
@@ -10,10 +10,10 @@ export default (sequelize, DataTypes) => {
     }
   });
   Role.associate = (models) => {
-    Role.hasMany(models.Permission, {
+    Role.hasMany(models.permission, {
       foreignKey: 'roleId',
     });
-    Role.hasMany(models.User, {
+    Role.hasMany(models.user, {
       foreignKey: 'roleId',
     });
   };

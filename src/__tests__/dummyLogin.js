@@ -17,7 +17,7 @@ describe('Login', () => {
     assert.hasAnyKeys(res.body, 'token');
     assert.isString(res.body.token);
   });
-  it('Should generate Token', async () => {
+  it('Should not generate Token', async () => {
     const res = await chai
       .request(server)
       .post('/api/v1/auth/login')

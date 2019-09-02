@@ -1,13 +1,13 @@
 import Joi from '@hapi/joi';
-import { Role, Permission } from '../models';
+import { role, permission } from '../models';
 
-export const checkPermission = async (roleId, resourceId, permission) => {
+export const checkPermission = async (roleId, resourceId, permissions) => {
   try {
     // Base case to check if there is no roleId given
     if (!roleId) throw new Error('You are not authorized to perform this operation');
     // Find Permission if exists
-    const foundPermission = await Permission.findOne({
-      attributes: [permission],
+    const foundPermission = await permission.findOne({
+      attributes: [permissions],
       where: {
         roleId,
         resourceId
@@ -17,18 +17,18 @@ export const checkPermission = async (roleId, resourceId, permission) => {
       throw new Error('You are not authorized to perform this operation');
     }
     // If Permission exists return the value of the permission
-    const isPermitted = foundPermission.dataValues[permission];
+    const isPermitted = foundPermission.dataValues[permissions];
     if (isPermitted) return isPermitted;
     // If permission does not exist
     // Get Role's ParentId
-    const role = await Role.findOne({
+    const foundRole = await role.findOne({
       where: {
         id: roleId
       }
     });
-    const { parentId } = role.dataValues;
+    const { parentId } = foundRole.dataValues;
     // Check via recursion if parent role has the permission
-    return checkPermission(parentId, resourceId, permission);
+    return checkPermission(parentId, resourceId, permissions);
   } catch (error) {
     throw new Error(error.message);
   }

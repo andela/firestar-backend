@@ -1,7 +1,7 @@
 module.exports = {
   // eslint-disable-next-line no-unused-vars
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert(
-    'Permissions',
+    'permissions',
     [
       {
         resourceId: 1,
@@ -78,5 +78,5 @@ module.exports = {
     {}
   ),
 
-  down: (queryInterface) => queryInterface.bulkDelete('Permissions', null, {})
+  down: (queryInterface) => queryInterface.bulkDelete('permissions', null, {})
 };

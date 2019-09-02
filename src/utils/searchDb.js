@@ -1,4 +1,4 @@
-import { User } from '../models';
+import { user } from '../models';
 
 export const checkIfExistsInDb = async (Model, id, errorMessage) => {
   try {
@@ -15,11 +15,11 @@ export const checkIfExistsInDb = async (Model, id, errorMessage) => {
 };
 
 export const findByEmail = async (email) => {
-  const user = await User.findOne({
+  const foundUser = await user.findOne({
     where: {
       email
     }
   });
-  if (!user) throw new Error('User with the given email does not exist');
-  return user.dataValues;
+  if (!foundUser) throw new Error('User with the given email does not exist');
+  return foundUser.dataValues;
 };
