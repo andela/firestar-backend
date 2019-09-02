@@ -10,7 +10,7 @@ class UserController {
     const { id } = req.params;
     try {
       const user = await findUserById(id);
-      const token = Helper.generateToken(id, user.email);
+      const token = Helper.generateToken(id);
       console.log(token)
       if (!user) {
         util.setError(401, `User with id ${id} does not exist`);
@@ -26,8 +26,7 @@ class UserController {
 
   static async updateUserProfile(req, res) {
     const { id } = req.params;
-    console.log(id)
-    console.log(req.user.id)
+    console.log(req.user.email)
     if (req.user.id !== id) {
       util.setError(401, 'Unauthorized')
       return util.send(res)

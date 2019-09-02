@@ -11,7 +11,7 @@ module.exports = {
           firstName: faker.name.firstName(),
           lastName: faker.name.lastName(),
           company: faker.company.companyName(),
-          email: faker.internet.email(),
+          email: 'alliolawale@gmail.com',
           gender: faker.random.arrayElement(gender),
           role: faker.name.jobTitle(),
           preferredLanguage: faker.random.arrayElement(language),
@@ -25,10 +25,10 @@ module.exports = {
           updatedAt: new Date()
         },
         {
-          firstName: 'Adewale',
-          lastName: 'Olaoye',
+          firstName: faker.name.firstName(),
+          lastName: faker.name.lastName(),
           company: faker.company.companyName(),
-          email: 'wale@gmail.com',
+          email: 'dolapoakpan@gmail.com',
           gender: faker.random.arrayElement(gender),
           role: faker.name.jobTitle(),
           preferredLanguage: faker.random.arrayElement(language),

@@ -12,8 +12,8 @@ class Helper {
    * @param {string} payload
    * @returns {string} token
    */
-  static generateToken(id, email) {
-    const token = jwt.sign({ id, email }, secretKey, {
+  static generateToken(id) {
+    const token = jwt.sign({ id }, secretKey, {
       expiresIn: '24h'
     });
     return token;
