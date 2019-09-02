@@ -36,7 +36,7 @@ class Helper {
         req.user = decoded;
         return next();
       }
-      throw new Error('You are not logged in.');
+      throw new Error('You are not logged in');
     } catch (error) {
       Util.setError(400, error.message)
       return Util.send(res)

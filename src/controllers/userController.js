@@ -13,12 +13,13 @@ class UserController {
       const token = Helper.generateToken(id);
       console.log(token)
       if (!user) {
-        util.setError(401, `User with id ${id} does not exist`);
+        util.setError(401, `User with id: ${id} not found`);
         return util.send(res);
       }
       util.setSuccess(200, 'Succesfully found user', user);
       return util.send(res);
     } catch (error) {
+      // console.log('I am looking for you', error)
       util.setError(401, error);
       return util.send(res);
     }
@@ -26,7 +27,7 @@ class UserController {
 
   static async updateUserProfile(req, res) {
     const { id } = req.params;
-    console.log(req.user.email)
+    // console.log(req.user.email)
     if (req.user.id !== id) {
       util.setError(401, 'Unauthorized')
       return util.send(res)
@@ -34,10 +35,6 @@ class UserController {
 
     const { error } = CheckValidInput.userProfile(req.body);
     if (error) {
-      // return res.status(422).json({
-      //   status: 'error',
-      //   error: error.details[0].message,
-      // });
       util.setError(422, error.details[0].message)
       return util.send(res)
     }

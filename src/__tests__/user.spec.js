@@ -4,7 +4,8 @@ import sinon from 'sinon';
 import 'chai/register-should';
 
 import app from '../index';
-import userMock from './mocks/userMock';
+// import { } from './mocks/userMock';
+import { userId, wrongId, updateUser, validToken, inValidToken2, invalidData } from './mocks/userMock'
 chai.use(chaiHttp);
 const { expect } = chai;
 
@@ -23,71 +24,132 @@ describe('User Profile Route', () => {
     it('should get user details', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/users/${userMock.userId}`)
+        .get(`${BASE_URL}/users/${userId}`)
         .set('Content-Type', 'application/json')
-        .send(userMock.updateUser);
-      expect(response.status).to.equal(202);
+        .send(updateUser);
+      expect(response.status).to.equal(200);
       expect(response.body.status).to.equal('success');
+      expect(response.body.message).to.equal(
+        'Succesfully found user'
+      );
     });
   });
 
   describe('GET /users/:id', () => {
-    it('It should throw error response invalid user', async () => {
+    it('It should check if user exist', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/users/${userMock.wrongId}`)
+        .get(`${BASE_URL}/users/${wrongId}`)
         .set('Content-Type', 'application/json')
-        .send(userMock.updateUser);
+        .send(updateUser);
       expect(response.status).to.equal(401);
       expect(response.body.status).to.equal('error');
       expect(response.body.message).to.equal(
-        `User with id: ${userMock.wrongId} not found`
+        `User with id: ${wrongId} not found`
       );
     });
   });
 
-  describe('PATCH /users/:id', () => {
-    it('should update users profile', async () => {
+  describe('GET /users/:id', () => {
+    it('It should throw a not found', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/users/${userMock.userId}`)
+        .get(`${BASE_URL}/users/${wrongId}`)
         .set('Content-Type', 'application/json')
-        .send(userMock.updateUser);
-      expect(response.status).to.equal(202);
-      expect(response.body.status).to.equal('success');
-      expect(response.body.data.firstName).to.equal(
-        userMock.updateUser.firstName
-      );
-    });
-  });
-
-  describe('PATCH /users/:id', () => {
-    it('It should give a successful message', async () => {
-      const response = await chai
-        .request(app)
-        .patch(`${BASE_URL}/users/${userMock.userId}`)
-        .set('Content-Type', 'application/json')
-        .send(userMock.updateUser);
-      expect(response.status).to.equal(202);
-      expect(response.body.status).to.equal('success');
-      expect(response.body.message).to.equal(
-        'You ve successfully updated your profile'
-      );
-    });
-  });
-
-  describe('PATCH /users/:id', () => {
-    it('It should throw error User is not in db', async () => {
-      const response = await chai
-        .request(app)
-        .patch(`${BASE_URL}/users/${userMock.wrongId}`)
-        .set('Content-Type', 'application/json')
-        .send(userMock.updateUser);
+        .send(updateUser);
       expect(response.status).to.equal(401);
       expect(response.body.status).to.equal('error');
       expect(response.body.message).to.equal(
-        `User with id: ${userMock.wrongId} not found`
+        `User with id: ${wrongId} not found`
+      );
+    });
+  });
+
+  describe('PATCH /users/:id', () => {
+    it('It should return Provide user token', async () => {
+      const response = await chai
+        .request(app)
+        .patch(`${BASE_URL}/users/${userId}`)
+        .set('Content-Type', 'application/json')
+        .send(updateUser);
+      expect(response.status).to.equal(401);
+      expect(response.body.status).to.equal('error');
+      expect(response.body.message).to.equal(
+        'Provide user token'
+      );
+    });
+  });
+
+  describe('PATCH /users/:id', () => {
+    it('It should check if token is available', async () => {
+      const response = await chai
+        .request(app)
+        .patch(`${BASE_URL}/users/${wrongId}`)
+        .set('token', '')
+        .send(updateUser);
+      expect(response.status).to.equal(401);
+      expect(response.body.status).to.equal('error');
+      expect(response.body.message).to.equal(
+        'Provide user token'
+      );
+    });
+  });
+
+  describe('PATCH /users/:id', () => {
+    it('It should return an error for invalid data type', async () => {
+      const response = await chai
+        .request(app)
+        .patch(`${BASE_URL}/users/${userId}`)
+        .set('token', validToken)
+        .send(invalidData);
+      expect(response.status).to.equal(422);
+      expect(response.body.status).to.equal('error');
+    });
+  });
+
+  describe('PATCH /users/:id', () => {
+    it('It should return Unauthorised message', async () => {
+      const response = await chai
+        .request(app)
+        .patch(`${BASE_URL}/users/${wrongId}`)
+        .set('token', validToken)
+        .send(updateUser);
+      expect(response.status).to.equal(401);
+      expect(response.body.status).to.equal('error');
+      expect(response.body.message).to.equal(
+        'Unauthorized'
+      );
+    });
+  });
+
+  describe('PATCH /users/:id', () => {
+    it('It should throw for invalid token', async () => {
+      const response = await chai
+        .request(app)
+        .patch(`${BASE_URL}/users/${wrongId}`)
+        .set('token', inValidToken2)
+        .send(updateUser);
+      expect(response.status).to.equal(400);
+      expect(response.body.status).to.equal('error');
+      expect(response.body.message).to.equal(
+        'You are not logged in'
       );
     });
   });
 });
+
+
+
+describe('PATCH /users/:id', () => {
+  it('It should throw error for catch', async () => {
+    const response = await chai
+      .request(app)
+      .patch(`${BASE_URL}/users/${userId}`)
+      .set('token', validToken)
+      .send(updateUser);
+    expect(response.status).to.equal(401);
+    expect(response.body.status).to.equal('error');
+  });
+});
+
+

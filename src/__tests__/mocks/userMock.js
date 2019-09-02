@@ -3,8 +3,6 @@ const faker = require('faker');
 const gender = ['male', 'female'];
 const language = ['English', 'French'];
 export default {
-  userId: 1,
-  wrongId: 2,
   updateUser: {
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
@@ -21,3 +19,15 @@ export default {
     lineManager: faker.name.jobType()
   }
 };
+
+export const userId = 1;
+export const wrongId = 212;
+
+export const invalidData = {
+  firstName: ''
+}
+
+export const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE1Njc0NTczODIsImV4cCI6MTU2NzU0Mzc4Mn0.AyPNgODmUGJbpr-6veG08WFpJIX5iDSqgh6Gy9pyKbU'
+export const inValidToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE1Njc0Mjg0NDUsImV4cCI6MTU2NzUxNDg0NX0.DyMcVLwMWhOt7yZWev8adIN9NE9vvnDehHMDmrjNYoU'
+export const inValidToken2 = 'GciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJpYXQiOjE1Njc0Mjg0NDUsImV4cCI6MTU2NzUxNDg0NX0.DyMcVLwMWhOt7yZWev8adIN9NE9vvnDehHMDmrjNYoU'
+

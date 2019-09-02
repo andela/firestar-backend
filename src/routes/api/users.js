@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import UserController from '../../controllers/userController';
 import Helper from '../../middlewares/index'
-import CheckValidInput from '../../validation/index'
 
 const router = Router();
 
