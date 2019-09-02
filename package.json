@@ -4,6 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
+    "pretest": "npm run undo:test && npm run migrate:test && npm run seed:test",
     "test": "cross-env NODE_ENV=development nyc mocha --require @babel/register --require @babel/polyfill -r dotenv/config ./src/__tests__/*.js --exit",
     "coverage": "nyc report --reporter=text",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
