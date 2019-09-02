@@ -2,7 +2,7 @@
 import UserService from '../services/userServices';
 import Util from '../utils/index';
 import Helper from '../middlewares/index';
-
+import CheckValidInput from '../validation/index'
 const { findUserById, updateUser } = UserService;
 const util = new Util();
 class UserController {
@@ -31,6 +31,17 @@ class UserController {
       util.setError(401, 'Unauthorized')
       return util.send(res)
     }
+
+    const { error } = CheckValidInput.userProfile(req.body);
+    if (error) {
+      // return res.status(422).json({
+      //   status: 'error',
+      //   error: error.details[0].message,
+      // });
+      util.setError(422, error.details[0].message)
+      return util.send(res)
+    }
+
     const {
       firstName, lastName, birthdate, preferredLanguage,
       preferredCurrency, gender, company, lineManager,

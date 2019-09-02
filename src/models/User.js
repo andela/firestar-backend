@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
     role: DataTypes.STRING,
     preferredLanguage: DataTypes.STRING,
     preferredCurrency: DataTypes.STRING,
-    residentialLocation: DataTypes.STRING,
     countryCode: DataTypes.STRING,
     birthdate: DataTypes.STRING,
     department: DataTypes.STRING,
+    residentialLocation: DataTypes.STRING,
     lineManager: DataTypes.STRING
   }, {});
   Users.associate = function (models) {
