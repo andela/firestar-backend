@@ -1,9 +1,9 @@
 import Helper from '../helpers/helperUtils';
-import userService from '../services/userService';
+import authService from '../services/authService';
 /**
  * @class UsersController
  */
-class UserController {
+class AuthController {
   /** Login User
    * @static
    * @param {object} req - HTTP Request
@@ -13,7 +13,7 @@ class UserController {
   static async loginAUser(req, res) {
     const { email, password } = req.body;
     try {
-      const loggedUser = await userService.loginAUser(email);
+      const loggedUser = await authService.loginAUser(email);
       const userDetail = {
         id: loggedUser.dataValues.id,
         email: loggedUser.dataValues.email
@@ -32,7 +32,7 @@ class UserController {
           });
         }
         return res.status(401).json({
-          error: 'Password does not match.',
+          error: 'Incorrect password.',
         });
       }
     } catch (error) {
@@ -41,4 +41,4 @@ class UserController {
   }
 }
 
-export default UserController;
+export default AuthController;

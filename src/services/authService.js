@@ -6,7 +6,7 @@ const { Users } = datastore;
 /**
  * @class
  */
-class UserService {
+class AuthService {
   /**
    * @param {string} email
    */
@@ -24,4 +24,4 @@ class UserService {
     }
   }
 }
-export default UserService;
+export default AuthService;

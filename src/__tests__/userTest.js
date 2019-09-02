@@ -89,7 +89,7 @@ describe('Login Users', () => {
       .end((err, res) => {
         res.should.have.status(401);
         res.body.should.have.property('error');
-        res.body.error.should.equal('Password does not match.');
+        res.body.error.should.equal('Incorrect password.');
         done();
       });
   });
