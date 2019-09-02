@@ -19,7 +19,6 @@ class UserController {
       util.setSuccess(200, 'Succesfully found user', user);
       return util.send(res);
     } catch (error) {
-      console.log(error)
       util.setError(401, error);
       return util.send(res);
     }
@@ -27,6 +26,8 @@ class UserController {
 
   static async updateUserProfile(req, res) {
     const { id } = req.params;
+    console.log(id)
+    console.log(req.user.id)
     if (req.user.id !== id) {
       util.setError(401, 'Unauthorized')
       return util.send(res)
@@ -44,10 +45,6 @@ class UserController {
         residentialLocation, countryCode, department
       };
       const updatedUser = await updateUser(id, values);
-      if (!updatedUser) {
-        util.setError(401, `User with id: ${id} not found`);
-        return util.send(res);
-      }
 
       util.setSuccess(
         201,

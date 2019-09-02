@@ -2,7 +2,9 @@
 /* eslint-disable require-jsdoc */
 import db from '../models';
 const { Users } = db;
+import Util from '../utils/index'
 
+const util = new Util()
 class UserService {
   static async findUserById(id) {
     try {
@@ -11,7 +13,7 @@ class UserService {
       });
       return user;
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
