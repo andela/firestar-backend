@@ -24,14 +24,14 @@ export const invalidResourceId2 = {
   add: true
 };
 export const validInput = {
-  roleId: 2,
-  resourceId: 4,
+  roleId: 4,
+  resourceId: 2,
   edit: true,
   read: false
 };
 export const validInput2 = {
   roleId: 2,
-  resourceId: 4,
+  resourceId: 1,
   edit: false,
 };
 

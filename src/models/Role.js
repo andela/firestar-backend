@@ -4,10 +4,6 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    parentId: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    }
   });
   Role.associate = (models) => {
     Role.hasMany(models.permission, {

@@ -1,10 +1,9 @@
-import { checkIfExistsInDb } from '../utils/searchDb';
-import { resource, permission } from '../models';
+import { permission } from '../models';
 /**
  * @class
  * @description Class based Permissions Controller
  */
-class Permissions {
+class Roles {
   /**
    * @description Sets the permission for a given role to a particular resource
    * @static
@@ -20,8 +19,6 @@ class Permissions {
     const { roleId } = req.params;
     const { resourceId, ...permissions } = req.body;
     try {
-      // Check if Resource Exists
-      await checkIfExistsInDb(resource, resourceId, 'Resource does not exist');
       // Check If Permission alreday exists in Db
       const userPermission = await permission.findOne({
         where: {
@@ -29,7 +26,7 @@ class Permissions {
           resourceId,
         }
       });
-      // Update Permission
+      // Create Permissions if does not exists
       if (!userPermission) {
         updatedPermissions = await permission.create({
           resourceId,
@@ -41,6 +38,7 @@ class Permissions {
           data: updatedPermissions.dataValues
         });
       }
+      // Update Permission
       updatedPermissions = await permission.update({
         ...permissions
       }, {
@@ -61,4 +59,4 @@ class Permissions {
   }
 }
 
-export default Permissions;
+export default Roles;

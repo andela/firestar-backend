@@ -1,4 +1,4 @@
-import validateRole from '../validation/roles';
+import validateRole from '../helpers/validation/roles';
 
 const validateSetRole = async (req, res, next) => {
   const { email, roleId } = req.body;

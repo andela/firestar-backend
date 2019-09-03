@@ -1,6 +1,7 @@
 import Joi from '@hapi/joi';
 import { resource } from '../models';
-import { permissionType, checkPermission, setPermissionSchema } from '../validation/permissions';
+import { checkIfExistsInDb } from '../utils/searchDb';
+import { permissionType, checkPermission, setPermissionSchema } from '../helpers/validation/permissions';
 
 export const permit = async (req, res, next) => {
   const { roleId } = req.user;
@@ -9,7 +10,7 @@ export const permit = async (req, res, next) => {
     // Find resource by name in the db if it exists
     const foundResource = await resource.findOne({
       where: {
-        name: req.url.split('/')[1]
+        name: req.route.path
       }
     });
     const resourceId = foundResource.dataValues.id;
@@ -28,9 +29,11 @@ export const permit = async (req, res, next) => {
 
 
 export const validateSetPermission = async (req, res, next) => {
-  const { resourceId } = req.body;
+  const { resourceId, ...permissions } = req.body;
   const { roleId } = req.params;
   try {
+    // Check if Resource Exists
+    if (Object.keys(permissions).length < 1) throw new Error('No permission provided');
     if (!resourceId) throw new Error('Resource not provided');
     if (!roleId) throw new Error('No Role provided');
     await Joi.validate(req.body, setPermissionSchema);
@@ -38,6 +41,19 @@ export const validateSetPermission = async (req, res, next) => {
   } catch (error) {
     return res.status(400).json({
       status: 'error',
+      message: error.message
+    });
+  }
+};
+
+export const checkResource = async (req, res, next) => {
+  const { resourceId } = req.body;
+  try {
+    await checkIfExistsInDb(resource, resourceId, 'Resource does not exist');
+    next();
+  } catch (error) {
+    res.status(404).json({
+      success: false,
       message: error.message
     });
   }

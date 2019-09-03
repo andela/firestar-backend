@@ -1,21 +1,22 @@
 import jwt from 'jsonwebtoken';
 
 const isLoggedIn = async (req, res, next) => {
-  let token = req.headers['x-auth-access'];
+  const token = req.headers.authorization;
   if (!token) {
     return res.status(401).json({
       status: 'error',
-      message: 'You are not loggged in'
+      message: 'Token required'
     });
   }
   try {
-    token = token.slice(7);
-    const decoded = await jwt.decode(token, process.env.JWT_SECRET);
+    // eslint-disable-next-line no-unused-vars
+    const [bearer, realToken] = token.split(' ');
+    const decoded = await jwt.decode(realToken, process.env.JWT_SECRET);
     if (decoded) {
       req.user = decoded;
       return next();
     }
-    throw new Error('You are not logged in.');
+    throw new Error('Invalid Token Provided');
   } catch (error) {
     return res.status(400).json({
       status: 'error',

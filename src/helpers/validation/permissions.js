@@ -1,5 +1,5 @@
 import Joi from '@hapi/joi';
-import { role, permission } from '../models';
+import { permission } from '../../models';
 
 export const checkPermission = async (roleId, resourceId, permissions) => {
   try {
@@ -19,16 +19,6 @@ export const checkPermission = async (roleId, resourceId, permissions) => {
     // If Permission exists return the value of the permission
     const isPermitted = foundPermission.dataValues[permissions];
     if (isPermitted) return isPermitted;
-    // If permission does not exist
-    // Get Role's ParentId
-    const foundRole = await role.findOne({
-      where: {
-        id: roleId
-      }
-    });
-    const { parentId } = foundRole.dataValues;
-    // Check via recursion if parent role has the permission
-    return checkPermission(parentId, resourceId, permissions);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -54,6 +44,7 @@ export const setPermissionSchema = Joi.object().keys({
     .optional(),
   resourceId: Joi.number()
     .integer()
+    .required()
     .positive()
     .error(new Error('Invalid Resource ID Provided')),
   roleId: Joi.number()

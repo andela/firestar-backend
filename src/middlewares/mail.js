@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { verifyEmailTemplate } from '../services/mail/template/verifyEmail';
 import { emailVerifyToken } from '../utils/index';
-import { emailRegex } from '../validation/emailValidation';
+import { emailRegex } from '../helpers/validation/emailValidation';
 import Mail from '../services/mail/Mail';
 
 

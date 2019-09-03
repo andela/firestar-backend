@@ -15,7 +15,7 @@ describe('Set Role Permissions', () => {
     const res = await chai
       .request(server)
       .patch(`/api/v1/roles/${unauthorised.roleId}/permissions`)
-      .set('x-auth-access', unauthorizedToken)
+      .set('authorization', unauthorizedToken)
       .send(unauthorised);
 
     assert.equal(
@@ -30,7 +30,7 @@ describe('Set Role Permissions', () => {
     const res = await chai
       .request(server)
       .patch(`/api/v1/roles/${invalidRoleId.roleId}/permissions`)
-      .set('x-auth-access', authorizedToken)
+      .set('authorization', authorizedToken)
       .send(invalidRoleId);
 
     assert.equal(
@@ -45,7 +45,7 @@ describe('Set Role Permissions', () => {
     const res = await chai
       .request(server)
       .patch(`/api/v1/roles/${invalidResourceId.roleId}/permissions`)
-      .set('x-auth-access', authorizedToken)
+      .set('authorization', authorizedToken)
       .send(invalidResourceId);
 
     assert.equal(
@@ -59,7 +59,7 @@ describe('Set Role Permissions', () => {
     const res = await chai
       .request(server)
       .patch(`/api/v1/roles/${invalidResourceId2.roleId}/permissions`)
-      .set('x-auth-access', authorizedToken)
+      .set('authorization', authorizedToken)
       .send(invalidResourceId2);
     assert.equal(
       res.status,
@@ -73,7 +73,7 @@ describe('Set Role Permissions', () => {
     const res = await chai
       .request(server)
       .patch(`/api/v1/roles/${invalidResourceId.roleId}/permissions`)
-      .set('x-auth-access', authorizedToken)
+      .set('authorization', authorizedToken)
       .send(invalidResourceId);
 
     assert.equal(
@@ -88,7 +88,7 @@ describe('Set Role Permissions', () => {
     const res = await chai
       .request(server)
       .patch(`/api/v1/roles/${validInput.roleId}/permissions`)
-      .set('x-auth-access', authorizedToken)
+      .set('authorization', authorizedToken)
       .send(validInput);
     assert.equal(
       res.status,
@@ -102,7 +102,7 @@ describe('Set Role Permissions', () => {
     const res = await chai
       .request(server)
       .patch(`/api/v1/roles/${validInput.roleId}/permissions`)
-      .set('x-auth-access', authorizedToken)
+      .set('authorization', authorizedToken)
       .send(validInput2);
     assert.equal(
       res.status,

@@ -14,7 +14,7 @@ router.post('/api/v1/auth/login', async (req, res, next) => {
     token = `Bearer ${token}`;
     res
       .status(200)
-      .header('x-auth-access', token)
+      .header('authorization', token)
       .json({
         token,
         data: user

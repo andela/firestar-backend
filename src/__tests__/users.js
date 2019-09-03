@@ -15,8 +15,8 @@ describe('Users', () => {
     it('Should return an error for unauthorised users', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/abc123@gmail.com/role')
-        .set('x-auth-access', unauthorizedToken)
+        .patch('/api/v1/users/edit/role')
+        .set('authorization', unauthorizedToken)
         .send(unauthorisedRoleUser);
 
       assert.equal(res.status, 401, 'Should return 401 for unauthorized users');
@@ -26,8 +26,8 @@ describe('Users', () => {
     it('Should return an error for missing role field', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/abc123@gmail.com/role')
-        .set('x-auth-access', authorizedToken)
+        .patch('/api/v1/users/edit/role')
+        .set('authorization', authorizedToken)
         .send(invalidInfoRole2);
 
       assert.equal(
@@ -41,8 +41,8 @@ describe('Users', () => {
     it('Should return an error for missing email field', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/abc123@gmail.com/role')
-        .set('x-auth-access', authorizedToken)
+        .patch('/api/v1/users/edit/role')
+        .set('authorization', authorizedToken)
         .send(invalidInfoRole1);
 
       assert.equal(
@@ -57,7 +57,7 @@ describe('Users', () => {
       const res = await chai
         .request(server)
         .patch('/api/v1/users/nonexistingemail@gmail.com/role')
-        .set('x-auth-access', authorizedToken)
+        .set('authorization', authorizedToken)
         .send(invalidInfoRole3);
 
       assert.equal(res.status, 404, 'Should return 401 for unauthorized users');
@@ -67,8 +67,8 @@ describe('Users', () => {
     it("Should update user's roleId", async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/abc123@gmail.com/role')
-        .set('x-auth-access', authorizedToken)
+        .patch('/api/v1/users/edit/role')
+        .set('authorization', authorizedToken)
         .send(validInfoRole);
 
       assert.equal(

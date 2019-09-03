@@ -3,11 +3,9 @@ import express from 'express';
 import errorHandler from 'errorhandler';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
-import Log from 'debug';
 import routes from './routes';
 import swaggerDocument from '../swagger.json';
 
-const serverLog = Log('server');
 
 const isProduction = process.env.NODE_ENV === 'production';
 

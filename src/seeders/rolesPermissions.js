@@ -24,26 +24,6 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        resourceId: 3,
-        roleId: 1,
-        delete: true,
-        edit: true,
-        read: true,
-        add: true,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        resourceId: 4,
-        roleId: 1,
-        delete: true,
-        edit: true,
-        read: true,
-        add: true,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
         resourceId: 1,
         roleId: 2,
         delete: true,

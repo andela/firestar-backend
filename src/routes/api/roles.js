@@ -1,12 +1,10 @@
 import { Router } from 'express';
-import Users from '../../controllers/users';
-import validateSetRole from '../../middlewares/userRole';
-import { permit } from '../../middlewares/permissions';
+import Permssions from '../../controllers/roleController';
+import { validateSetPermission, permit, checkResource } from '../../middlewares/permissions';
 import isLoggedIn from '../../middlewares/login';
 
 const router = Router();
 
-router.patch('/users/:email/role', [isLoggedIn, validateSetRole, permit], Users.changeRole);
-
+router.patch('/roles/:roleId/permissions', [isLoggedIn, validateSetPermission, permit, checkResource], Permssions.setPermissions);
 
 export default router;

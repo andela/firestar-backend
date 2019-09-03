@@ -10,7 +10,6 @@ module.exports = {
       },
       {
         name: 'Travel Administrator',
-        parentId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -21,7 +20,6 @@ module.exports = {
       },
       {
         name: 'Manager',
-        parentId: 5,
         createdAt: new Date(),
         updatedAt: new Date()
       },
