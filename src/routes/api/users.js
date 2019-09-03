@@ -4,6 +4,7 @@ import { authorization, jwtVerify } from '../../middlewares/auth/auth';
 import { validationForSignUp } from '../../middlewares/validation/validation';
 import emailverification from '../../controllers/emailController';
 import userController from '../../controllers/userController';
+import index from '../../controllers/index';
 
 const router = Router();
 
@@ -16,8 +17,10 @@ router.post('/users/auth/register', validationForSignUp, SendVerificationEmail, 
 router.get('/users/email/verify', emailverification.confirmEmailVerificaionToken);
 
 /**
- * Example of how to make use of a protected route middleware
+ * Example of how to make use of a protected route
+ * Simply call the authorization and jwtVerify middleware in the route in want
+ * to protect
  */
-router.post('/users/myaccount', authorization, jwtVerify);
+router.get('/users/myaccount', authorization, jwtVerify, index.Welcome);
 
 export default router;

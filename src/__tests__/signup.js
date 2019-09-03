@@ -5,8 +5,11 @@ import sinonChai from 'sinon-chai';
 import app from '../index';
 
 import { jwtVerifyUserToken } from '../utils/index';
+import { hashPassword, comparePassword } from '../helpers/index';
 import { validateData, signUpValidationSchema } from '../validation/index';
+import { jwtVerify, authorization } from '../middlewares/auth/auth';
 import userservices from '../services/userservice';
+import userController from '../controllers/userController';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -37,7 +40,7 @@ describe('SIGNUP ROUTE', () => {
         email: 'akps.i@yahoo.com',
         firstName: 'Aniefiok',
         lastName: 'Akpan',
-        password: 'EMma250@@'
+        password: 'EMma8760@@'
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       token = response.body.data.token;
@@ -61,6 +64,15 @@ describe('SIGNUP ROUTE', () => {
     it('should verify token', async () => {
       const response = await jwtVerifyUserToken(token);
       expect(response.id).to.equal(UserId);
+    }).timeout(0);
+  });
+
+  describe('HASHPASWORD AND COMPAREPASSWORD', () => {
+    it('should hash passowrd for user', async () => {
+      const password = 'dfdfdfg33gf';
+      const hashPass = await hashPassword(password);
+      const decoded = await comparePassword(hashPass, password);
+      expect(decoded).to.equal(true);
     }).timeout(0);
   });
 
@@ -137,6 +149,7 @@ describe('SIGNUP ROUTE', () => {
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
+
     it(`should have a status of 400 with a message of
      "Password must be at leat 8 character long, with at least an uppercase, lowercase, digit and special character" when password does not meet the required`, async () => {
       const body = {
@@ -152,6 +165,22 @@ describe('SIGNUP ROUTE', () => {
     }).timeout(0);
   });
 
+  describe('PROTECTED ROUTE TEST', () => {
+    it('should welcome user to the proctected route endpoint', async () => {
+      const response = await request.get('/api/v1/users/myaccount')
+        .set('Authorization', token);
+      expect(response.status).to.equal(200);
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should say proctected route when token is not present', async () => {
+      const response = await request.get('/api/v1/users/myaccount')
+        .set('Authorization', tokenEmail);
+      expect(response.status).to.equal(401);
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+  });
+
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 200 when valid token is sent as query string', async () => {
       const id = tokenEmail;
@@ -159,5 +188,217 @@ describe('SIGNUP ROUTE', () => {
       expect(response.status).to.equal(200);
       expect(response.body).to.be.a('object');
     }).timeout(0);
+  });
+
+  describe('STUBS FOR AUTH MIDDLEWARE', () => {
+    it('reproduce server response when token is not valid /JWTVERIFY', async () => {
+      const req = {
+        token: tokenEmail,
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(req, 'token').throws();
+
+      await jwtVerify(req, res);
+
+      expect(res.status).to.have.been.calledWith(401);
+    });
+
+    it('Go to the next middleware when no error in JWTVERIFY', async () => {
+      const req = {
+        token,
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      const next = () => 2;
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(req, 'token').throws();
+
+      await jwtVerify(req, res, next);
+    });
+
+    it('Go to the next middleware when no error in Authorization', async () => {
+      const req = {
+        header() {
+        },
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      const next = () => 2;
+
+      sinon.stub(req, 'header').returnsThis();
+      await authorization(req, res, next);
+
+      expect(req.header).to.have.been.calledWith('Authorization');
+    });
+
+    it('reproduce server response when token is not available in Header as Authorization', async () => {
+      const req = {
+        header() {}
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+
+      await authorization(req, res);
+
+      expect(res.status).to.have.been.calledWith(401);
+    });
+  });
+
+  describe('STUBS FOR USERCONTROLLER', () => {
+    it('reproduce server response to get users', async () => {
+      const req = {
+        header() {}
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+
+      await userController.getUsers(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+    });
+
+    it('reproduce server response to when user exist already in database', async () => {
+      const req = {
+        user: {
+          email: 'akps.i@yahoo.com',
+          firstName: 'Aniefiok',
+          lastName: 'Akpan',
+          password: 'EMma250@@'
+        },
+        tokenEmail
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+
+      await userController.addUser(req, res);
+
+      expect(res.status).to.have.been.calledWith(400);
+    });
+
+    it('reproduce server response to add a new user to database with statuscode of 201', async () => {
+      const req = {
+        user: {
+          email: 'akps.ani@yahoo.com',
+          firstName: 'Aniefiok',
+          lastName: 'Akpan',
+          password: '43DFsd&&'
+        },
+        tokenEmail
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+
+      await userController.addUser(req, res);
+      expect(res.status).to.have.been.calledWith(201);
+    });
+
+    it('reproduce server response to update a user with 200 statuscode response', async () => {
+      const req = {
+        body: {
+          alteredUser: {
+            firstName: 'Indris',
+            lastName: 'Solomon'
+          }
+        },
+        params: {
+          id: UserId
+        }
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      await userController.updatedUser(req, res);
+      expect(res.status).to.have.been.calledWith(200);
+    });
+
+    it('reproduce server response to update a user with 404 statuscode response', async () => {
+      const req = {
+        body: {
+          alteredUser: {
+            firstName: 'Indris',
+            lastName: 'Solomon'
+          }
+        },
+        params: {
+          id: '433'
+        }
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+
+      await userController.updatedUser(req, res);
+      expect(res.status).to.have.been.calledWith(404);
+    });
+
+    it('reproduce server response to get a user with 200 statuscode response', async () => {
+      const req = {
+
+        params: {
+          id: UserId
+        }
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+
+      await userController.getAUser(req, res);
+      expect(res.status).to.have.been.calledWith(200);
+    });
+
+    it('reproduce server response to get a user with 404 statuscode response', async () => {
+      const req = {
+
+        params: {
+          id: '343'
+        }
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+
+      await userController.getAUser(req, res);
+      expect(res.status).to.have.been.calledWith(404);
+    });
   });
 });

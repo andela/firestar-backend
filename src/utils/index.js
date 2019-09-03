@@ -25,9 +25,3 @@ export const jwtVerifyUserToken = (token) => new Promise((resolve,reject) => {
   if (result) return resolve(result);
   if (!result) return reject(result);
 });
-/**
- * @param {array} array of data to test
- * @param {element} element of that array
- * @return {integer} index of the  element in array
- */
-export const arrayTest = (array, element) => array.indexOf(element);

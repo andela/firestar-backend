@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -12,7 +12,7 @@ export const authorization = (req, res, next) => {
     req.token = token;
     next();
   } else {
-    res.status(401).json({ status: 402, error: 'You are not authorized to access this route' });
+    res.status(401).json({ status: 401, error: 'You are not authorized to access this route' });
   }
 };
 

@@ -9,7 +9,7 @@ export const hashPassword = (password) => new Promise((resolve, reject) => {
 
 export const comparePassword = (hashpassword, password) => new Promise((resolve, reject) => {
   bcrypt.compare(password, hashpassword, (err, boolean) => {
-    resolve(boolean);
-    reject(err);
+    if (boolean)resolve(boolean);
+    if (err)reject(err);
   });
 });
