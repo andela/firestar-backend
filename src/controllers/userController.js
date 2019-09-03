@@ -1,7 +1,6 @@
 import UserService from '../services/userServices';
 import Util from '../utils/index';
 import Helper from '../middlewares/index';
-import CheckValidInput from '../validation/index'
 const { findUserById, updateUser } = UserService;
 const util = new Util();
 class UserController {
@@ -28,12 +27,6 @@ class UserController {
     const { id } = req.params;
     if (req.user.id !== id) {
       util.setError(401, 'Unauthorized')
-      return util.send(res)
-    }
-
-    const { error } = CheckValidInput.userProfile(req.body);
-    if (error) {
-      util.setError(422, error.details[0].message)
       return util.send(res)
     }
 

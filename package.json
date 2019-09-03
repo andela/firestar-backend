@@ -23,6 +23,7 @@
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
+    "@hapi/joi": "^15.1.1",
     "body-parser": "^1.18.3",
     "chai-http": "^4.3.0",
     "core-js": "^3.2.1",

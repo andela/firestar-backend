@@ -110,18 +110,6 @@ describe('User Profile Route', () => {
   });
 
   describe('PATCH /users/:id', () => {
-    it('It should return an error for invalid data type', async () => {
-      const response = await chai
-        .request(app)
-        .patch(`${BASE_URL}/users/${userId}`)
-        .set('token', validToken)
-        .send(invalidData);
-      expect(response.status).to.equal(422);
-      expect(response.body.status).to.equal('error');
-    });
-  });
-
-  describe('PATCH /users/:id', () => {
     it('should update users', async () => {
       const response = await chai
         .request(app)
@@ -181,5 +169,3 @@ describe('PATCH /users/:id', () => {
     );
   });
 });
-
-

@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-catch */
-/* eslint-disable require-jsdoc */
 import db from '../models';
 const { Users } = db;
 import Util from '../utils/index'
