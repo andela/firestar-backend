@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import 'chai/register-should';
 
 import app from '../index';
-import { userId, wrongId, updateUser, validToken, inValidToken2, invalidData, inValidRequest, invalidSyntax } from './mocks/userMock'
+import { userId, wrongId, updateUser, validToken, inValidToken2, invalidUserData, inValidRequest, invalidSyntax, updateUser2 } from './mocks/userMock'
 chai.use(chaiHttp);
 const { expect } = chai;
 
@@ -165,22 +165,20 @@ describe('PATCH /users/:id', () => {
     expect(response.status).to.equal(401);
     expect(response.body.status).to.equal('error');
     expect(response.body.message).to.equal(
-      'cannot read undefined property'
+      'undefined property'
     );
   });
 });
 
-// describe('PATCH /users/:id', () => {
-//   it('It should throw error validation message', async () => {
-//     const response = await chai
-//       .request(app)
-//       .patch(`${BASE_URL}/users/${userId}`)
-//       .set('token', validToken)
-//       .send(invalidData.firstName);
-//     expect(response.status).to.equal(401);
-//     expect(response.body.status).to.equal('error');
-//     expect(response.body.message).to.equal(
-//       'firstName length must be at least 2 characters long'
-//     );
-//   });
-// });
+describe('PATCH /users/:id', () => {
+  it('invalid user data type', async () => {
+    const response = await chai
+      .request(app)
+      .patch(`${BASE_URL}/users/1`)
+      .set('token', validToken)
+      .send(updateUser2);
+    expect(response.status).to.equal(400);
+    expect(response.body.status).to.equal('error');
+    expect(response.body.message[0]).to.equal('firstName length must be at least 2 characters long');
+  });
+});

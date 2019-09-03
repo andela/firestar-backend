@@ -9,7 +9,7 @@ import Joi from '@hapi/joi';
 const joiValidator = (data, schema) => {
     let message;
     const validationOptions = {
-        allowUnknown: true, // allow unknown keys that will be ignored
+        allowUnknown: false, // allow unknown keys that will be ignored
         stripUnknown: true, // remove unknown keys from the validated data
     };
     Joi.validate(data, schema, validationOptions, (err) => {

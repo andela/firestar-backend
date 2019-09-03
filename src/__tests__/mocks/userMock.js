@@ -18,11 +18,27 @@ export const updateUser = {
   lineManager: faker.name.jobType()
 }
 
+export const updateUser2 = {
+  firstName: 'A',
+  lastName: faker.name.lastName(),
+  company: faker.company.companyName(),
+  email: faker.internet.email(),
+  gender: faker.random.arrayElement(gender),
+  role: faker.name.jobTitle(),
+  prefferedLanguage: faker.random.arrayElement(language),
+  prefferedCurrency: faker.finance.currencyName(),
+  residentialLocation: faker.address.streetAddress(),
+  countryCode: faker.address.countryCode(),
+  birthdate: faker.date.past(),
+  department: faker.commerce.department(),
+  lineManager: faker.name.jobType()
+}
+
 
 export const userId = 1;
 export const wrongId = 212;
 
-export const invalidData = {
+export const invalidUserData = {
   firstName: 'A'
 }
 

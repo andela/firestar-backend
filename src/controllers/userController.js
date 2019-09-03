@@ -67,7 +67,7 @@ class UserController {
       );
       return util.send(res);
     } catch (error) {
-      util.setError(401, 'cannot read undefined property');
+      util.setError(401, 'undefined property');
       return util.send(res);
     }
   }
