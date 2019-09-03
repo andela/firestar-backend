@@ -45,7 +45,7 @@ export default class emailVerificationController {
       const updateResponse = await userservices.updateUserByEmail(decoded.id, is_verified);
       if (updateResponse) {return res.status(200).json({
         status: 200,
-        data: { message: 'Your Account has been successfully verified.', updateResponse }
+        data: { message: 'Your Account has been successfully verified.' }
       });}
     } catch (err) {
       return res.status(400).json({
