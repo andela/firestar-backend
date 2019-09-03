@@ -1,6 +1,6 @@
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('user', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('users', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -39,7 +39,6 @@ module.exports = {
     },
     preferred_currency: {
       type: Sequelize.STRING,
-      allowNull: true
     },
     createdAt: {
       allowNull: false,
@@ -51,5 +50,5 @@ module.exports = {
     }
 
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('user')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('users')
 };

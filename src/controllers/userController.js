@@ -1,16 +1,27 @@
-import BookService from '../services/bookservice';
+/* eslint-disable camelcase */
+import userService from '../services/userservice';
 import Util from '../utils/response';
+import { jwtSignUser } from '../utils/index';
+import { hashPassword } from '../helpers/index';
+
 
 const util = new Util();
-
+/**
+ * @param { class } provide response to user signup activity.
+ */
 class userController {
-  static async getAllBooks(req, res) {
+  /**
+ * @param {req} req that contains the req body object.
+ * @param {res} res content to be rendered.
+ * @returns {object} Success or failure response on getting all users
+ */
+  static async getUsers(req, res) {
     try {
-      const allBooks = await BookService.getAllBooks();
-      if (allBooks.length > 0) {
-        util.setSuccess(200, 'Books retrieved', allBooks);
+      const allUsers = await userService.getAllUser();
+      if (allUsers.length > 0) {
+        util.setSuccess(200, 'Users retrieved', allUsers);
       } else {
-        util.setSuccess(200, 'No book found');
+        util.setSuccess(200, 'No Users found');
       }
       return util.send(res);
     } catch (error) {
@@ -19,35 +30,52 @@ class userController {
     }
   }
 
-  static async addBook(req, res) {
-    if (!req.body.title || !req.body.price || !req.body.description) {
-      util.setError(400, 'Please provide complete details');
-      return util.send(res);
-    }
-    const newBook = req.body;
+  /**
+ * @param {req} req that contains the req body object.
+ * @param {res} res content to be rendered.
+ * @returns {object} Success or failure response on adding a specific user
+ */
+  static async addUser(req, res) {
+    const { user } = req;
     try {
-      const createdBook = await BookService.addBook(newBook);
-      util.setSuccess(201, 'Book Added!', createdBook);
+      const hashpassword = await hashPassword(user.password);
+      user.password = hashpassword;
+      const {
+        id, email, first_name, last_name,
+      } = await userService.addUser(user);
+      const token = await jwtSignUser(id);
+      util.setSuccess(201, 'user Added!', {
+        token, id, email, first_name, last_name,
+      });
       return util.send(res);
     } catch (error) {
+      if (error.original.routine === '_bt_check_unique') {
+        util.setError(400, 'Email already exist');
+        return util.send(res);
+      }
       util.setError(400, error.message);
       return util.send(res);
     }
   }
 
-  static async updatedBook(req, res) {
-    const alteredBook = req.body;
+  /**
+ * @param {req} req that contains the req body object.
+ * @param {res} res content to be rendered.
+ * @returns {object} Success or failure response on updating a  single user details
+ */
+  static async updatedUser(req, res) {
+    const alteredUser = req.body;
     const { id } = req.params;
     if (!Number(id)) {
       util.setError(400, 'Please input a valid numeric value');
       return util.send(res);
     }
     try {
-      const updateBook = await BookService.updateBook(id, alteredBook);
-      if (!updateBook) {
-        util.setError(404, `Cannot find book with the id: ${id}`);
+      const updateUser = await userService.updateUser(id, alteredUser);
+      if (!updateUser) {
+        util.setError(404, `Cannot find user with the id: ${id}`);
       } else {
-        util.setSuccess(200, 'Book updated', updateBook);
+        util.setSuccess(200, 'User updated', updateUser);
       }
       return util.send(res);
     } catch (error) {
@@ -56,7 +84,12 @@ class userController {
     }
   }
 
-  static async getABook(req, res) {
+  /**
+ * @param {req} req that contains the req body object.
+ * @param {res} res content to be rendered.
+ * @returns {object} Success or failure response on getting a specific user
+ */
+  static async getAUser(req, res) {
     const { id } = req.params;
 
     if (!Number(id)) {
@@ -65,12 +98,12 @@ class userController {
     }
 
     try {
-      const theBook = await BookService.getABook(id);
+      const theUser = await userService.getAUser(id);
 
-      if (!theBook) {
-        util.setError(404, `Cannot find book with the id ${id}`);
+      if (!theUser) {
+        util.setError(404, `Cannot find user with the id ${id}`);
       } else {
-        util.setSuccess(200, 'Found Book', theBook);
+        util.setSuccess(200, 'Found User', theUser);
       }
       return util.send(res);
     } catch (error) {
@@ -79,7 +112,12 @@ class userController {
     }
   }
 
-  static async deleteBook(req, res) {
+  /**
+ * @param {req} req that contains the req body object.
+ * @param {res} res content to be rendered.
+ * @returns {object} Success or failure response to delete a specific user.
+ */
+  static async deleteUser(req, res) {
     const { id } = req.params;
 
     if (!Number(id)) {
@@ -88,12 +126,12 @@ class userController {
     }
 
     try {
-      const bookToDelete = await BookService.deleteBook(id);
+      const userToDelete = await userService.deleteUser(id);
 
-      if (bookToDelete) {
-        util.setSuccess(200, 'Book deleted');
+      if (userToDelete) {
+        util.setSuccess(200, 'User deleted');
       } else {
-        util.setError(404, `Book with the id ${id} cannot be found`);
+        util.setError(404, `User with the id ${id} cannot be found`);
       }
       return util.send(res);
     } catch (error) {

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
 import { verifyEmailTemplate } from '../services/mail/template/verifyEmail';
 import { emailVerifyToken } from '../utils/index';
@@ -13,15 +14,16 @@ import Mail from '../services/mail/Mail';
  * @returns {error} if any error occurs it throws an error.
  */
 export const SendVerificationEmail = async (req, res, next) => {
-  let { email, firstName, lastName } = req.body;
+  let { email, first_name, last_name } = req.body;
   email = email ? email.trim() : '';
-  firstName = firstName ? firstName.trim() : '';
-  lastName = lastName ? lastName.trim() : '';
+  first_name = first_name ? first_name.trim() : '';
+  last_name = last_name ? last_name.trim() : '';
   /**
    * @var {id} id is the user unique id from Table column
    */
-  const id = 'some_encoded_identiity';
+  const id = req.user.email;
   const token = await emailVerifyToken(id);
+
   const emaildDetails = {
     Subject: 'Email Verification',
     Recipient: email,
@@ -32,11 +34,10 @@ export const SendVerificationEmail = async (req, res, next) => {
   const link = req.hostname === domain ? linkProd : linkLocal;
   const data = {
     email,
-    firstName,
-    lastName,
+    first_name,
+    last_name,
     link,
   };
-
   try {
     const send = new Mail(emaildDetails, verifyEmailTemplate(data));
     const response = await send.main();
@@ -48,7 +49,10 @@ export const SendVerificationEmail = async (req, res, next) => {
       return res.status(403).json({ status: 403, error: response.message });
     }
     if (response.message === 'queryA ECONNREFUSED smtp.gmail.com') {
-      return res.status(409).json({ status: 409, error: response.message });
+      return res.status(409).json({ status: 409, error: 'Network error occured, please check your network' });
+    }
+    if (response.message === 'queryA EREFUSED smtp.gmail.com') {
+      return res.status(409).json({ status: 409, error: 'Network error occured, please check your network' });
     }
     if (response) {
       req.verificationMailResponse = response;

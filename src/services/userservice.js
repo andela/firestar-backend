@@ -1,32 +1,47 @@
-import database from '../models/User';
-
+/* eslint-disable no-useless-catch */
+import db from '../models/index';
+/**
+ * @param { class } provide response to user signup activity.
+ */
 class userService {
-  static async getAllBUser() {
+  /**
+ * @returns {object} of all query data from databas
+ */
+  static async getAllUser() {
     try {
-      return await database.user.findAll();
+      return await db.users.findAll();
     } catch (error) {
       throw error;
     }
   }
 
+  /**
+   * @param { newUser } newUser to be added to database.
+ * @returns {object} containing newly added user to the database
+ */
   static async addUser(newUser) {
     try {
-      return await database.user.create(newUser);
+      return await db.users.create(newUser);
     } catch (error) {
       throw error;
     }
   }
 
-  static async updateUser(id, updateBook) {
+  /**
+   * @param { id } id of user to be updated.
+   * @param { updateUser } updateUser of user to be updated.
+ * @returns {object} object containing recently details of user.
+ */
+  static async updateUser(id, updateUser) {
     try {
-      const bookToUpdate = await database.user.findOne({
+      const userToUpdate = await db.users.findOne({
         where: { id: Number(id) },
       });
 
-      if (bookToUpdate) {
-        await database.user.update(updateBook, { where: { id: Number(id) } });
+      if (userToUpdate) {
+        await db.users.update(updateUser, { where: { id: Number(id) } });
 
-        return updateBook;
+        return updateUser;
       }
       return null;
     } catch (error) {
@@ -34,27 +49,57 @@ class userService {
     }
   }
 
-  static async getAUser(id) {
+  /**
+   * @param { email } email of user to be updated.
+   * @param { updateUser } updateUser of user to be updated.
+ * @returns {object} object containing recently details of user.
+ */
+  static async updateUserByEmail(email, updateUser) {
     try {
-      const theBook = await database.user.findOne({
-        where: { id: Number(id) },
+      const userToUpdate = await db.users.findOne({
+        where: { email },
       });
 
-      return theBook;
+      if (userToUpdate) {
+        await db.users.update(updateUser, { where: { email } });
+
+        return updateUser;
+      }
+      return null;
     } catch (error) {
       throw error;
     }
   }
 
+  /**
+   * @param { id } id of user to get.
+ * @returns {object} object of user detail returned by the given id.
+ */
+  static async getAUser(id) {
+    try {
+      const theUser = await db.users.findOne({
+        where: { id: Number(id) },
+      });
+
+      return theUser;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * @param { id } id of user to delete.
+ * @returns {object} object of user deleted from the database.
+ */
   static async deleteUser(id) {
     try {
-      const bookToDelete = await database.user.findOne({ where: { id: Number(id) } });
+      const userToDelete = await db.users.findOne({ where: { id: Number(id) } });
 
-      if (bookToDelete) {
-        const deletedBook = await database.user.destroy({
+      if (userToDelete) {
+        const deletedUser = await db.users.destroy({
           where: { id: Number(id) },
         });
-        return deletedBook;
+        return deletedUser;
       }
       return null;
     } catch (error) {
