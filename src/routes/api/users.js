@@ -16,4 +16,5 @@ router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail,
 
 router.get('/users/email/verify', emailverification.confirmEmailVerificaionToken);
 
+
 export default router;

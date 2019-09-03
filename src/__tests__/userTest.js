@@ -10,7 +10,7 @@ chai.should();
 const loginUrl = '/api/v1/users/login';
 
 const userLoginDetails = {
-  email: 'example@gmail.com',
+  email: 'example1@gmail.com',
   password: 'firestar2019',
 };
 const userToken = '';
@@ -33,6 +33,7 @@ describe('Login Users', () => {
         done();
       });
   });
+
   it('should return 200 for successful Login', (done) => {
     chai
       .request(app)
@@ -65,6 +66,7 @@ describe('Login Users', () => {
         done();
       });
   });
+
   it('should return 400 for undefined Login password detail', (done) => {
     chai
       .request(app)
@@ -78,12 +80,13 @@ describe('Login Users', () => {
         done();
       });
   });
+
   it('should return 401 for incorrect password login detail', (done) => {
     chai
       .request(app)
       .post(loginUrl)
       .send({
-        email: 'example@gmail.com',
+        email: 'example1@gmail.com',
         password: 'barefoot2020',
       })
       .end((err, res) => {
@@ -93,6 +96,7 @@ describe('Login Users', () => {
         done();
       });
   });
+
   it('should return 401 for email not exist for login detail', (done) => {
     chai
       .request(app)
