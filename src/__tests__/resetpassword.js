@@ -7,7 +7,6 @@ import app from '../index';
 import models, { sequelize } from '../models';
 import { sendResetMail, sendSignupMail } from '../services/sendMail';
 import UserController from '../controllers/userController';
-import compareWithHash from '../utils/hash/compareHash';
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -75,6 +74,33 @@ const seedTestDb = async () => {
   });
 };
 
+// Clear tables of seed
+const clearTestDb = async () => {
+  await models.Login.destroy({
+    where: { email: 'youremail3@andela.com' }
+  });
+
+  await models.Login.destroy({
+    where: { email: 'youremail4@andela.com' }
+  });
+
+  await models.Reset.destroy({
+    where: { email: 'youremail3@andela.com' }
+  });
+
+  await models.Reset.destroy({
+    where: { email: 'youremail4@andela.com' }
+  });
+  
+  await models.User.destroy({
+    where: { email: 'youremail3@andela.com' }
+  });
+
+  await models.User.destroy({
+    where: { email: 'youremail4@andela.com' }
+  });
+};
+
 before(async () => {
   try {
     sequelize.sync({ force: true }).then(async () => {
@@ -84,6 +110,17 @@ before(async () => {
     throw err;
   }
 });
+
+after(async () => {
+  try {
+    sequelize.sync({ force: true }).then(async () => {
+      await clearTestDb();
+    });
+  } catch (err) {
+    throw err;
+  }
+});
+
 
 describe('Forgot Password validations', () => {
   describe('POST /api/users/passwords/forgot', () => {

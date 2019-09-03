@@ -29,11 +29,13 @@ const users = (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     User.hasOne(models.Login, {
-      foreignKey: 'email'
+      foreignKey: 'email',
+      onDelete: 'CASCADE',
     });
 
     User.hasOne(models.Reset, {
-      foreignKey: 'email'
+      foreignKey: 'email',
+      onDelete: 'CASCADE',
     });
   };
 

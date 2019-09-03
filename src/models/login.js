@@ -1,5 +1,5 @@
 // define the Login model with its content
-const login = (sequelize, DataTypes) => {
+const logins = (sequelize, DataTypes) => {
   const Login = sequelize.define('login', {
     id: {
       type: DataTypes.INTEGER,
@@ -33,4 +33,4 @@ const login = (sequelize, DataTypes) => {
   return Login;
 };
 
-export default login;
+export default logins;

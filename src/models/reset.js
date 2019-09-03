@@ -1,5 +1,5 @@
 // define the Reset model with its content
-const reset = (sequelize, DataTypes) => {
+const resets = (sequelize, DataTypes) => {
   const Reset = sequelize.define('reset', {
     id: {
       type: DataTypes.INTEGER,
@@ -22,11 +22,10 @@ const reset = (sequelize, DataTypes) => {
   Reset.associate = (models) => {
     Reset.belongsTo(models.User, {
       foreignKey: 'email',
-      onDelete: 'CASCADE'
     });
   };
 
   return Reset;
 };
 
-export default reset;
+export default resets;
