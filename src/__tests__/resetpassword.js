@@ -122,7 +122,7 @@ describe('Forgot Password validations', () => {
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
-        .send({ email: '123xy' })
+        .send({ email: '123xyz' })
         .end((err, res) => {
           expect(res).to.have.status(400);
           expect(res.body.status).to.be.equal('error');
@@ -158,6 +158,21 @@ describe('Forgot Password validations', () => {
           expect(res).to.have.status(400);
           expect(res.body.status).to.be.equal('error');
           expect(res.body.error.password).to.be.equal('Password is invalid');
+          done();
+        });
+    });
+
+    it('should not reset password without confirm password', done => {
+      chai
+        .request(app)
+        .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
+        .send({
+          password: '123456',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.status).to.be.equal('error');
+          expect(res.body.error.password).to.be.equal('Confirm password is required');
           done();
         });
     });

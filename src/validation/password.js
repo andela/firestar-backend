@@ -15,6 +15,9 @@ const validatePassword = ({ password, confirmPassword }) => {
     if (password !== confirmPassword) {
       errors.password = 'Passwords must match';
     }
+    if (isEmpty(confirmPassword)) {
+      errors.password = 'Confirm password is required';
+    }
   }
 
   return {
