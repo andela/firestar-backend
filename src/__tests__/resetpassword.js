@@ -12,7 +12,8 @@ const { expect } = chai;
 chai.use(chaiHttp);
 chai.use(sinonChai);
 
-let { Reset } = models;
+let request;
+let { Reset, User } = models;
 const { resetPassword } = UserController;
 
 const apiVersion = '/api/v1';
@@ -55,55 +56,39 @@ const seedTestDb = async () => {
 
   await models.Reset.create({
     email: 'youremail3@andela.com',
-    password: 'password',
     expireTime: new Date(),
-      resetToken: '$2a$10$Yc4fNidn3ih0Z0wRajFhq.AwneQLYR2RWWYQT7PGJdJj4UN1BGJ1K',
-      createdAt: new Date(),
-      updatedAt: new Date()
-  },
-  {
+    resetToken: '$2a$10$Yc4fNidn3ih0Z0wRajFhq.AwneQLYR2RWWYQT7PGJdJj4UN1BGJ1K'
+  }),
+
+  await models.Reset.create({
     email: 'youremail4@andela.com',
-    password: 'password',
     expireTime: moment
       .utc()
       .add(process.env.TOKENEXPIRY, 'seconds')
       .toLocaleString(),
-      resetToken: '$2a$10$Yc4fNidn3ih0Z0wRajFhq.AwneQLYR2RWWYQT7PGJdJj4UN1BGJ1K',
-      createdAt: new Date(),
-      updatedAt: new Date()
+    resetToken: '$2a$10$Yc4fNidn3ih0Z0wRajFhq.AwneQLYR2RWWYQT7PGJdJj4UN1BGJ1K'
   });
 };
 
 // Clear tables of seed
 const clearTestDb = async () => {
-  await models.Login.destroy({
-    where: { email: 'youremail3@andela.com' }
-  });
-
-  await models.Login.destroy({
-    where: { email: 'youremail4@andela.com' }
-  });
-
-  await models.Reset.destroy({
-    where: { email: 'youremail3@andela.com' }
-  });
-
-  await models.Reset.destroy({
-    where: { email: 'youremail4@andela.com' }
-  });
-  
-  await models.User.destroy({
-    where: { email: 'youremail3@andela.com' }
-  });
-
-  await models.User.destroy({
-    where: { email: 'youremail4@andela.com' }
-  });
+  try{
+    return await Promise.all(
+      Object.keys(models).map((key) => {
+        if (['sequelize', 'Sequelize'].includes(key)) return null;
+        return models[key].destroy({ where: {}, force: true });
+      })
+    );
+  } catch (err) {
+    throw err;
+  }
 };
 
+// clear database and seed data before test
 before(async () => {
   try {
-    sequelize.sync({ force: true }).then(async () => {
+    return sequelize.sync({ force: false }).then(async () => {
+      await clearTestDb();
       await seedTestDb();
     });
   } catch (err) {
@@ -111,15 +96,11 @@ before(async () => {
   }
 });
 
+// clear database after test
 after(async () => {
-  try {
-    sequelize.sync({ force: true }).then(async () => {
-      await clearTestDb();
-    });
-  } catch (err) {
-    throw err;
-  }
+  sequelize.sync({ force: true });
 });
+
 
 
 describe('Forgot Password validations', () => {
@@ -231,7 +212,21 @@ describe('Forgot Password validations', () => {
   });
 });
 
-describe('Forgot Password validations', () => {
+describe(' Valid Forgot Password Request', () => {
+  before(async () => {
+    request = chai.request(app).keepOpen();
+  });
+
+  afterEach(() => sinon.restore());
+
+  after(() => request.close());
+
+  const stubUser = {
+    id: 2,
+    email: 'youremail2@andela.com',
+    role: 'passenger'
+  }
+
   const user = {
     id: 2,
     email: 'youremail2@andela.com',
@@ -246,10 +241,10 @@ describe('Forgot Password validations', () => {
 
   it('should send reset mail to the email of an existing user', done => {
     // stub send mail functions
-    const resetMailStub = sinon.stub(sendResetMail(user, user.resetToken));
+    
     Reset = sinon.stub(Reset);
-
-    resetMailStub.yields();
+    User = sinon.stub(User);
+    sinon.stub(sendResetMail(user, user.resetToken));
 
     chai
       .request(app)
@@ -260,8 +255,7 @@ describe('Forgot Password validations', () => {
       });
   });
   it('should send signup mail to the email of a non user', done => {
-    const signupMailStub = sinon.stub(sendSignupMail(user2.email));
-    signupMailStub.yields();
+    sinon.stub(sendSignupMail(user2.email));
     chai
       .request(app)
       .post(`${forgotPasswordURL}`)
