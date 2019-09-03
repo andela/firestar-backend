@@ -23,7 +23,7 @@ export const userId = 1;
 export const wrongId = 212;
 
 export const invalidData = {
-  firstName: ''
+  firstName: 'A'
 }
 
 export const inValidRequest = {

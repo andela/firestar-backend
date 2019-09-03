@@ -3,6 +3,13 @@ import Joi from '@hapi/joi';
 import Util from '../utils/index';
 const util = new Util();
 
+/**
+ * Helper function to validate user profile
+* @param {Object} req - server request
+* @param {Object} res - server response
+* @returns {Object} - custom response
+* @param {Function} next
+*/
 export const validateProfileData = async (req, res, next) => {
   try {
     const schema = Joi.object().keys({

@@ -169,3 +169,18 @@ describe('PATCH /users/:id', () => {
     );
   });
 });
+
+// describe('PATCH /users/:id', () => {
+//   it('It should throw error validation message', async () => {
+//     const response = await chai
+//       .request(app)
+//       .patch(`${BASE_URL}/users/${userId}`)
+//       .set('token', validToken)
+//       .send(invalidData.firstName);
+//     expect(response.status).to.equal(401);
+//     expect(response.body.status).to.equal('error');
+//     expect(response.body.message).to.equal(
+//       'firstName length must be at least 2 characters long'
+//     );
+//   });
+// });

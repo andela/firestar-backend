@@ -3,7 +3,16 @@ import Util from '../utils/index';
 import Helper from '../middlewares/index';
 const { findUserById, updateUser } = UserService;
 const util = new Util();
+
+/** Class representing user controller. */
 class UserController {
+  /**
+  * get user profile
+  * @param {Object} req - server request
+  * @param {Object} res - server response
+  * @returns {Object} - custom response
+  * @description get details of registered user
+  */
   static async getUserProfile(req, res) {
     const { id } = req.params;
     try {
@@ -17,12 +26,19 @@ class UserController {
       util.setSuccess(200, 'Succesfully found user', user);
       return util.send(res);
     } catch (error) {
-      console.log('the error is here', error.message)
+      console.log('dssad')
       util.setError(401, error.message);
       return util.send(res);
     }
   }
 
+  /**
+  * update user profile
+  * @param {Object} req - server request
+  * @param {Object} res - server response
+  * @returns {Object} - custom response
+  * @description get's details of registered user
+  */
   static async updateUserProfile(req, res) {
     const { id } = req.params;
     if (req.user.id !== id) {

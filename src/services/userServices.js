@@ -1,9 +1,13 @@
 import db from '../models';
 const { Users } = db;
-import Util from '../utils/index'
 
-const util = new Util()
+/** Class representing user controller */
 class UserService {
+  /**
+ * Helper function to find a user by id
+ * @param {Integer} id - user's id
+ * @returns {Promise} - sequelize response
+*/
   static async findUserById(id) {
     try {
       const user = await Users.findOne({
@@ -15,6 +19,12 @@ class UserService {
     }
   }
 
+  /**
+ * Helper function to find to update user
+ * @returns {Promise} - sequelize response
+ * @param {Integer} id - user's id
+ * @param {Object} user
+*/
   static async updateUser(id, user) {
     try {
       const userToUpdate = await Users.findOne({
