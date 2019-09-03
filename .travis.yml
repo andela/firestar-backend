@@ -7,7 +7,6 @@ cache:
 env:
   - DATABASE_URL_TEST="postgres://postgres@localhost:5432/firestar_backend_test"
 before_script:
-  - psql -c 'drop database if exists firestar_backend_test;' -U postgres
   - psql -c 'create database firestar_backend_test;' -U postgres
 after_success:
   - npm run coveralls
