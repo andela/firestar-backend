@@ -4,8 +4,7 @@ import sinon from 'sinon';
 import 'chai/register-should';
 
 import app from '../index';
-// import { } from './mocks/userMock';
-import { userId, wrongId, updateUser, validToken, inValidToken2, invalidData } from './mocks/userMock'
+import { userId, wrongId, updateUser, validToken, inValidToken2, invalidData, inValidRequest, invalidSyntax } from './mocks/userMock'
 chai.use(chaiHttp);
 const { expect } = chai;
 
@@ -65,6 +64,21 @@ describe('User Profile Route', () => {
     });
   });
 
+  describe('GET /users/:id', () => {
+    it('It should throw error for invalid syntax', async () => {
+      const response = await chai
+        .request(app)
+        .get(`${BASE_URL}/users/${invalidSyntax}`)
+        .set('Content-Type', 'application/json')
+        .send(updateUser);
+      expect(response.status).to.equal(401);
+      expect(response.body.status).to.equal('error');
+      expect(response.body.message).to.equal(
+        `invalid input syntax for integer: "${invalidSyntax}"`
+      );
+    });
+  });
+
   describe('PATCH /users/:id', () => {
     it('It should return Provide user token', async () => {
       const response = await chai
@@ -108,6 +122,21 @@ describe('User Profile Route', () => {
   });
 
   describe('PATCH /users/:id', () => {
+    it('should update users', async () => {
+      const response = await chai
+        .request(app)
+        .patch(`${BASE_URL}/users/1`)
+        .set('token', validToken)
+        .send(updateUser);
+      expect(response.status).to.equal(201);
+      expect(response.body.status).to.equal('success');
+      expect(response.body.message).to.equal(
+        'You ve successfully updated your profile'
+      );
+    });
+  });
+
+  describe('PATCH /users/:id', () => {
     it('It should return Unauthorised message', async () => {
       const response = await chai
         .request(app)
@@ -138,17 +167,18 @@ describe('User Profile Route', () => {
   });
 });
 
-
-
 describe('PATCH /users/:id', () => {
-  it('It should throw error for catch', async () => {
+  it('It should throw undefined error', async () => {
     const response = await chai
       .request(app)
       .patch(`${BASE_URL}/users/${userId}`)
       .set('token', validToken)
-      .send(updateUser);
+      .send(inValidRequest);
     expect(response.status).to.equal(401);
     expect(response.body.status).to.equal('error');
+    expect(response.body.message).to.equal(
+      'cannot read undefined property'
+    );
   });
 });
 

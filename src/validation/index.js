@@ -7,7 +7,7 @@ const validationOptions = {
 
 class checkValidInput {
   /**
-   * check user input for sign_up
+   * check user input for profile settings
    * @param {user} object
   */
   static userProfile(user) {

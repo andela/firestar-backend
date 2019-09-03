@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import UserService from '../services/userServices';
 import Util from '../utils/index';
 import Helper from '../middlewares/index';
@@ -19,15 +18,14 @@ class UserController {
       util.setSuccess(200, 'Succesfully found user', user);
       return util.send(res);
     } catch (error) {
-      // console.log('I am looking for you', error)
-      util.setError(401, error);
+      console.log('the error is here', error.message)
+      util.setError(401, error.message);
       return util.send(res);
     }
   }
 
   static async updateUserProfile(req, res) {
     const { id } = req.params;
-    // console.log(req.user.email)
     if (req.user.id !== id) {
       util.setError(401, 'Unauthorized')
       return util.send(res)
@@ -60,7 +58,7 @@ class UserController {
       );
       return util.send(res);
     } catch (error) {
-      util.setError(401, error);
+      util.setError(401, 'cannot read undefined property');
       return util.send(res);
     }
   }
