@@ -25,7 +25,10 @@ export default class UserController {
       const { user } = req;
       // Check for user
       if (!user) {
-        sendSignupMail(email);
+        req.mailSent = sendSignupMail(email);
+        if (!req.mailSent) {
+          return errorResponse(res, 500, 'Error in sending email');
+        }
       } else {
         const newReset = new Reset({
           email: user.email,
@@ -45,7 +48,10 @@ export default class UserController {
         });
         const resetDetails = await newReset.save();
         // Send reset link to user email
-        await sendResetMail(resetDetails, resetToken);
+        req.mailSent = sendResetMail(resetDetails, resetToken);
+        if(!req.mailSent) {
+          return errorResponse(res, 500, 'Error in sending email');
+        }
       }
       successResponse(res, 200, 'Check your mail for further instruction');
     } catch (error) {
