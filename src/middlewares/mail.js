@@ -15,13 +15,14 @@ import Mail from '../services/mail/Mail';
  */
 export const SendVerificationEmail = async (req, res, next) => {
   let { email, firstName, lastName } = req.body;
+  console.log(email)
   email = email ? email.trim() : '';
   firstName = firstName ? firstName.trim() : '';
   lastName = lastName ? lastName.trim() : '';
   /**
    * @var {id} id is the user unique id from Table column
    */
-  const id = req.user.email;
+  const id = req.user ? req.user.email : 'some_encoded_identity';
   const token = await emailVerifyToken(id);
 
   const emaildDetails = {

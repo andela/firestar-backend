@@ -24,6 +24,7 @@ describe('EMAIL ROUTE', () => {
 
   afterEach(() => sinon.restore());
 
+
   describe('EMAIL VERIFICATION ROUTE', () => {
     it('should have a status of 200 when message is sent succesfully', async () => {
       const body = {
@@ -82,19 +83,10 @@ describe('EMAIL ROUTE', () => {
   });
 
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
-    it('should have a status of 200 when valid token is sent as query string', async () => {
-      const id = tokenEmail;
-      const response = await request.get(`/api/v1/users/email/verify?id=${id}`);
-      expect(response.body.status).to.equal(200);
-      expect(response.body).to.be.a('object');
-    }).timeout(0);
-  });
-
-  describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 400 when invalid token is sent as query string', async () => {
       const id = idWrong;
       const response = await request.get(`/api/v1/users/email/verify?id=${id}`);
-      expect(response.body.status).to.equal(400);
+      expect(response.status).to.equal(400);
       expect(response.body).to.be.a('object');
     }).timeout(0);
   });

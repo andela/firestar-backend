@@ -15,11 +15,11 @@ export const signUpValidationSchema = Joi.object().keys({
     })),
   password: Joi.string().regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/).required()
     .error((errors) => ({
-      message: 'Password must be at leat 8 character long, with at least an uppercase, lowercase, digit and special character '
+      message: 'Password must be at leat 8 character long, with at least an uppercase, lowercase, digit and special character'
     })),
   email: Joi.string().email({ minDomainSegments: 2 }).required()
     .error((errors) => ({
-      message: 'Your email is not valid '
+      message: 'Your email is not valid'
     }))
 });
 

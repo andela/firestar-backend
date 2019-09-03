@@ -36,7 +36,7 @@ class userController {
  * @returns {object} Success or failure response on adding a specific user
  */
   static async addUser(req, res) {
-    const { user } = req;
+    const { user, emailToken } = req;
     try {
       const hashpassword = await hashPassword(user.password);
       user.password = hashpassword;
@@ -45,7 +45,7 @@ class userController {
       } = await userService.addUser(user);
       const token = await jwtSignUser(id);
       util.setSuccess(201, 'user Added!', {
-        token, id, email, firstName, lastName,
+        token, emailToken, id, email, firstName, lastName,
       });
       return util.send(res);
     } catch (error) {
