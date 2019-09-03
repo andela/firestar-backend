@@ -5,6 +5,7 @@ import sinonChai from 'sinon-chai';
 import app from '../index';
 
 import { jwtVerifyUserToken } from '../utils/index';
+import { validateData, signUpValidationSchema } from '../validation/index';
 import userservices from '../services/userservice';
 
 chai.use(chaiHttp);
@@ -31,7 +32,6 @@ describe('SIGNUP ROUTE', () => {
 
 
   describe('SIGNUP SUCCESSFULLY', () => {
-
     it('should have a status of 201 when user is created', async () => {
       const body = {
         email: 'akps.i@yahoo.com',
@@ -61,6 +61,39 @@ describe('SIGNUP ROUTE', () => {
     it('should verify token', async () => {
       const response = await jwtVerifyUserToken(token);
       expect(response.id).to.equal(UserId);
+    }).timeout(0);
+  });
+
+  describe('VALIDATE USING JOI LIBRARY', () => {
+    it('should validate joi schema', () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        firstName: 'Aniefiok',
+        lastName: 'Akpan',
+        password: 'EMma340##@@'
+      };
+      const response = validateData(body, signUpValidationSchema);
+      expect(response).to.be.a('object');
+      expect(response).to.have.property('error').equal(null);
+    }).timeout(0);
+
+    it('Spy function for validatiedate() method', () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        firstName: 'Aniefiok',
+        lastName: 'Akpan',
+        password: 'EMma340##@@'
+      };
+      const res = {
+        validate: validateData
+      };
+
+      const setSpy = sinon.spy(res, 'validate');
+
+      res.validate(body, signUpValidationSchema);
+
+      expect(setSpy.callCount).to.equal(1);
+      setSpy.restore();
     }).timeout(0);
   });
 
