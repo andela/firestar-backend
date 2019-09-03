@@ -7,11 +7,11 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    first_name: {
+    firstName: {
       allowNull: false,
       type: Sequelize.STRING
     },
-    last_name: {
+    lastName: {
       allowNull: false,
       type: Sequelize.STRING
     },
@@ -24,20 +24,20 @@ module.exports = {
       allowNull: false,
       type: Sequelize.STRING,
     },
-    phone_number: {
+    phoneNumber: {
       type: Sequelize.STRING,
     },
     gender: {
       type: Sequelize.STRING,
     },
-    is_verified: {
+    isVerified: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
     },
     role: {
       type: Sequelize.STRING,
     },
-    preferred_currency: {
+    preferredCurrency: {
       type: Sequelize.STRING,
     },
     createdAt: {

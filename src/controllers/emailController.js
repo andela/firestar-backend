@@ -5,9 +5,12 @@ import Jwt from 'jsonwebtoken';
 import url from 'url';
 import dotenv from 'dotenv';
 import userservices from '../services/userservice';
+import Util from '../utils/response';
 
 
 dotenv.config();
+const util = new Util();
+
 
 /**
  * @param { class } provide response to email request.
@@ -41,17 +44,16 @@ export default class emailVerificationController {
     const { id } = url.parse(req.url, true).query;
     try {
       const decoded = await Jwt.verify(id, process.env.EMAIL_VERIFY_TOKEN_SECRET_KEY);
-      const is_verified = { is_verified: true };
-      const updateResponse = await userservices.updateUserByEmail(decoded.id, is_verified);
-      if (updateResponse) {return res.status(200).json({
-        status: 200,
-        data: { message: 'Your Account has been successfully verified.', updateResponse }
-      });}
+      const isVerified = { isVerified: true };
+      const updateResponse = await userservices.updateUserByEmail(decoded.id, isVerified);
+      if (updateResponse.isVerified) {
+        util.setSuccess(200, 'Your account has been successfully verified');
+        return util.send(res);
+      }
     } catch (err) {
-      return res.status(400).json({
-        status: 400,
-        error: err
-      });
+      util.setSuccess(400, `We are sorry, Your account cannot be verified at the moment, 
+      the link is expired, please login to your account and click resend verification mail`, err);
+      return util.send(res);
     }
   }
 }

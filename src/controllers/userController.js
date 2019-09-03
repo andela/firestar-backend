@@ -41,11 +41,11 @@ class userController {
       const hashpassword = await hashPassword(user.password);
       user.password = hashpassword;
       const {
-        id, email, first_name, last_name,
+        id, email, firstName, lastName,
       } = await userService.addUser(user);
       const token = await jwtSignUser(id);
       util.setSuccess(201, 'user Added!', {
-        token, id, email, first_name, last_name,
+        token, id, email, firstName, lastName,
       });
       return util.send(res);
     } catch (error) {

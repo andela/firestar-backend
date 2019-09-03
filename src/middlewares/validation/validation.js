@@ -7,10 +7,10 @@ const util = new Util();
 
 export const validationForSignUp = (req, res, next) => {
   const {
-    email, password, first_name, last_name
+    email, password, firstName, lastName
   } = req.body;
   const signupBody = {
-    email, password, first_name, last_name
+    email, password, firstName, lastName
   };
   try {
     const { error, value } = validateData(signupBody, signUpValidationSchema);

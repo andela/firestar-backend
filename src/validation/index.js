@@ -3,12 +3,12 @@
 import Joi from '@hapi/joi';
 
 export const signUpValidationSchema = Joi.object().keys({
-  first_name: Joi.string().alphanum().min(3).max(30)
+  firstName: Joi.string().alphanum().min(3).max(30)
     .required()
     .error((errors) => ({
       message: 'firstname must be a minimum of 3 character and max of 30'
     })),
-  last_name: Joi.string().alphanum().min(3).max(30)
+  lastName: Joi.string().alphanum().min(3).max(30)
     .required()
     .error((errors) => ({
       message: 'lastname must be a minimum of 3 character and max of 30'

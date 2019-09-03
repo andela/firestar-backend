@@ -1,11 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define('users', {
-    first_name: {
+    firstName: {
       allowNull: false,
       type: DataTypes.STRING
     },
-    last_name: {
+    lastName: {
       allowNull: false,
       type: DataTypes.STRING
     },
@@ -18,17 +18,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
     },
-    is_verified: {
+    isVerified: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    phone_number: {
+    phoneNumber: {
       type: DataTypes.STRING,
     },
     gender: {
       type: DataTypes.STRING,
     },
-    preferred_currency: {
+    preferredCurrency: {
       type: DataTypes.STRING,
     },
   }, {});

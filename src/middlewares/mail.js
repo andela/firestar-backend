@@ -14,10 +14,10 @@ import Mail from '../services/mail/Mail';
  * @returns {error} if any error occurs it throws an error.
  */
 export const SendVerificationEmail = async (req, res, next) => {
-  let { email, first_name, last_name } = req.body;
+  let { email, firstName, lastName } = req.body;
   email = email ? email.trim() : '';
-  first_name = first_name ? first_name.trim() : '';
-  last_name = last_name ? last_name.trim() : '';
+  firstName = firstName ? firstName.trim() : '';
+  lastName = lastName ? lastName.trim() : '';
   /**
    * @var {id} id is the user unique id from Table column
    */
@@ -34,8 +34,8 @@ export const SendVerificationEmail = async (req, res, next) => {
   const link = req.hostname === domain ? linkProd : linkLocal;
   const data = {
     email,
-    first_name,
-    last_name,
+    firstName,
+    lastName,
     link,
   };
   try {
