@@ -8,7 +8,6 @@ import { jwtVerifyUserToken } from '../utils/index';
 import { hashPassword, comparePassword } from '../helpers/index';
 import { validateData, signUpValidationSchema } from '../validation/index';
 import { jwtVerify, authorization } from '../middlewares/auth/auth';
-import userservices from '../services/userservice';
 import userController from '../controllers/userController';
 
 chai.use(chaiHttp);
@@ -27,11 +26,6 @@ describe('SIGNUP ROUTE', () => {
   });
 
   afterEach(() => sinon.restore());
-
-  after(async () => {
-    await userservices.deleteUser(UserId);
-    request.close();
-  });
 
 
   describe('SIGNUP SUCCESSFULLY', () => {
@@ -261,22 +255,6 @@ describe('SIGNUP ROUTE', () => {
   });
 
   describe('STUBS FOR USERCONTROLLER', () => {
-    it('reproduce server response to get users', async () => {
-      const req = {
-        header() {}
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      sinon.stub(res, 'status').returnsThis();
-
-      await userController.getUsers(req, res);
-
-      expect(res.status).to.have.been.calledWith(200);
-    });
-
     it('reproduce server response to when user exist already in database', async () => {
       const req = {
         user: {
@@ -318,87 +296,6 @@ describe('SIGNUP ROUTE', () => {
 
       await userController.addUser(req, res);
       expect(res.status).to.have.been.calledWith(201);
-    });
-
-    it('reproduce server response to update a user with 200 statuscode response', async () => {
-      const req = {
-        body: {
-          alteredUser: {
-            firstName: 'Indris',
-            lastName: 'Solomon'
-          }
-        },
-        params: {
-          id: UserId
-        }
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      sinon.stub(res, 'status').returnsThis();
-      await userController.updatedUser(req, res);
-      expect(res.status).to.have.been.calledWith(200);
-    });
-
-    it('reproduce server response to update a user with 404 statuscode response', async () => {
-      const req = {
-        body: {
-          alteredUser: {
-            firstName: 'Indris',
-            lastName: 'Solomon'
-          }
-        },
-        params: {
-          id: '433'
-        }
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      sinon.stub(res, 'status').returnsThis();
-
-      await userController.updatedUser(req, res);
-      expect(res.status).to.have.been.calledWith(404);
-    });
-
-    it('reproduce server response to get a user with 200 statuscode response', async () => {
-      const req = {
-
-        params: {
-          id: UserId
-        }
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      sinon.stub(res, 'status').returnsThis();
-
-      await userController.getAUser(req, res);
-      expect(res.status).to.have.been.calledWith(200);
-    });
-
-    it('reproduce server response to get a user with 404 statuscode response', async () => {
-      const req = {
-
-        params: {
-          id: '343'
-        }
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      sinon.stub(res, 'status').returnsThis();
-
-      await userController.getAUser(req, res);
-      expect(res.status).to.have.been.calledWith(404);
     });
   });
 });

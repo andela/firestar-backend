@@ -4,7 +4,7 @@ import { authorization, jwtVerify } from '../../middlewares/auth/auth';
 import { validationForSignUp } from '../../middlewares/validation/validation';
 import emailverification from '../../controllers/emailController';
 import userController from '../../controllers/userController';
-import index from '../../controllers/index';
+import index from '../../controllers/indexController';
 
 const router = Router();
 

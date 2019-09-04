@@ -2,7 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 import { verifyEmailTemplate } from '../services/mail/template/verifyEmail';
 import { emailVerifyToken } from '../utils/index';
-import { emailRegex } from '../validation/emailValidation';
+import { emailRegex } from '../utils/validation/emailValidation';
 import Mail from '../services/mail/Mail';
 
 
@@ -15,7 +15,6 @@ import Mail from '../services/mail/Mail';
  */
 export const SendVerificationEmail = async (req, res, next) => {
   let { email, firstName, lastName } = req.body;
-  console.log(email)
   email = email ? email.trim() : '';
   firstName = firstName ? firstName.trim() : '';
   lastName = lastName ? lastName.trim() : '';
