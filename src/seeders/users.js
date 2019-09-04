@@ -3,8 +3,8 @@ const faker = require('faker');
 module.exports = {
   // eslint-disable-next-line no-unused-vars
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert('users', [{
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
     roleId: 1,
     password: 'password',
     email: 'barefoot@gmail.com',
@@ -12,8 +12,8 @@ module.exports = {
     updatedAt: new Date()
   },
   {
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
     email: 'abc123@gmail.com',
     password: 'password',
     roleId: 2,
@@ -21,8 +21,8 @@ module.exports = {
     updatedAt: new Date()
   },
   {
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
     email: faker.internet.email(),
     password: 'password',
     roleId: 3,
@@ -30,8 +30,8 @@ module.exports = {
     updatedAt: new Date()
   },
   {
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
     password: 'password',
     email: faker.internet.email(),
     roleId: 4,

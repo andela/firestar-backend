@@ -9,10 +9,6 @@ const setRoleSchema = Joi.object().keys({
     .positive()
     .max(5)
     .error(new Error('Invalid Role ID Provided')),
-  id: Joi.number()
-    .integer()
-    .positive()
-    .optional(),
 });
 
 const validateRole = async (body) => {

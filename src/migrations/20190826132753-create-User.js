@@ -6,11 +6,11 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    first_name: {
+    firstName: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    last_name: {
+    lastName: {
       type: Sequelize.STRING,
       allowNull: false,
     },
@@ -24,6 +24,8 @@ module.exports = {
     },
     roleId: {
       type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 5,
       onDelete: 'CASCADE',
       references: {
         model: 'roles',

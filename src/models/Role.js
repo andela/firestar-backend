@@ -5,13 +5,5 @@ export default (sequelize, DataTypes) => {
       allowNull: false
     },
   });
-  Role.associate = (models) => {
-    Role.hasMany(models.permission, {
-      foreignKey: 'roleId',
-    });
-    Role.hasMany(models.user, {
-      foreignKey: 'roleId',
-    });
-  };
   return Role;
 };

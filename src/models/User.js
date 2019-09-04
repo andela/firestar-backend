@@ -1,10 +1,10 @@
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
-    first_name: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    last_name: {
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -15,12 +15,11 @@ export default (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    roleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     }
   });
-  User.associate = (models) => {
-    User.belongsTo(models.role, {
-      foreignKey: 'roleId'
-    });
-  };
   return User;
 };

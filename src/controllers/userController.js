@@ -1,5 +1,4 @@
-import { findByEmail, checkIfExistsInDb } from '../utils/searchDb';
-import { user, role } from '../models';
+import { user } from '../models';
 
 /**
  * @description Class based Controller for Roles
@@ -11,31 +10,28 @@ class Users {
  * @param {object} req object
  * @param {object} res object
  * @param {method} next method
- * @returns {object } Sets Role for a given user
+ * @returns { object } Sets Role for a given user
  * @memberof Roles
  * @type {object}
  */
   static async changeRole(req, res, next) {
     const { email, roleId } = req.body;
     try {
-      await findByEmail(email);
-      await checkIfExistsInDb(role, roleId, 'Role does not exist');
-      const updatedUser = await user.update(
-        { roleId },
+      const updatedUser = await user.update({ roleId },
         {
           returning: true,
+          plain: true,
           where: {
             email
           }
-        }
-      );
+        });
       return res.status(200).json({
         status: 'success',
-        data: updatedUser[1][0]
+        data: updatedUser[1].dataValues
       });
     } catch (error) {
       error.status = 404;
-      next(error);
+      return next(error);
     }
   }
 }

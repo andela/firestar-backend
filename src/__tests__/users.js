@@ -35,7 +35,7 @@ describe('Users', () => {
         400,
         'Should return 401 for invalid Role Id input'
       );
-      assert.equal(res.body.status, 'error', 'Should equal error');
+      assert.equal(res.body.success, false, 'Should equal error');
     });
 
     it('Should return an error for missing email field', async () => {
@@ -50,7 +50,7 @@ describe('Users', () => {
         400,
         'Should return 400 for invalid email input'
       );
-      assert.equal(res.body.status, 'error', 'Should equal error');
+      assert.equal(res.body.success, false, 'Should equal error');
     });
 
     it("Should return an error if email doesn't exist in database", async () => {
