@@ -6,13 +6,14 @@ import app from '../index';
 
 import emailverification from '../controllers/emailController';
 import { emailVerifyToken } from '../utils/index';
-import { emailRegex } from '../validation/emailValidation';
+import validation from '../helpers/validation';
 import { idUnset, idWrong } from '../__mocks__/emailVerification';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
 
 const { expect } = chai;
+const { isValidEmail } = validation;
 
 let request;
 let tokenEmail;
@@ -137,12 +138,12 @@ describe('EMAIL ROUTE', () => {
   describe('VALIDATION EMAIL VERIFICATION', () => {
     it('It checks if email is valid', async () => {
       const email = 'akp.ani@yahoo.com';
-      const test = emailRegex(email);
+      const test = isValidEmail(email);
       expect(test).to.be.equal(true);
     });
     it('It checks if email is not valid', async () => {
       const email = 'akp.aniyahoo.com';
-      const test = emailRegex(email);
+      const test = isValidEmail(email);
       expect(test).to.be.equal(false);
     });
   });
