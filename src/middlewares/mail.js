@@ -2,7 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 import { verifyEmailTemplate } from '../services/mail/template/verifyEmail';
 import { emailVerifyToken } from '../utils/index';
-import { emailRegex } from '../utils/validation/emailValidation';
+import { emailRegex } from '../helpers/validation/emailValidation';
 import Mail from '../services/mail/Mail';
 
 
@@ -21,7 +21,7 @@ export const SendVerificationEmail = async (req, res, next) => {
   /**
    * @var {id} id is the user unique id from Table column
    */
-  const id = req.user ? req.user.email : 'some_encoded_identity';
+  const id = req.user ? req.user.email : 'nodedeweb@yahoo.com';
   const token = await emailVerifyToken(id);
 
   const emaildDetails = {

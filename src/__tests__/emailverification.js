@@ -6,7 +6,7 @@ import app from '../index';
 
 import emailverification from '../controllers/emailController';
 import { emailVerifyToken } from '../utils/index';
-import { emailRegex } from '../utils/validation/emailValidation';
+import { emailRegex } from '../helpers/validation/emailValidation';
 import { idUnset, idWrong } from '../__mocks__/emailVerification';
 
 chai.use(chaiHttp);

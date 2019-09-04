@@ -6,7 +6,7 @@ import app from '../index';
 
 import { jwtVerifyUserToken } from '../utils/index';
 import { hashPassword, comparePassword } from '../helpers/index';
-import { validateData, signUpValidationSchema } from '../utils/validation/signupValidation';
+import { validateData, signUpValidationSchema } from '../helpers/validation/signupValidation';
 import { jwtVerify, authorization } from '../middlewares/auth/auth';
 import userController from '../controllers/userController';
 
@@ -265,7 +265,7 @@ describe('SIGNUP ROUTE', () => {
 
       await userController.addUser(req, res);
 
-      expect(res.status).to.have.been.calledWith(400);
+      expect(res.status).to.have.been.calledWith(409);
     });
 
     it('reproduce server response to add a new user to database with statuscode of 201', async () => {

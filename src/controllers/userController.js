@@ -30,7 +30,7 @@ class userController {
       return util.send(res);
     } catch (error) {
       if (error.original.routine === '_bt_check_unique') {
-        util.setError(400, 'Email already exist');
+        util.setError(409, 'Email already exist');
         return util.send(res);
       }
       util.setError(400, error.message);
