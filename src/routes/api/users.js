@@ -21,6 +21,6 @@ router.post('/users/passwords/forgot', forgotPasswordCheck, forgotPassword);
 // @route POST /api/v1/users/resetpassword/:id/
 // @desc Resets a User Password / Returns a new Password
 // @access Public
-router.post('/users/passwords/reset/:id', resetPasswordCheck, resetPassword);
+router.post('/users/passwords/reset/:userId', resetPasswordCheck, resetPassword);
 
 export default router;

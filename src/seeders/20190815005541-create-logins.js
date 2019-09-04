@@ -3,13 +3,13 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('logins', [{
-      email: 'youremail@andela.com',
+      email: 'youremail10@andela.com',
       password: 'password',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
-      email: 'youremail2@andela.com',
+      email: 'youremail20@andela.com',
       password: 'password',
       createdAt: new Date(),
       updatedAt: new Date()

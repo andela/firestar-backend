@@ -7,14 +7,14 @@ module.exports = {
     return queryInterface.bulkInsert('users', [{
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      email: 'youremail@andela.com',
+      email: 'youremail10@andela.com',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      email: 'youremail2@andela.com',
+      email: 'youremail20@andela.com',
       createdAt: new Date(),
       updatedAt: new Date()
     },

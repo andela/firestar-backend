@@ -1,11 +1,12 @@
 import moment from 'moment';
 import crypto from 'crypto';
 import { sendResetMail, sendSignupMail } from '../services/sendMail';
-import { errorResponse, successResponse } from '../utils/response';
+import Response from '../utils/response';
 import Hash from '../utils/hash';
 import models from '../models';
 
 const { User, Login, Reset } = models;
+const { errorResponse, successResponse } = Response;
 
 export default class UserController {
   /**
@@ -21,12 +22,11 @@ export default class UserController {
       const { email } = req.body;
 
       // Find user by email
-      req.user = await User.findOne({ where: { email } });
-      const { user } = req;
+      const user = await User.findOne({ where: { email } });
       // Check for user
       if (!user) {
-        req.mailSent = sendSignupMail(email);
-        if (!req.mailSent) {
+        const mailSent = sendSignupMail(email);
+        if (!mailSent) {
           return errorResponse(res, 500, 'Error in sending email');
         }
       } else {
@@ -42,20 +42,23 @@ export default class UserController {
         // Generate Reset token
         const resetToken = await crypto.randomBytes(32).toString('hex');
         newReset.resetToken = await Hash.hash(resetToken);
+        
         // Remove all reset token for this user if it exists
         await Reset.destroy({
           where: { email: newReset.dataValues.email }
         });
-        const resetDetails = await newReset.save();
+        // console.log('newReset', newReset);
+        await newReset.save();
         // Send reset link to user email
-        req.mailSent = sendResetMail(resetDetails, resetToken);
-        if(!req.mailSent) {
+        const mailSent = sendResetMail(user, resetToken);
+        if (!mailSent) {
           return errorResponse(res, 500, 'Error in sending email');
         }
       }
       successResponse(res, 200, 'Check your mail for further instruction');
     } catch (error) {
-      return errorResponse(res, 500, error);
+      // return errorResponse(res, 500, error);
+      throw error;
     }
   }
 
@@ -69,26 +72,31 @@ export default class UserController {
    */
   static async resetPassword(req, res) {
     try {
-      const { id } = req.params;
+      const { userId } = req.params;
       const resetToken = req.query.token;
       const { password } = req.body;
+
+      // Find user by user id
+      const user = await User.findOne({ where: { id: userId } });
+      let userRequestReset;
+
       // Find user reset request by email
-      req.data = {};
-      req.data.userRequest = await Reset.findOne({ where: { id } });
+      user
+        ? (userRequestReset = await Reset.findOne({
+            where: { email: user.email }
+          }))
+        : null;
 
-      const { userRequest } = req.data;
       // Check if user has requested password reset
-
-      if (userRequest) {
+      if (user && userRequestReset) {
         // Check if reset token is not expired
-        const { expireTime } = userRequest;
+        const { expireTime } = userRequestReset;
         const tokenExpireTime = moment.utc(expireTime);
 
         // If reset link is valid and not expired
-        req.data.validReset =
+        const validReset =
           moment().isBefore(tokenExpireTime) &&
-          Hash.compareWithHash(resetToken, userRequest.resetToken);
-        const { validReset } = req.data;
+          Hash.compareWithHash(resetToken, userRequestReset.resetToken);
 
         if (validReset) {
           // Store hash of new password in login
@@ -97,20 +105,20 @@ export default class UserController {
             {
               token: '',
               password: hashed,
-              logged_in: false,
               lastLogin: new Date()
             },
-            { where: { email: userRequest.email } }
+            { where: { email: userRequestReset.email } }
           );
           // Delete reset request from database
-          await Reset.destroy({ where: { email: userRequest.email } });
+          await Reset.destroy({ where: { email: userRequestReset.email } });
           return successResponse(res, 200, 'Password updated successfully');
         }
         return errorResponse(res, 400, 'Invalid or expired reset token');
       }
       return errorResponse(res, 400, 'Invalid or expired reset token');
     } catch (error) {
-      return errorResponse(res, 500, error);
+      // return errorResponse(res, 500, error);
+      throw error;
     }
   }
 }
