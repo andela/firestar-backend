@@ -1,11 +1,57 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Users = sequelize.define('Users', {
-    first_name: DataTypes.STRING,
-    last_name: DataTypes.STRING
+  const users = sequelize.define('users', {
+    userName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    roleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    dateOfBirth: {
+      type: DataTypes.DATE,
+    },
+    preferredLanguage: {
+      type: DataTypes.STRING,
+    },
+    preferredCurrency: {
+      type: DataTypes.STRING,
+    },
+    residentialLocation: {
+      type: DataTypes.STRING,
+    },
+    departmentId: {
+      type: DataTypes.INTEGER,
+    },
+    saveProfile: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    countryCode: {
+      type: DataTypes.STRING,
+    },
   }, {});
-  Users.associate = function (models) {
+  users.associate = (models) => {
     // associations can be defined here
+    users.hasMany(models.requests);
   };
-  return Users;
+  return users;
 };
