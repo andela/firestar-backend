@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import util from '../utils/index'
+import util from '../utils/response';
 
 const Util = new util()
 dotenv.config();

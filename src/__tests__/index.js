@@ -1,5 +1,5 @@
-// import { equal } from 'assert';
-// import arrayTest from '../utils/index';
+import { equal } from 'assert';
+import { arrayTest } from '../utils/index';
 
 // describe('Array', () => {
 //   describe('#indexOf()', () => {

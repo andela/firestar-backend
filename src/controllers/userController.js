@@ -1,5 +1,5 @@
 import UserService from '../services/userServices';
-import Util from '../utils/index';
+import Util from '../utils/response';
 import Helper from '../middlewares/index';
 const { findUserById, updateUser } = UserService;
 const util = new Util();

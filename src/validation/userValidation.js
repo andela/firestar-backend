@@ -1,6 +1,6 @@
 import joiValidator from './joiValidator';
 import Joi from '@hapi/joi';
-import Util from '../utils/index';
+import Util from '../utils/response';
 const util = new Util();
 
 /**

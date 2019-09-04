@@ -1,38 +1,18 @@
-export default class Util {
-  constructor() {
-    this.status = null,
-      this.data = null,
-      this.message = null,
-      this.type = null
-  }
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-  setSuccess(statusCode, message, data) {
-    this.statusCode = statusCode,
-      this.message = message,
-      this.data = data,
-      this.type = 'success'
-  }
-
-  setError(statusCode, message) {
-    this.statusCode = statusCode,
-      this.message = message,
-      this.type = 'error'
-  }
-
-  // eslint-disable-next-line require-jsdoc
-  send(res) {
-    const result = {
-      status: this.type,
-      message: this.message,
-      data: this.data,
-    };
-
-    if (this.type === 'success') {
-      return res.status(this.statusCode).json(result);
-    }
-    return res.status(this.statusCode).json({
-      status: this.type,
-      message: this.message,
-    });
-  }
-}
+dotenv.config();
+/**
+ * @param {id} id of newly registered user from the user Table.
+ * @return {string} generated token that is a string data type.
+ */
+export const emailVerifyToken = (id) => new Promise((resolve) => {
+  const token = jwt.sign({ id }, process.env.SECRET_KEY_EMAIL_VERIFY_TOKEN, { expiresIn: '24h' });
+  if (token) return resolve(token);
+});
+/**
+ * @param {array} array of data to test
+ * @param {element} element of that array
+ * @return {integer} index of the  element in array
+ */
+export const arrayTest = (array, element) => array.indexOf(element);
