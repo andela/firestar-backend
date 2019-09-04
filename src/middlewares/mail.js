@@ -49,10 +49,10 @@ export const SendVerificationEmail = async (req, res, next) => {
       return res.status(403).json({ status: 403, error: response.message });
     }
     if (response.message === 'queryA ECONNREFUSED smtp.gmail.com') {
-      return res.status(409).json({ status: 409, error: 'Network error occured, please check your network' });
+      return res.status(511).json({ status: 511, error: 'Network error occured, please check your network' });
     }
     if (response.message === 'queryA EREFUSED smtp.gmail.com') {
-      return res.status(409).json({ status: 409, error: 'Network error occured, please check your network' });
+      return res.status(511).json({ status: 511, error: 'Network error occured, please check your network' });
     }
     if (response) {
       req.verificationMailResponse = response;
