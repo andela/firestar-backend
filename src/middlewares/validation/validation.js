@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
-import { signUpValidationSchema, validateData } from '../../validation/index';
+import { signUpValidationSchema, validateData } from '../../utils/validation/signupValidation';
 import Util from '../../utils/response';
 
 const util = new Util();

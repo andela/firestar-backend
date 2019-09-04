@@ -6,7 +6,7 @@ import app from '../index';
 
 import { jwtVerifyUserToken } from '../utils/index';
 import { hashPassword, comparePassword } from '../helpers/index';
-import { validateData, signUpValidationSchema } from '../validation/index';
+import { validateData, signUpValidationSchema } from '../utils/validation/signupValidation';
 import { jwtVerify, authorization } from '../middlewares/auth/auth';
 import userController from '../controllers/userController';
 
@@ -171,15 +171,6 @@ describe('SIGNUP ROUTE', () => {
       const response = await request.get('/api/v1/users/myaccount')
         .set('Authorization', tokenEmail);
       expect(response.status).to.equal(401);
-      expect(response.body).to.be.a('object');
-    }).timeout(0);
-  });
-
-  describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
-    it('should have a status of 200 when valid token is sent as query string', async () => {
-      const id = tokenEmail;
-      const response = await request.get(`/api/v1/users/email/verify?id=${id}`);
-      expect(response.status).to.equal(200);
       expect(response.body).to.be.a('object');
     }).timeout(0);
   });

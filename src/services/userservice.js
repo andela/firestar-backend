@@ -15,6 +15,28 @@ class userService {
       throw error;
     }
   }
+
+  /**
+   * @param { email } email of user to be updated.
+   * @param { updateUser } updateUser of user to be updated.
+ * @returns {object} object containing recently details of user.
+ */
+  static async updateUserByEmail(email, updateUser) {
+    try {
+      const userToUpdate = await db.users.findOne({
+        where: { email },
+      });
+
+      if (userToUpdate) {
+        await db.users.update(updateUser, { where: { email } });
+
+        return updateUser;
+      }
+      return null;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default userService;
