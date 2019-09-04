@@ -10,7 +10,9 @@ const router = Router();
 router.get('/users/:id', UserController.getUserProfile);
 router.patch('/users/:id', validateProfileData, Helper.verifyToken, UserController.updateUserProfile);
 
+
 router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail,
+
     SendVerificationEmail, emailverification.signUp);
 
 router.get('/users/email/verify', emailverification.confirmEmailVerificaionToken);
