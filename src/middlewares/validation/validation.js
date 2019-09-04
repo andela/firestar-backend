@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
 import { signUpValidationSchema, validateData } from '../../helpers/validation/signupValidation';
 import Util from '../../utils/response';
