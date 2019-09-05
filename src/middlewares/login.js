@@ -10,7 +10,7 @@ const isLoggedIn = async (req, res, next) => {
   }
   try {
     // eslint-disable-next-line no-unused-vars
-    const [bearer, realToken] = token.split(' ');
+    const [, realToken] = token.split(' ');
     const decoded = await jwt.decode(realToken, process.env.JWT_SECRET);
     if (decoded) {
       req.user = decoded;

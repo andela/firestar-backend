@@ -1,32 +1,50 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../index';
+import { user, role } from '../models';
 import {
   unauthorizedToken, authorizedToken, validInfoRole, unauthorisedRoleUser, invalidInfoRole1,
-  invalidInfoRole2, invalidInfoRole3
-} from '../__mocks__/testVariables';
+  invalidInfoRole2, invalidInfoRole3, users, roles
+} from '../__mocks__/userRoles';
 
 chai.use(chaiHttp);
 
 const { assert } = chai;
 
-describe('Users', () => {
+describe('User Role Setting', () => {
+  before(async () => {
+    const {
+      superAdmin, travelAdmin, travelTeamMember, manager, requester
+    } = roles;
+    try {
+      await user.sync({ force: true });
+      await role.sync({ force: true });
+      await user.bulkCreate([users.superAdmin, users.nonadmin]);
+      await role.bulkCreate([superAdmin, travelAdmin, travelTeamMember, manager, requester]);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+  after(async () => {
+    await user.destroy({ where: {} });
+    await role.destroy({ where: {} });
+  });
   describe('Set User Role', () => {
     it('Should return an error for unauthorised users', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/edit/role')
+        .patch('/api/v1/users/user/role')
         .set('authorization', unauthorizedToken)
         .send(unauthorisedRoleUser);
 
       assert.equal(res.status, 401, 'Should return 401 for unauthorized users');
-      assert.equal(res.body.status, 'error', 'Should equal error');
+      assert.equal(res.body.success, false, 'Should equal false');
     });
 
     it('Should return an error for missing role field', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/edit/role')
+        .patch('/api/v1/users/user/role')
         .set('authorization', authorizedToken)
         .send(invalidInfoRole2);
 
@@ -41,10 +59,9 @@ describe('Users', () => {
     it('Should return an error for missing email field', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/edit/role')
+        .patch('/api/v1/users/user/role')
         .set('authorization', authorizedToken)
         .send(invalidInfoRole1);
-
       assert.equal(
         res.status,
         400,
@@ -56,18 +73,18 @@ describe('Users', () => {
     it("Should return an error if email doesn't exist in database", async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/nonexistingemail@gmail.com/role')
+        .patch('/api/v1/users/user/role')
         .set('authorization', authorizedToken)
         .send(invalidInfoRole3);
 
-      assert.equal(res.status, 404, 'Should return 401 for unauthorized users');
+      assert.equal(res.status, 404, 'Should return 404 if email does not exist');
       assert.equal(res.body.success, false, 'Should equal error');
     });
 
     it("Should update user's roleId", async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/edit/role')
+        .patch('/api/v1/users/user/role')
         .set('authorization', authorizedToken)
         .send(validInfoRole);
 
@@ -86,6 +103,26 @@ describe('Users', () => {
         res.body.data.email,
         validInfoRole.email,
         'The user with the given email should be updated and returned'
+      );
+    });
+
+    it('Should return an error if Super Admin tries to change his/her role', async () => {
+      const res = await chai
+        .request(server)
+        .patch('/api/v1/users/user/role')
+        .set('authorization', authorizedToken)
+        .send({ email: 'barefoot@gmail.com', roleId: 2 });
+
+      assert.equal(
+        res.status,
+        403,
+        'Should return 403 status'
+      );
+      assert.equal(res.body.success, false, 'Should equal success');
+      assert.equal(
+        res.body.message,
+        'You are not allowed to perform this operation',
+        'Should return a 403 error'
       );
     });
   });

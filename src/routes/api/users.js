@@ -16,14 +16,13 @@ router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail,
   SendVerificationEmail, emailverification.signUp);
 
 router.get('/users/email/verify', emailverification.confirmEmailVerificaionToken);
-router.patch('/users/edit/role', [isLoggedIn, validateSetRole, permit([roleIds['Super Administrator']])], Users.changeRole);
+router.patch('/users/user/role', [isLoggedIn, validateSetRole, permit([roleIds['Super Administrator']])], Users.changeRole);
 router.post('/auth/login', async (req, res, next) => {
   try {
     const user = await findByEmail(req.body.email);
 
-    const { id, roleId } = user;
-    let token = await jwt.sign({ id, roleId }, process.env.JWT_SECRET);
-    token = `Bearer ${token}`;
+    const { id, roleId, email } = user;
+    const token = await jwt.sign({ id, roleId, email }, process.env.JWT_SECRET);
     res
       .status(200)
       .header('authorization', token)
