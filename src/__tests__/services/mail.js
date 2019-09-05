@@ -57,13 +57,9 @@ describe('Email services', () => {
             resetToken: 'theResetToken'
         };
 
-        try {
-            const resetMailStub = sinon.stub(await sendResetMail(newReset, newReset.resetToken));
-            const signupMailStub = sinon.stub(await sendSignupMail(newReset.email));
-            resetMailStub.callsFake(msg => msg);
-        } catch (err) {
-            throw err;
-        }
+        const resetMailStub = sinon.stub(await sendResetMail(newReset, newReset.resetToken));
+        const signupMailStub = sinon.stub(await sendSignupMail(newReset.email));
+        resetMailStub.callsFake(msg => msg);
 
         beforeEach(() => {
             try {
@@ -74,7 +70,7 @@ describe('Email services', () => {
                 throw err;
             }
         });
-        afterEach(() => resetMailStub.restore());
+        afterEach(() => sinon.restore());
 
         it('should send reset mail if email service is configured with right API key', async () => {
             expect(await sendResetMail(user, resetToken)).to.be.equal(true);
