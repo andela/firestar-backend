@@ -58,12 +58,9 @@ const seedTestDb = async () => {
 // Clear tables of seed
 const clearTestDb = async () => {
     try {
-        return await Promise.all(
-            Object.keys(models).map((key) => {
-                if (['sequelize', 'Sequelize'].includes(key)) return null;
-                return models[key].destroy({ where: {}, force: true });
-            })
-        );
+        await models['User'].destroy({ where: {}, force: true });
+        await models['Login'].destroy({ where: {}, force: true });
+        await models['Reset'].destroy({ where: {}, force: true });
     } catch (err) {
         throw err;
     }
