@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '../index';
-
+import { handleEmptyEmailBody } from '../middlewares/mail';
 import emailverification from '../controllers/emailController';
 import { emailVerifyToken } from '../utils/index';
 import validation from '../helpers/validation';
@@ -133,6 +133,21 @@ describe('EMAIL ROUTE', () => {
 
       await emailverification.confirmEmailVerificaionToken(req, res);
       expect(res.status).to.have.been.calledWith(400);
+    });
+    it('should not send forgot mail if email service is not configured with right API key', () => {
+      const req = {
+        url: tokenEmail
+      };
+      const res = {
+        status() {},
+        json() {},
+      };
+
+      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(res, 'json').returnsThis();
+      
+      handleEmptyEmailBody(req, res);
+      expect(res.json).to.have.been.calledWith({ error: "No body property is presented in the req object", status: 403 });
     });
   });
   describe('VALIDATION EMAIL VERIFICATION', () => {
