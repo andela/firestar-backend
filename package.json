@@ -11,7 +11,6 @@
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/ --fix",
     "build": "babel ./src -d dist",
     "start": "node dist/index.js",
-    "sync": "DEBUG=dev babel-node ./src/database/reSync",
     "start:dev": "nodemon --exec babel-node -- src/index.js",
     "migrate:dev": "sequelize db:migrate",
     "migrate:test": "cross-env NODE_ENV=test sequelize db:migrate",
