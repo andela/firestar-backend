@@ -3,9 +3,9 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import moment from 'moment';
-import app from '../../index';
-import models, { sequelize } from '../../models';
-import { sendResetMail, sendSignupMail } from '../../services/sendMail';
+import app from '../../../index';
+import models, { sequelize } from '../../../models';
+import { sendResetMail, sendSignupMail } from '../../../services/sendMail';
 
 const { expect } = chai;
 chai.use(chaiHttp);

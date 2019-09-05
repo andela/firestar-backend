@@ -1,4 +1,4 @@
-import './routes/resetPassword';
+import './routes/users/resetPassword';
 import './routes/routes';
 import './routes/unknownRoute';
 import './services/mail';
