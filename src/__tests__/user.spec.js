@@ -19,11 +19,11 @@ describe('User Profile Route', () => {
 
   afterEach(() => sinon.restore());
 
-  describe('GET /users/:id', () => {
+  describe('GET /users/:id/profile', () => {
     it('should get user details', async () => {
       const response = await chai
         .request(app)
-        .get(`${BASE_URL}/users/${userId}`)
+        .get(`${BASE_URL}/users/${userId}/profile`)
         .set('Content-Type', 'application/json')
         .send(updateUser);
       expect(response.status).to.equal(200);
@@ -34,11 +34,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('GET /users/:id', () => {
+  describe('GET /users/:id/profile', () => {
     it('It should check if user exist', async () => {
       const response = await chai
         .request(app)
-        .get(`${BASE_URL}/users/${wrongId}`)
+        .get(`${BASE_URL}/users/${wrongId}/profile`)
         .set('Content-Type', 'application/json')
         .send(updateUser);
       expect(response.status).to.equal(401);
@@ -49,11 +49,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('GET /users/:id', () => {
+  describe('GET /users/:id/profile', () => {
     it('It should throw a not found', async () => {
       const response = await chai
         .request(app)
-        .get(`${BASE_URL}/users/${wrongId}`)
+        .get(`${BASE_URL}/users/${wrongId}/profile`)
         .set('Content-Type', 'application/json')
         .send(updateUser);
       expect(response.status).to.equal(401);
@@ -64,11 +64,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('GET /users/:id', () => {
+  describe('GET /users/:id/profile', () => {
     it('It should throw error for invalid syntax', async () => {
       const response = await chai
         .request(app)
-        .get(`${BASE_URL}/users/${invalidSyntax}`)
+        .get(`${BASE_URL}/users/${invalidSyntax}/profile`)
         .set('Content-Type', 'application/json')
         .send(updateUser);
       expect(response.status).to.equal(401);
@@ -79,11 +79,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('PATCH /users/:id', () => {
+  describe('PATCH /users/:id/profile', () => {
     it('It should return Provide user token', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/users/${userId}`)
+        .patch(`${BASE_URL}/users/${userId}/profile`)
         .set('Content-Type', 'application/json')
         .send(updateUser);
       expect(response.status).to.equal(401);
@@ -94,11 +94,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('PATCH /users/:id', () => {
+  describe('PATCH /users/:id/profile', () => {
     it('It should check if token is available', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/users/${wrongId}`)
+        .patch(`${BASE_URL}/users/${wrongId}/profile`)
         .set('token', '')
         .send(updateUser);
       expect(response.status).to.equal(401);
@@ -109,11 +109,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('PATCH /users/:id', () => {
+  describe('PATCH /users/:id/profile', () => {
     it('should update users', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/users/1`)
+        .patch(`${BASE_URL}/users/${userId}/profile`)
         .set('token', validToken)
         .send(updateUser);
       expect(response.status).to.equal(201);
@@ -124,14 +124,14 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('PATCH /users/:id', () => {
+  describe('PATCH /users/:id/profile', () => {
     it('It should return Unauthorised message', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/users/${wrongId}`)
+        .patch(`${BASE_URL}/users/${wrongId}/profile`)
         .set('token', validToken)
         .send(updateUser);
-      expect(response.status).to.equal(401);
+      expect(response.status).to.equal(403);
       expect(response.body.status).to.equal('error');
       expect(response.body.message).to.equal(
         'Unauthorized'
@@ -139,11 +139,11 @@ describe('User Profile Route', () => {
     });
   });
 
-  describe('PATCH /users/:id', () => {
+  describe('PATCH /users/:id/profile', () => {
     it('It should throw for invalid token', async () => {
       const response = await chai
         .request(app)
-        .patch(`${BASE_URL}/users/${wrongId}`)
+        .patch(`${BASE_URL}/users/${wrongId}/profile`)
         .set('token', inValidToken2)
         .send(updateUser);
       expect(response.status).to.equal(400);
@@ -155,14 +155,14 @@ describe('User Profile Route', () => {
   });
 });
 
-describe('PATCH /users/:id', () => {
+describe('PATCH /users/:id/profile', () => {
   it('It should throw undefined error', async () => {
     const response = await chai
       .request(app)
-      .patch(`${BASE_URL}/users/${userId}`)
+      .patch(`${BASE_URL}/users/${userId}/profile`)
       .set('token', validToken)
       .send(inValidRequest);
-    expect(response.status).to.equal(401);
+    expect(response.status).to.equal(403);
     expect(response.body.status).to.equal('error');
     expect(response.body.message).to.equal(
       'undefined property'
@@ -170,11 +170,11 @@ describe('PATCH /users/:id', () => {
   });
 });
 
-describe('PATCH /users/:id', () => {
-  it('invalid user data type', async () => {
+describe('PATCH /users/:id/profile', () => {
+  it('check request body length', async () => {
     const response = await chai
       .request(app)
-      .patch(`${BASE_URL}/users/1`)
+      .patch(`${BASE_URL}/users/${userId}/profile`)
       .set('token', validToken)
       .send(updateUser2);
     expect(response.status).to.equal(400);

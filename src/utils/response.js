@@ -6,11 +6,12 @@ export default class Util {
       this.type = null
   }
 
-  setSuccess(statusCode, message, data) {
+  setSuccess(statusCode, message, data, token) {
     this.statusCode = statusCode,
       this.message = message,
       this.data = data,
-      this.type = 'success'
+      this.type = 'success',
+      this.token = token
   }
 
   setError(statusCode, message) {
@@ -25,6 +26,7 @@ export default class Util {
       status: this.type,
       message: this.message,
       data: this.data,
+      token: this.token
     };
 
     if (this.type === 'success') {

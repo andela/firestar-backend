@@ -18,15 +18,14 @@ class UserController {
     try {
       const user = await findUserById(id);
       const token = Helper.generateToken(id);
-      console.log(token)
+
       if (!user) {
         util.setError(401, `User with id: ${id} not found`);
         return util.send(res);
       }
-      util.setSuccess(200, 'Succesfully found user', user);
+      util.setSuccess(200, 'Succesfully found user', user, token);
       return util.send(res);
     } catch (error) {
-      console.log('dssad')
       util.setError(401, error.message);
       return util.send(res);
     }
@@ -42,7 +41,7 @@ class UserController {
   static async updateUserProfile(req, res) {
     const { id } = req.params;
     if (req.user.id !== id) {
-      util.setError(401, 'Unauthorized')
+      util.setError(403, 'Unauthorized')
       return util.send(res)
     }
 
@@ -67,7 +66,7 @@ class UserController {
       );
       return util.send(res);
     } catch (error) {
-      util.setError(401, 'undefined property');
+      util.setError(403, 'undefined property');
       return util.send(res);
     }
   }

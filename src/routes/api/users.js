@@ -7,8 +7,8 @@ import { validateProfileData } from '../../validation/userValidation'
 
 const router = Router();
 
-router.get('/users/:id', UserController.getUserProfile);
-router.patch('/users/:id', validateProfileData, Helper.verifyToken, UserController.updateUserProfile);
+router.get('/users/:id/profile', UserController.getUserProfile);
+router.patch('/users/:id/profile', validateProfileData, Helper.verifyToken, UserController.updateUserProfile);
 
 
 router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail,
