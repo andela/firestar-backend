@@ -162,7 +162,7 @@ describe('SIGNUP ROUTE', () => {
   describe('PROTECTED ROUTE TEST', () => {
     it('should welcome user to the proctected route endpoint', async () => {
       const response = await request.get('/api/v1/users/myaccount')
-        .set('Authorization', token);
+        .set('Authorization', `bearer ${token}`);
       expect(response.status).to.equal(200);
       expect(response.body).to.be.a('object');
     }).timeout(0);
@@ -195,7 +195,7 @@ describe('SIGNUP ROUTE', () => {
 
     it('Go to the next middleware when no error in JWTVERIFY', async () => {
       const req = {
-        token,
+        token: `bearer ${token}`,
       };
       const res = {
         status() {},
@@ -210,23 +210,6 @@ describe('SIGNUP ROUTE', () => {
       await jwtVerify(req, res, next);
     });
 
-    it('Go to the next middleware when no error in Authorization', async () => {
-      const req = {
-        header() {
-        },
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      const next = () => 2;
-
-      sinon.stub(req, 'header').returnsThis();
-      await authorization(req, res, next);
-
-      expect(req.header).to.have.been.calledWith('Authorization');
-    });
 
     it('reproduce server response when token is not available in Header as Authorization', async () => {
       const req = {

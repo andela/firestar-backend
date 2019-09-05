@@ -18,13 +18,13 @@ export const emailVerifyToken = (id) => new Promise((resolve) => {
 export const jwtSignUser = (id) => new Promise((resolve, reject) => {
   const token = jwt.sign({ id }, process.env.SECRET_KEY_SIGN_UP);
   if (token) return resolve(token);
-  const ERROR = 'Token cannot be assigned';
+  const ERROR = 'Token cannot be assigned because your secret key is has an issue';
   if (!token) return reject(ERROR);
 });
 
 export const jwtVerifyUserToken = (token) => new Promise((resolve, reject) => {
   const result = jwt.verify(token, process.env.SECRET_KEY_SIGN_UP);
-  const ERROR = 'Token cannot be VERIFIED';
+  const ERROR = 'Token cannot be VERIFIED because your secret key is has an issue';
   if (result) return resolve(result);
   if (!result) return reject(ERROR);
 });
