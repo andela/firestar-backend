@@ -42,7 +42,7 @@ export default class UserController {
         // Generate Reset token
         const resetToken = await crypto.randomBytes(32).toString('hex');
         newReset.resetToken = await Hash.hash(resetToken);
-        
+
         // Remove all reset token for this user if it exists
         await Reset.destroy({
           where: { email: newReset.dataValues.email }
@@ -57,8 +57,7 @@ export default class UserController {
       }
       successResponse(res, 200, 'Check your mail for further instruction');
     } catch (error) {
-      // return errorResponse(res, 500, error);
-      throw error;
+      return errorResponse(res, 500, error);
     }
   }
 
@@ -117,8 +116,7 @@ export default class UserController {
       }
       return errorResponse(res, 400, 'Invalid or expired reset token');
     } catch (error) {
-      // return errorResponse(res, 500, error);
-      throw error;
+      return errorResponse(res, 500, error);
     }
   }
 }
