@@ -74,6 +74,7 @@ describe('EMAIL ROUTE', () => {
       expect(response.body).to.be.a('object');
     }).timeout(0);
   });
+
   describe('UTILS/ EMAIL TOKEN', () => {
     it('it should assign a token to newly registered users', async () => {
       const id = idUnset;
@@ -120,6 +121,7 @@ describe('EMAIL ROUTE', () => {
       await emailverification.signUp(req, res);
       expect(res.status).to.have.been.calledWith(200);
     });
+
     it('fakes server response for email confirmation', async () => {
       const req = {
         url: tokenEmail
@@ -134,6 +136,7 @@ describe('EMAIL ROUTE', () => {
       await emailverification.confirmEmailVerificaionToken(req, res);
       expect(res.status).to.have.been.calledWith(400);
     });
+
     it('should not send forgot mail if email service is not configured with right API key', () => {
       const req = {
         url: tokenEmail
@@ -149,6 +152,7 @@ describe('EMAIL ROUTE', () => {
       handleEmptyEmailBody(req, res);
       expect(res.json).to.have.been.calledWith({ error: "No body property is presented in the req object", status: 403 });
     });
+
   });
   describe('VALIDATION EMAIL VERIFICATION', () => {
     it('It checks if email is valid', async () => {
@@ -156,6 +160,7 @@ describe('EMAIL ROUTE', () => {
       const test = isValidEmail(email);
       expect(test).to.be.equal(true);
     });
+    
     it('It checks if email is not valid', async () => {
       const email = 'akp.aniyahoo.com';
       const test = isValidEmail(email);
