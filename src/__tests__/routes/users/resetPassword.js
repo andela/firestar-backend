@@ -81,9 +81,7 @@ before(async () => {
 // clear database after test
 after(async () => {
     try {
-        return sequelize.sync({ force: true }).then(async () => {
-            await clearTestDb();
-        });
+        await clearTestDb();
     } catch (err) {
         throw err;
     }
