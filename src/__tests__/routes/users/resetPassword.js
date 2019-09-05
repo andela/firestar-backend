@@ -69,10 +69,8 @@ const clearTestDb = async () => {
 // clear database and seed data before test
 before(async () => {
     try {
-        return sequelize.sync({ force: false }).then(async () => {
-            await clearTestDb();
-            await seedTestDb();
-        });
+        await clearTestDb();
+        await seedTestDb();
     } catch (err) {
         throw err;
     }
