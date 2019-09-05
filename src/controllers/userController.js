@@ -52,12 +52,12 @@ class UserController {
     } = req.body;
 
     try {
-      const values = {
+      const userDetails = {
         firstName, lastName, birthdate, preferredLanguage,
         preferredCurrency, gender, company, lineManager,
         residentialLocation, countryCode, department
       };
-      const updatedUser = await updateUser(id, values);
+      const updatedUser = await updateUser(id, userDetails);
 
       util.setSuccess(
         201,

@@ -5,6 +5,7 @@ const language = ['English', 'French'];
 export const updateUser = {
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
+  userName: faker.name.firstName(),
   company: faker.company.companyName(),
   email: faker.internet.email(),
   gender: faker.random.arrayElement(gender),
@@ -21,6 +22,7 @@ export const updateUser = {
 export const updateUser2 = {
   firstName: 'A',
   lastName: faker.name.lastName(),
+  userName: faker.name.firstName(),
   company: faker.company.companyName(),
   email: faker.internet.email(),
   gender: faker.random.arrayElement(gender),

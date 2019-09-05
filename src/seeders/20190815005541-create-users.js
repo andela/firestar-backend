@@ -10,6 +10,7 @@ module.exports = {
         {
           firstName: faker.name.firstName(),
           lastName: faker.name.lastName(),
+          userName: faker.name.firstName(),
           company: faker.company.companyName(),
           email: 'alliolawale@gmail.com',
           gender: faker.random.arrayElement(gender),
@@ -27,6 +28,7 @@ module.exports = {
         {
           firstName: faker.name.firstName(),
           lastName: faker.name.lastName(),
+          userName: faker.name.firstName(),
           company: faker.company.companyName(),
           email: 'dolapoakpan@gmail.com',
           gender: faker.random.arrayElement(gender),
