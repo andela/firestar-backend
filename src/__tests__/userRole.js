@@ -33,7 +33,7 @@ describe('User Role Setting', () => {
     it('Should return an error for unauthorised users', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/users/roles')
         .set('authorization', unauthorizedToken)
         .send(unauthorisedRoleUser);
 
@@ -44,7 +44,7 @@ describe('User Role Setting', () => {
     it('Should return an error for missing role field', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/users/roles')
         .set('authorization', authorizedToken)
         .send(invalidInfoRole2);
 
@@ -59,7 +59,7 @@ describe('User Role Setting', () => {
     it('Should return an error for missing email field', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/users/roles')
         .set('authorization', authorizedToken)
         .send(invalidInfoRole1);
       assert.equal(
@@ -73,7 +73,7 @@ describe('User Role Setting', () => {
     it("Should return an error if email doesn't exist in database", async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/users/roles')
         .set('authorization', authorizedToken)
         .send(invalidInfoRole3);
 
@@ -84,7 +84,7 @@ describe('User Role Setting', () => {
     it("Should update user's roleId", async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/users/roles')
         .set('authorization', authorizedToken)
         .send(validInfoRole);
 
@@ -93,7 +93,7 @@ describe('User Role Setting', () => {
         200,
         'Should return 200 status for successfully operation'
       );
-      assert.equal(res.body.status, 'success', 'Should equal success');
+      assert.equal(res.body.status, 'success', 'Should equal false');
       assert.equal(
         res.body.data.roleId,
         validInfoRole.roleId,
@@ -109,7 +109,7 @@ describe('User Role Setting', () => {
     it('Should return an error if Super Admin tries to change his/her role', async () => {
       const res = await chai
         .request(server)
-        .patch('/api/v1/users/user/role')
+        .patch('/api/v1/users/roles')
         .set('authorization', authorizedToken)
         .send({ email: 'barefoot@gmail.com', roleId: 2 });
 
@@ -118,11 +118,29 @@ describe('User Role Setting', () => {
         403,
         'Should return 403 status'
       );
-      assert.equal(res.body.success, false, 'Should equal success');
+      assert.equal(res.body.success, false, 'Should equal false');
       assert.equal(
         res.body.message,
         'You are not allowed to perform this operation',
-        'Should return a 403 error'
+      );
+    });
+
+    it('Should return an error user already belongs to the role', async () => {
+      const res = await chai
+        .request(server)
+        .patch('/api/v1/users/roles')
+        .set('authorization', authorizedToken)
+        .send(validInfoRole);
+
+      assert.equal(
+        res.status,
+        409,
+        'Should return 409 status'
+      );
+      assert.equal(res.body.success, false, 'Should equal success');
+      assert.isNotNull(
+        res.body.message,
+        'Should return an error message'
       );
     });
   });

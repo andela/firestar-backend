@@ -22,7 +22,7 @@ class Users {
           returning: true,
           plain: true,
           where: {
-            email
+            email: email.trim()
           }
         });
       return res.status(200).json({

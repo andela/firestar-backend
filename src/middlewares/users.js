@@ -17,8 +17,8 @@ export const validateSetRole = async (req, res, next) => {
         error: err
       });
     }
-    await checkIfExistsInDb(role, roleId, 'Role does not exist');
-    await findByEmail(email);
+    req.newRole = await checkIfExistsInDb(role, roleId, 'Role does not exist');
+    req.userToUpdate = await findByEmail(email.trim());
     next();
   } catch (error) {
     return res.status(404).json({
@@ -29,17 +29,11 @@ export const validateSetRole = async (req, res, next) => {
 };
 
 export const permit = (roles = []) => (req, res, next) => {
-  const { roleId, email } = req.user;
+  const { roleId } = req.user;
   try {
     // Find resource by name in the db if it exists
     if (roles.length > 0 && !roles.includes(roleId)) {
       throw new Error('You are not authorized to perform this operation');
-    }
-    if (email === req.body.email) {
-      res.status(403).json({
-        success: false,
-        message: 'You are not allowed to perform this operation'
-      });
     }
     next();
   } catch (error) {
@@ -48,4 +42,23 @@ export const permit = (roles = []) => (req, res, next) => {
       message: error.message
     });
   }
+};
+
+export const checkRoleConflict = (req, res, next) => {
+  const { email } = req.user;
+  const { userToUpdate, body: { roleId } } = req;
+  const { newRole } = req;
+  if (email === req.body.email) {
+    return res.status(403).json({
+      success: false,
+      message: 'You are not allowed to perform this operation'
+    });
+  }
+  if (userToUpdate.dataValues.roleId === parseInt(roleId, 10)) {
+    return res.status(409).json({
+      success: false,
+      message: `User already has the role ${newRole.name}`
+    });
+  }
+  next();
 };
