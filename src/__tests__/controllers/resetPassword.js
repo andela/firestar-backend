@@ -92,19 +92,13 @@ after(async () => {
     }
 });
 
-before(async () => {
+before(() => {
     chai.request(app).keepOpen();
 });
 
 afterEach(() => sinon.restore());
 
 describe('Forgot Password Controller', () => {
-    const stubUser = {
-        id: 2,
-        email: 'youremail2@andela.com',
-        role: 'passenger'
-    }
-
     const newReset = {
         id: 2,
         email: 'youremail2@andela.com',
@@ -151,12 +145,6 @@ describe('Forgot Password Controller', () => {
 
 describe('Reset Password Controller', () => {
     describe('POST /api/users/passwords/reset', () => {
-        const resetTokenLink = '12ererfbuib23iub328o7rg8hbiuva';
-        const userId = 1;
-        const userId2 = 13;
-
-        // beforeEach(())
-
         it('should not reset password if reset password link is invalid', (done) => {
             chai
                 .request(app)
