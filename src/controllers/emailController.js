@@ -33,7 +33,6 @@ export default class emailVerificationController {
  */
   static confirmEmailVerificaionToken(req, res) {
     const { id } = url.parse(req.url, true).query;
-
     try {
       jwt.verify(id, process.env.SECRET_KEY_EMAIL_VERIFY_TOKEN);
       return res.status(200).json({

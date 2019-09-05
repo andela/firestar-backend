@@ -10,10 +10,6 @@ module.exports = {
     email: {
       type: Sequelize.STRING,
       allowNull: false,
-      references: {
-        model: 'users',
-        key: 'email'
-      }
     },
     password: {
       type: Sequelize.STRING,

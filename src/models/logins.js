@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     lastLogin: {
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      defaultValue: new Date()
     }
   }, {});
   logins.associate = (models) => {

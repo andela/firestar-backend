@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import Validator from 'validatorjs';
-import authService from '../services/authService';
+import userService from '../services/userService';
 
 
 /**
@@ -28,7 +28,7 @@ class UsersValidation {
     }
     email = email.toLowerCase().trim();
     try {
-      const findIfUserExist = await authService.loginAUser(email);
+      const findIfUserExist = await userService.loginAUser(email);
       if (!findIfUserExist) {
         return res.status(401).json({
           error: 'Email does not exist, Please register an account or signup',
