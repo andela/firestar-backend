@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import userService from '../services/userservice';
+import userService from '../services/userService';
 import Util from '../utils/response';
 import { jwtSignUser } from '../utils/index';
 import { hashPassword } from '../helpers/hashpassword';
