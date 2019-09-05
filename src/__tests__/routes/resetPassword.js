@@ -89,89 +89,87 @@ after(async () => {
     }
 });
 
-before(() => {
-    chai.request(app).keepOpen();
-});
-
 afterEach(() => sinon.restore());
 
-describe('Forgot Password Controller', () => {
-    const newReset = {
-        id: 2,
-        email: 'youremail2@andela.com',
-        resetToken: 'theResetToken'
-    };
+describe('Forgot and Reset Password Test', () => {
+    describe('Forgot Password Controller', () => {
+        const newReset = {
+            id: 2,
+            email: 'youremail2@andela.com',
+            resetToken: 'theResetToken'
+        };
 
-    const newReset2 = {
-        id: 2,
-        email: 'youremail34@andela.com',
-        resetToken: 'theResetToken'
-    };
+        const newReset2 = {
+            id: 2,
+            email: 'youremail34@andela.com',
+            resetToken: 'theResetToken'
+        };
 
-    it('should send reset mail to the email of an existing user', async () => {
-        // stub send mail functions
-        const resetMailStub = sinon.stub(await sendResetMail());
-        resetMailStub.returns(true);
-        chai
-            .request(app)
-            .post(`${forgotPasswordURL}`)
-            .send({ email: newReset.email })
-            .end(async () => {
-                expect(await resetMailStub).to.be.true;
+        it('should send reset mail to the email of an existing user', async () => {
+            // stub send mail functions
+            const resetMailStub = sinon.stub(await sendResetMail());
+            resetMailStub.returns(true);
+            chai
+                .request(app)
+                .post(`${forgotPasswordURL}`)
+                .send({ email: newReset.email })
+                .end(async () => {
+                    expect(await resetMailStub).to.be.true;
+                });
+        });
+
+        it('should send signup mail to the email of a non user', async () => {
+            const signupMailStub = sinon.stub(await sendSignupMail());
+            chai
+                .request(app)
+                .post(`${forgotPasswordURL}`)
+                .send({ email: newReset2.email })
+                .end(async (err, res) => {
+                    expect(await signupMailStub).to.be.true;
+                    expect(await signupMailStub.firstCall.args[0]).to.equal(newReset2.email);
+                    expect(res).to.have.status(200);
+                    expect(res.body.status).to.be.equal('success');
+                    expect(res.body.message).to.be.equal(
+                        'Check your mail for further instruction'
+                    );
+                    done();
+                });
+        });
+    })
+
+    describe('Reset Password Controller', () => {
+        describe('POST /api/users/passwords/reset', () => {
+            it('should not reset password if reset password link is invalid', (done) => {
+                chai
+                    .request(app)
+                    .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
+                    .send({
+                        password: 'password10',
+                        confirmPassword: 'password10'
+                    })
+                    .end((err, res) => {
+                        expect(res).to.have.status(400);
+                        expect(res.body.status).to.be.equal('error');
+                        expect(res.body.error).to.be.equal('Invalid or expired reset token');
+                        done();
+                    });
             });
-    });
 
-    it('should send signup mail to the email of a non user', async () => {
-        const signupMailStub = sinon.stub(await sendSignupMail());
-        chai
-            .request(app)
-            .post(`${forgotPasswordURL}`)
-            .send({ email: newReset2.email })
-            .end(async (err, res) => {
-                expect(await signupMailStub).to.be.true;
-                expect(await signupMailStub.firstCall.args[0]).to.equal(newReset2.email);
-                expect(res).to.have.status(200);
-                expect(res.body.status).to.be.equal('success');
-                expect(res.body.message).to.be.equal(
-                    'Check your mail for further instruction'
-                );
-                done();
+            it('should return invalid reset token if user did not request password reset', (done) => {
+                chai
+                    .request(app)
+                    .post(`${resetPasswordURL}/10?token=${resetToken}`)
+                    .send({
+                        password: 'password10',
+                        confirmPassword: 'password10'
+                    })
+                    .end((err, res) => {
+                        expect(res).to.have.status(400);
+                        expect(res.body.status).to.be.equal('error');
+                        expect(res.body.error).to.be.equal('Invalid or expired reset token');
+                        done();
+                    });
             });
+        });
     });
 })
-
-describe('Reset Password Controller', () => {
-    describe('POST /api/users/passwords/reset', () => {
-        it('should not reset password if reset password link is invalid', (done) => {
-            chai
-                .request(app)
-                .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
-                .send({
-                    password: 'password10',
-                    confirmPassword: 'password10'
-                })
-                .end((err, res) => {
-                    expect(res).to.have.status(400);
-                    expect(res.body.status).to.be.equal('error');
-                    expect(res.body.error).to.be.equal('Invalid or expired reset token');
-                    done();
-                });
-        });
-
-        it('should return invalid reset token if user did not request password reset', (done) => {
-            chai
-                .request(app)
-                .post(`${resetPasswordURL}/10?token=${resetToken}`)
-                .send({
-                    password: 'password10',
-                    confirmPassword: 'password10'
-                })
-                .end((err, res) => {
-                    expect(res).to.have.status(400);
-                    expect(res.body.status).to.be.equal('error');
-                    expect(res.body.error).to.be.equal('Invalid or expired reset token');
-                    done();
-                });
-        });
-    });
-});

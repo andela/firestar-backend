@@ -57,9 +57,13 @@ describe('Email services', () => {
             resetToken: 'theResetToken'
         };
 
-        const resetMailStub = sinon.stub(await sendResetMail(newReset, newReset.resetToken));
-        const signupMailStub = sinon.stub(await sendSignupMail(newReset.email));
-        resetMailStub.callsFake(msg => msg);
+        try {
+            const resetMailStub = sinon.stub(await sendResetMail(newReset, newReset.resetToken));
+            const signupMailStub = sinon.stub(await sendSignupMail(newReset.email));
+            resetMailStub.callsFake(msg => msg);
+        } catch (err) {
+            throw err;
+        }
 
         beforeEach(() => {
             try {
