@@ -68,6 +68,13 @@ describe('SIGNUP ROUTE', () => {
       const decoded = await comparePassword(hashPass, password);
       expect(decoded).to.equal(true);
     }).timeout(0);
+
+    it('should return pasword does not match', async () => {
+      const password = 'dfdfdfg33gf';
+      const hashPass = await hashPassword(password);
+      const decoded = await comparePassword(hashPass, 'password');
+      expect(decoded).to.equal(false);
+    }).timeout(0);
   });
 
   describe('VALIDATE USING JOI LIBRARY', () => {
