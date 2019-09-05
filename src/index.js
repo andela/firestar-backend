@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 import Log from 'debug';
 import root from './routes/api/index';
 import requests from './routes/api/requests';
+import auth from './routes/api/auth';
 import swaggerDocument from '../swagger.json';
 
 const serverLog = Log('server');
@@ -45,6 +46,7 @@ if (!isProduction) {
   app.use(errorHandler());
 }
 app.use('/api/v1/requests', requests);
+app.use('/api/v1/auth', auth);
 app.use(root);
 
 

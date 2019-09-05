@@ -1,28 +1,18 @@
-/* eslint-disable no-unused-vars */
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Requests', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Trips', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    requesterId: {
-      type: Sequelize.INTEGER
-    },
-    managerId: {
-      type: Sequelize.INTEGER
-    },
-    tripType: {
+    type: {
       type: Sequelize.STRING
     },
-    departureLocation: {
-      type: Sequelize.STRING
-    },
-    destinationIds: {
+    destinationId: {
       type: Sequelize.ARRAY(Sequelize.INTEGER)
     },
-    accommodationIds: {
+    accommodationId: {
       type: Sequelize.ARRAY(Sequelize.INTEGER)
     },
     departureDate: {
@@ -30,12 +20,6 @@ export default {
     },
     returnDate: {
       type: Sequelize.DATE
-    },
-    reasons: {
-      type: Sequelize.STRING
-    },
-    status: {
-      type: Sequelize.STRING
     },
     createdAt: {
       allowNull: false,
@@ -46,5 +30,6 @@ export default {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Requests')
+  // eslint-disable-next-line no-unused-vars
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('Trips')
 };

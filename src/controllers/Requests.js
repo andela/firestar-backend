@@ -1,5 +1,7 @@
-import db from '../models/index';
+import db from '../models';
 import ValidateParams from '../validation/ValidateParams';
+
+const { Request } = db;
 /**
  * class Requests defines travel requests endpoints
  * @class
@@ -22,8 +24,7 @@ class Requests {
         error: 'Invalid request',
       });
     }
-
-    const data = await db.Request.findAll({ where: { requesterId: userId } });
+    const data = await Request.findAll();
     res.send({
       status: 200,
       data,

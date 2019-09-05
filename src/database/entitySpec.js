@@ -2,19 +2,18 @@ const databaseStructure = {
 /** Users */
   Users: {
     id: Integer,
-    firstName: String,
-    lastName: String,
-    email: String,
-    password: String,
+    firstName: String,  /*** REQUIRED FOR SIGNUP */
+    lastName: String,   /*** REQUIRED FOR SIGNUP */
+    email: String,      /*** REQUIRED FOR SIGNUP */
+    password: String,   /*** REQUIRED FOR SIGNUP */
     gender: String,
     role: String, // portfolio in the company
-    isVerified: Boolean, // user signup verification, Default value is false
+    isVerified: Boolean, // user signup verification, Default value is false ecomes true after email verification
     phoneNumber: String,
+    dateOfBirth: Date,
     prefferedCurrency: String,
 
   },
-
-
   /** Requests */
   Requests: {
     id: Integer,
@@ -53,7 +52,7 @@ const databaseStructure = {
     address: String,
     imageUrl: String, // cloudinary image url
     numberOfRooms: Integer,
-    roomTypes: String, // e.g. deluxe,
+    roomTypes: Array(String), // e.g. deluxe,
     numberOfTimesUsed: Integer //
   },
 };

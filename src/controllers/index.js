@@ -1,4 +1,3 @@
-
 /**
  * class Root defines root apis
  * @class
@@ -10,11 +9,13 @@ class Root {
    * @static
    * @returns {void}
    */
-  static getRoot(req, res) {
+  static async getRoot(req, res) {
+    // const d = await User.findAll({});
     res.status(201).send({
       status: 201,
       data: {
-        message: 'Welcome to Barefoot Nomad',
+        message: 'Welcome to Firestar Barefoot Nomad',
+        // d,
       },
     });
   }

@@ -1,29 +1,28 @@
 /* eslint-disable no-unused-vars */
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Accommodation', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Requests', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    locationId: {
+    requesterId: {
       type: Sequelize.INTEGER
     },
-    nameOfFacility: {
-      type: Sequelize.STRING
-    },
-    address: {
-      type: Sequelize.STRING
-    },
-    imageUrl: {
-      type: Sequelize.STRING
-    },
-    numberOfRooms: {
+    managerId: {
       type: Sequelize.INTEGER
     },
-    roomTypes: {
-      type: Sequelize.ARRAY(Sequelize.STRING)
+    reasons: {
+      type: Sequelize.STRING
+    },
+    status: {
+      type: Sequelize.ENUM,
+      values: ['open', 'accepted', 'rejected'],
+      defaultValue: 'open',
+    },
+    trip: {
+      type: Sequelize.REAL
     },
     createdAt: {
       allowNull: false,
@@ -34,5 +33,5 @@ export default {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Accommodation')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('Requests')
 };
