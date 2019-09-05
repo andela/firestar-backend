@@ -51,7 +51,7 @@ const seedTestDb = async () => {
             .utc()
             .add(process.env.TOKENEXPIRY, 'seconds')
             .toLocaleString(),
-        resetToken: '$2a$10$Yc4fNidn3ih0Z0wRajFhq.AwneQLYR2RWWYQT7PGJdJj4UN1BGJ1K'
+        resetToken: '$2a$10$Yc4fNidn3ih0Z0wRajFhq.AwneQLYR2RWWYQT7PGJdJj4UN1BGJ1K2'
     });
 };
 
