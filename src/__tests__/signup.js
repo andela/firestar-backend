@@ -113,7 +113,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstname must be a minimum of 3 character and max of 30');
+      expect(response.body.message).to.equal('firstname must be alphabetics character and a minimum of 3 character and max of 30');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -126,7 +126,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('lastname must be a minimum of 3 character and max of 30');
+      expect(response.body.message).to.equal('lastname must be alphabetics character and a minimum of 3 character and max of 30');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
