@@ -2,7 +2,7 @@
 import userService from '../services/userservice';
 import Util from '../utils/response';
 import { jwtSignUser } from '../utils/index';
-import { hashPassword } from '../helpers/index';
+import { hashPassword } from '../helpers/hashpassword';
 
 
 const util = new Util();
