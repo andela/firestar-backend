@@ -1,11 +1,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import server from '../index';
-import { user, role } from '../models';
+import server from '../../../index';
+import models from '../../../models';
 import {
   unauthorizedToken, authorizedToken, validInfoRole, unauthorisedRoleUser, invalidInfoRole1,
   invalidInfoRole2, invalidInfoRole3, users, roles
-} from '../__mocks__/userRoles';
+} from '../../../__mocks__/userRoles';
 
 chai.use(chaiHttp);
 
@@ -17,17 +17,17 @@ describe('User Role Setting', () => {
       superAdmin, travelAdmin, travelTeamMember, manager, requester
     } = roles;
     try {
-      await user.sync({ force: true });
-      await role.sync({ force: true });
-      await user.bulkCreate([users.superAdmin, users.nonadmin]);
-      await role.bulkCreate([superAdmin, travelAdmin, travelTeamMember, manager, requester]);
+      await models.User.sync({ force: true });
+      await models.Role.sync({ force: true });
+      await models.User.bulkCreate([users.superAdmin, users.nonadmin]);
+      await models.Role.bulkCreate([superAdmin, travelAdmin, travelTeamMember, manager, requester]);
     } catch (error) {
       console.log(error);
     }
   });
   after(async () => {
-    await user.destroy({ where: {} });
-    await role.destroy({ where: {} });
+    await models.User.destroy({ where: {} });
+    await models.Role.destroy({ where: {} });
   });
   describe('Set User Role', () => {
     it('Should return an error for unauthorised users', async () => {

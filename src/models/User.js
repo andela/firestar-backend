@@ -1,25 +1,45 @@
-export default (sequelize, DataTypes) => {
+const users = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false
+    id: {
+      type: DataTypes.INTEGER,
+      unique: true,
+      allowNull: false,
+      autoIncrement: true,
     },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      unique: true,
+      allowNull: false,
+      primaryKey: true,
+      validate: {
+        notEmpty: true,
+        isEmail: true
+      }
     },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false
+    phoneNumber: {
+      type: DataTypes.BIGINT,
+      unique: true
     },
     roleId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
     }
   });
+
+  User.associate = (models) => {
+    User.hasOne(models.Login, {
+      foreignKey: 'email',
+      onDelete: 'CASCADE',
+    });
+
+    User.hasOne(models.Reset, {
+      foreignKey: 'email',
+      onDelete: 'CASCADE',
+    });
+  };
+
   return User;
 };
+
+export default users;

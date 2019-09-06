@@ -1,5 +1,5 @@
 import setRoleValidator from '../helpers/validation/roles';
-import { role } from '../models';
+import models from '../models';
 import { checkIfExistsInDb, findByEmail } from '../utils/searchDb';
 
 export const validateSetRole = async (req, res, next) => {
@@ -17,7 +17,8 @@ export const validateSetRole = async (req, res, next) => {
         error: err
       });
     }
-    req.newRole = await checkIfExistsInDb(role, roleId, 'Role does not exist');
+    req.body.email = req.body.email.trim();
+    req.newRole = await checkIfExistsInDb(models.Role, roleId, 'Role does not exist');
     req.userToUpdate = await findByEmail(email.trim());
     next();
   } catch (error) {

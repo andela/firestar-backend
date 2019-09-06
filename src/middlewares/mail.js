@@ -1,9 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 import { verifyEmailTemplate } from '../services/mail/template/verifyEmail';
 import { emailVerifyToken } from '../utils/index';
-import { emailRegex } from '../helpers/validation/emailValidation';
+import validation from '../helpers/validation';
 import Mail from '../services/mail/Mail';
 
+const { isValidEmail } = validation;
 
 /**
  * @param {req} req contains the express object.
@@ -82,7 +83,7 @@ export const handleEmptyEmailBody = (req, res, next) => {
   }
 };
 export const handleInvalidEmail = (req, res, next) => {
-  const emailCheck = emailRegex(req.body.email);
+  const emailCheck = isValidEmail(req.body.email);
   if (emailCheck) {
     next();
   } else {

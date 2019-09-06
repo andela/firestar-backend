@@ -1,4 +1,4 @@
-import { user } from '../models';
+import models from '../models';
 
 export const checkIfExistsInDb = async (Model, id, errorMessage) => {
   try {
@@ -17,7 +17,7 @@ export const checkIfExistsInDb = async (Model, id, errorMessage) => {
 
 export const findByEmail = async (email) => {
   try {
-    const foundUser = await user.findOne({
+    const foundUser = await models.User.findOne({
       where: {
         email
       }
