@@ -36,8 +36,8 @@ app.use(
     secret: 'authorshaven',
     cookie: { maxAge: 60000 },
     resave: false,
-    saveUninitialized: false,
-  }),
+    saveUninitialized: false
+  })
 );
 
 if (!isProduction) {
@@ -67,28 +67,16 @@ if (!isProduction) {
     res.json({
       errors: {
         message: err.message,
-        error: err,
-      },
+        error: err
+      }
     });
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({
-    errors: {
-      message: err.message,
-      error: {},
-    },
-  });
-});
-
 // finally, let's start our server...
-const server = app.listen(process.env.PORT || 3000, () => {
-  serverLog(`Listening on port ${server.address().port}`);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });
 
 export default app;
