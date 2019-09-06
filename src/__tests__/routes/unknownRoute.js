@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
-import app from '../index';
+import app from '../../index';
 
 chai.use(chaiHttp);
 let request;

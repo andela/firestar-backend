@@ -2,13 +2,13 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import app from '../index';
+import app from '../../../index';
 
-import { jwtVerifyUserToken } from '../utils/index';
-import { hashPassword, comparePassword } from '../helpers/hashpassword';
-import { validateData, signUpValidationSchema } from '../helpers/validation/signupValidation';
-import { jwtVerify, authorization } from '../middlewares/auth/auth';
-import userController from '../controllers/userController';
+import { jwtVerifyUserToken } from '../../../utils/index';
+import { hashPassword, comparePassword } from '../../../helpers/hashpassword';
+import { validateData, signUpValidationSchema } from '../../../helpers/validation/signupValidation';
+import { jwtVerify, authorization } from '../../../middlewares/auth/auth';
+import userController from '../../../controllers/userController';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);

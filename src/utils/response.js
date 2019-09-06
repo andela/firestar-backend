@@ -1,4 +1,4 @@
-export default class Util {
+export default class Response {
 	constructor() {
 		this.statusCode = null;
 		this.type = null;
@@ -18,6 +18,20 @@ export default class Util {
 		this.message = message;
 		this.type = 'error';
 	}
+
+	static errorResponse(res, statusCode, err) {
+		return res.status(statusCode).json({
+		  status: 'error',
+		  error: err
+		});
+	  }
+	
+	  static successResponse(res, statusCode, msg) {
+		return res.status(statusCode).json({
+		  status: 'success',
+		  message: msg
+		});
+	  }
 
 	send(res) {
 		const result = {
