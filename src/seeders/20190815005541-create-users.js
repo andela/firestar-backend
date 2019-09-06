@@ -6,7 +6,7 @@ module.exports = {
         firstName: 'alimi',
         lastName: 'marusoft',
         email: 'example@gmail.com',
-        password: '$2a$10$f7CWmXI07w5Y3JtsYNe8jeExmw5sbZxTSyAPONHXq/Jbp7/OpzmEy',
+        password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
         isVerified: true,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -16,7 +16,7 @@ module.exports = {
         firstName: 'alimi1',
         lastName: 'marusoft1',
         email: 'example1@gmail.com',
-        password: '$2a$10$f7CWmXI07w5Y3JtsYNe8jeExmw5sbZxTSyAPONHXq/Jbp7/OpzmEy',
+        password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
         isVerified: true,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -26,7 +26,7 @@ module.exports = {
         firstName: 'alimi2',
         lastName: 'marusoft2',
         email: 'example2@gmail.com',
-        password: '$2a$10$f7CWmXI07w5Y3JtsYNe8jeExmw5sbZxTSyAPONHXq/Jbp7/OpzmEy',
+        password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
         isVerified: true,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -36,7 +36,7 @@ module.exports = {
         firstName: 'alimi3',
         lastName: 'marusoft3',
         email: 'example3@gmail.com',
-        password: '$2a$10$f7CWmXI07w5Y3JtsYNe8jeExmw5sbZxTSyAPONHXq/Jbp7/OpzmEy',
+        password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
         isVerified: true,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -46,7 +46,7 @@ module.exports = {
         firstName: 'alimi4',
         lastName: 'marusoft4',
         email: 'example4@gmail.com',
-        password: '$2a$10$f7CWmXI07w5Y3JtsYNe8jeExmw5sbZxTSyAPONHXq/Jbp7/OpzmEy',
+        password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
         isVerified: true,
         createdAt: new Date(),
         updatedAt: new Date()

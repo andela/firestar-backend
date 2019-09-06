@@ -1,7 +1,7 @@
-import Helper from '../helpers/helperUtils';
+// import Helper from '../helpers/helperUtils';
 import userService from '../services/userService';
-// import { jwtSignUser } from '../utils/index';
-// import { comparePassword } from '../helpers/index';
+import { jwtSignUser } from '../utils/index';
+import { comparePassword } from '../helpers/comparePassword';
 import { logins } from '../models';
 /**
  * @class UsersController
@@ -22,7 +22,7 @@ class UserController {
         email: loggedUser.dataValues.email,
       };
       if (loggedUser) {
-        const validPassword = Helper.verifyPassword(
+        const validPassword = await comparePassword(
           loggedUser.password,
           password
         );
@@ -43,7 +43,7 @@ class UserController {
               }
             });
           }
-          const token = Helper.generateToken(userDetail);
+          const token = await jwtSignUser(userDetail);
           const { id } = loggedUser.dataValues;
           return res.status(200).json({
             data: {
