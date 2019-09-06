@@ -3,8 +3,13 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import 'chai/register-should';
 
-import app from '../index';
-import { userId, wrongId, updateUser, validToken, inValidToken2, invalidUserData, inValidRequest, invalidSyntax, updateUser2 } from './mocks/userMock'
+import app from '../index'
+import {
+  userId, wrongId, updateUser, validToken,
+  inValidToken2, invalidUserData, inValidRequest, invalidSyntax,
+  updateUser2
+} from '../__mocks__/userMock';
+
 chai.use(chaiHttp);
 const { expect } = chai;
 
@@ -71,7 +76,7 @@ describe('User Profile Route', () => {
         .get(`${BASE_URL}/${invalidSyntax}/profile`)
         .set('Content-Type', 'application/json')
         .send(updateUser);
-      expect(response.status).to.equal(401);
+      expect(response.status).to.equal(501);
       expect(response.body.status).to.equal('error');
       expect(response.body.message).to.equal(
         `invalid input syntax for integer: "${invalidSyntax}"`
@@ -153,32 +158,32 @@ describe('User Profile Route', () => {
       );
     });
   });
-});
 
-describe('PATCH /users/:id/profile', () => {
-  it('It should throw undefined error', async () => {
-    const response = await chai
-      .request(app)
-      .patch(`${BASE_URL}/${userId}/profile`)
-      .set('token', validToken)
-      .send(inValidRequest);
-    expect(response.status).to.equal(403);
-    expect(response.body.status).to.equal('error');
-    expect(response.body.message).to.equal(
-      'undefined property'
-    );
+  describe('PATCH /users/:id/profile', () => {
+    it('It should throw undefined error', async () => {
+      const response = await chai
+        .request(app)
+        .patch(`${BASE_URL}/${userId}/profile`)
+        .set('token', validToken)
+        .send(inValidRequest);
+      expect(response.status).to.equal(403);
+      expect(response.body.status).to.equal('error');
+      expect(response.body.message).to.equal(
+        'undefined property'
+      );
+    });
   });
-});
 
-describe('PATCH /users/:id/profile', () => {
-  it('check request body length', async () => {
-    const response = await chai
-      .request(app)
-      .patch(`${BASE_URL}/${userId}/profile`)
-      .set('token', validToken)
-      .send(updateUser2);
-    expect(response.status).to.equal(400);
-    expect(response.body.status).to.equal('error');
-    expect(response.body.message[0]).to.equal('firstName length must be at least 2 characters long');
+  describe('PATCH /users/:id/profile', () => {
+    it('check request body length', async () => {
+      const response = await chai
+        .request(app)
+        .patch(`${BASE_URL}/${userId}/profile`)
+        .set('token', validToken)
+        .send(updateUser2);
+      expect(response.status).to.equal(400);
+      expect(response.body.status).to.equal('error');
+      expect(response.body.message[0]).to.equal('firstName length must be at least 2 characters long');
+    });
   });
 });

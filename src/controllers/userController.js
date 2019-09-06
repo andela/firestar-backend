@@ -26,7 +26,7 @@ class UserController {
       util.setSuccess(200, 'Succesfully found user', user, token);
       return util.send(res);
     } catch (error) {
-      util.setError(401, error.message);
+      util.setError(501, error.message);
       return util.send(res);
     }
   }

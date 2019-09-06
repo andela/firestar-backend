@@ -1,4 +1,3 @@
-// import faker from 'faker';
 const faker = require('faker');
 const gender = ['male', 'female'];
 const language = ['English', 'French'];
