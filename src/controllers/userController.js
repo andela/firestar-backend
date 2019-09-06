@@ -8,14 +8,19 @@ import models from '../models';
 const { User, Login, Reset } = models;
 const { errorResponse, successResponse } = Response;
 
+
+/**
+ @description Class based Controller for Roles
+*/
 export default class UserController {
   /**
    * @description Generate link to reset a user password
    * @static
    * @param {*} req
    * @param {*} res
-   * @returns Promise {UserController} A reset link for new password
+   * @returns {UserController} A reset link for new password
    * @memberof UserController
+   * @type {object} return an object
    */
   static async forgotPassword(req, res) {
     try {
@@ -66,7 +71,7 @@ export default class UserController {
    * @static
    * @param {*} req
    * @param {*} res
-   * @returns Promise {UserController} A new password record
+   * @returns {UserController} A new password record
    * @memberof UserController
    */
   static async resetPassword(req, res) {
@@ -82,8 +87,8 @@ export default class UserController {
       // Find user reset request by email
       user
         ? (userRequestReset = await Reset.findOne({
-            where: { email: user.email }
-          }))
+          where: { email: user.email }
+        }))
         : null;
 
       // Check if user has requested password reset
@@ -93,9 +98,8 @@ export default class UserController {
         const tokenExpireTime = moment.utc(expireTime);
 
         // If reset link is valid and not expired
-        const validReset =
-          moment().isBefore(tokenExpireTime) &&
-          Hash.compareWithHash(resetToken, userRequestReset.resetToken);
+        const validReset = moment().isBefore(tokenExpireTime)
+          && Hash.compareWithHash(resetToken, userRequestReset.resetToken);
 
         if (validReset) {
           // Store hash of new password in login
@@ -117,6 +121,37 @@ export default class UserController {
       return errorResponse(res, 400, 'Invalid or expired reset token');
     } catch (error) {
       return errorResponse(res, 500, error);
+    }
+  }
+
+  /**
+ * @description Sets the permission for a given role to a particular resource
+ * @static
+ * @param {object} req object
+ * @param {object} res object
+ * @param {method} next method
+ * @returns { object } Sets Role for a given user
+ * @memberof Roles
+ * @type {object}
+ */
+  static async changeRole(req, res, next) {
+    const { email, roleId } = req.body;
+    try {
+      const updatedUser = await models.User.update({ roleId },
+        {
+          returning: true,
+          plain: true,
+          where: {
+            email
+          }
+        });
+      return res.status(200).json({
+        status: 'success',
+        data: updatedUser[1].dataValues
+      });
+    } catch (error) {
+      error.status = 404;
+      return next(error);
     }
   }
 }

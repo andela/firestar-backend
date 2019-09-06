@@ -1,16 +1,11 @@
 import dotEnv from 'dotenv';
 import express from 'express';
-import bodyParser from 'body-parser';
-import session from 'express-session';
 import errorHandler from 'errorhandler';
-import methodOverride from 'method-override';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
-import Log from 'debug';
 import routes from './routes';
 import swaggerDocument from '../swagger.json';
 
-const serverLog = Log('server');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -25,20 +20,10 @@ app.enable('trust proxy');
 dotEnv.config();
 // Normal express config defaults
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-app.use(methodOverride());
 app.use(express.static(`${__dirname}/public`));
-
-app.use(
-  session({
-    secret: 'authorshaven',
-    cookie: { maxAge: 60000 },
-    resave: false,
-    saveUninitialized: false
-  })
-);
 
 if (!isProduction) {
   app.use(errorHandler());
@@ -60,23 +45,20 @@ app.use((req, res, next) => {
 if (!isProduction) {
   // eslint-disable-next-line no-unused-vars
   app.use((err, req, res, next) => {
-    serverLog(err.stack);
-
     res.status(err.status || 500);
-
     res.json({
-      errors: {
-        message: err.message,
-        error: err
-      }
+      success: false,
+      message: err.message || 'Something went wrong',
     });
   });
 }
+// production error handler
+// no stacktraces leaked to user
+// eslint-disable-next-line no-unused-vars
 
 // finally, let's start our server...
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+const server = app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${server.address().port}`);
 });
 
-export default app;
+export default server;

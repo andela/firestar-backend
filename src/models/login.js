@@ -23,7 +23,7 @@ const logins = (sequelize, DataTypes) => {
     },
   });
 
-  Login.associate = models => {
+  Login.associate = (models) => {
     Login.belongsTo(models.User, {
       foreignKey: 'email',
       onDelete: 'CASCADE'

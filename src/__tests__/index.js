@@ -5,3 +5,5 @@ import './services/mail';
 import './utils/hash';
 import './validations/resetPassword';
 import './emailverification';
+import './dummyLogin';
+import './routes/users/userRole';

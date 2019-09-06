@@ -20,10 +20,10 @@ const sendResetMail = async (user, resetToken) => {
       html: `
         <p>To reset your password, click link to complete this form:</p>
         <a href='${CLIENT_URL}/users/passwords/reset/${
-        user.id
-      }?token=${resetToken}'>${CLIENT_URL}/users/passwords/reset/${
-        user.id
-      }?token=${resetToken}</a>
+  user.id
+}?token=${resetToken}'>${CLIENT_URL}/users/passwords/reset/${
+  user.id
+}?token=${resetToken}</a>
         <p>This link expires in ${expiry} hours<p>
         <br><br>
         <p>--Firestar Team</p>`
@@ -55,7 +55,7 @@ const sendSignupMail = async (email) => {
     }
   } catch (error) {
     return false;
-  }  
+  }
 };
 
 export { sendResetMail, sendSignupMail };

@@ -22,8 +22,8 @@ const users = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
       unique: true
     },
-    role: {
-      type: DataTypes.STRING
+    roleId: {
+      type: DataTypes.INTEGER,
     }
   });
 

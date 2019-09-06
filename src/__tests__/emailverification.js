@@ -148,11 +148,10 @@ describe('EMAIL ROUTE', () => {
 
       sinon.stub(res, 'status').returnsThis();
       sinon.stub(res, 'json').returnsThis();
-      
-      handleEmptyEmailBody(req, res);
-      expect(res.json).to.have.been.calledWith({ error: "No body property is presented in the req object", status: 403 });
-    });
 
+      handleEmptyEmailBody(req, res);
+      expect(res.json).to.have.been.calledWith({ error: 'No body property is presented in the req object', status: 403 });
+    });
   });
   describe('VALIDATION EMAIL VERIFICATION', () => {
     it('It checks if email is valid', async () => {
@@ -160,7 +159,7 @@ describe('EMAIL ROUTE', () => {
       const test = isValidEmail(email);
       expect(test).to.be.equal(true);
     });
-    
+
     it('It checks if email is not valid', async () => {
       const email = 'akp.aniyahoo.com';
       const test = isValidEmail(email);
