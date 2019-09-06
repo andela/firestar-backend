@@ -1,12 +1,19 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const logins = sequelize.define('logins', {
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    lastLogin: DataTypes.DATE
+    email: {
+      type: DataTypes.STRING,
+    },
+    password: {
+      type: DataTypes.STRING,
+    },
+    lastLogin: {
+      type: DataTypes.DATE,
+    }
   }, {});
-  logins.associate = function(models) {
-    // associations can be defined here
+  logins.associate = (models) => {
+    logins.belongsTo(models.users, {
+      foreignKey: 'email', onDelete: 'CASCADE'
+    });
   };
   return logins;
 };

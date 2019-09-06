@@ -27,7 +27,6 @@ describe('Login Users', () => {
         res.status.should.equal(200);
         res.body.should.have.property('data');
         res.body.data.should.have.property('token');
-        res.body.data.should.have.property('id');
         const validUser = Helper.verifyToken(userToken);
         validUser.should.be.an('boolean');
         done();
@@ -46,7 +45,6 @@ describe('Login Users', () => {
         res.status.should.equal(200);
         res.body.should.have.property('data');
         res.body.data.should.have.property('token');
-        res.body.data.should.have.property('id');
         res.body.message.should.equal('Welcome back, your login was successful');
         done();
       });
@@ -90,7 +88,7 @@ describe('Login Users', () => {
       .end((err, res) => {
         res.should.have.status(401);
         res.body.should.have.property('error');
-        res.body.error.should.equal('Incorrect password.');
+        res.body.error.should.equal('Email or password incorrect.');
         done();
       });
   });

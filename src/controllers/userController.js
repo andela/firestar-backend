@@ -18,7 +18,7 @@ class UserController {
       const loggedUser = await userService.loginAUser(email);
       if (!loggedUser) {
         return res.status(404).json({
-          error: 'Email does not exit',
+          error: 'Invalid login details',
         });
       }
       const userDetail = {
