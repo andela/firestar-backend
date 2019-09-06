@@ -28,7 +28,7 @@ describe('EMAIL ROUTE', () => {
   describe('EMAIL VERIFICATION ROUTE', () => {
     it('should have a status of 200 when message is sent succesfully', async () => {
       const body = {
-        email: 'akp.ani@yahoo.com',
+        email: 'akp.axcni@yahoo.com',
         firstName: 'Aniefiok',
         lastName: 'Akpan'
       };
@@ -52,7 +52,7 @@ describe('EMAIL ROUTE', () => {
 
     it('should have a status of 403 and a messsage of "Email, firstName and lastName is required"  when some body is not present', async () => {
       const body = {
-        email: 'akp.ani@yahoo.com',
+        email: 'akp.acni@yahoo.com',
         firstName: 'Aniefiok',
         lastName: ''
       };
@@ -95,7 +95,7 @@ describe('EMAIL ROUTE', () => {
     it('fakes server success for email verification controller', async () => {
       const req = {
         body: {
-          email: 'akp.ani@yahoo.com',
+          email: 'akp.anvfi@yahoo.com',
           firstName: 'Aniefiok',
           lastName: 'Akpan'
         },
