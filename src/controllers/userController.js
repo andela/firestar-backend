@@ -16,6 +16,11 @@ class UserController {
     const { email, password } = req.body;
     try {
       const loggedUser = await userService.loginAUser(email);
+      if (!loggedUser) {
+        return res.status(404).json({
+          error: 'Email does not exit',
+        });
+      }
       const userDetail = {
         id: loggedUser.dataValues.id,
         email: loggedUser.dataValues.email,
@@ -53,7 +58,7 @@ class UserController {
           });
         }
         return res.status(401).json({
-          error: 'Incorrect password.',
+          error: 'Email or password incorrect.',
         });
       }
     } catch (error) {
