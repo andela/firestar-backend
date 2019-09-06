@@ -9,7 +9,7 @@
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/ --fix",
     "clean": "rm -rf ./dist && mkdir dist",
-    "build": "babel ./src -d dist",
+    "build": "npm run clean && babel ./src -d dist",
     "start": "npm run build && node dist/index.js",
     "start:dev": "nodemon --exec babel-node -- src/index.js",
     "migrate:dev": "sequelize db:migrate",
