@@ -1,4 +1,3 @@
-// import Helper from '../helpers/helperUtils';
 import userService from '../services/userService';
 import { jwtSignUser } from '../utils/index';
 import { comparePassword } from '../helpers/comparePassword';

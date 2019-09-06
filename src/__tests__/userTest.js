@@ -7,11 +7,11 @@ import app from '../index';
 chai.use(chaiHttp);
 chai.should();
 
-const loginUrl = '/api/v1/users/login';
+const loginUrl = '/api/v1/users/auth/login';
 
 const userLoginDetails = {
   email: 'example1@gmail.com',
-  password: 'firestar2019',
+  password: 'firestar2019@K',
 };
 const userToken = '';
 
@@ -28,7 +28,7 @@ describe('Login Users', () => {
         res.body.should.have.property('data');
         res.body.data.should.have.property('token');
         res.body.data.should.have.property('id');
-        const validUser = Helper.verifyToken(userToken, res.body.data);
+        const validUser = Helper.verifyToken(userToken);
         validUser.should.be.an('boolean');
         done();
       });
@@ -40,7 +40,7 @@ describe('Login Users', () => {
       .post(loginUrl)
       .send({
         email: 'example1@gmail.com',
-        password: 'firestar2019',
+        password: 'firestar2019@K',
       })
       .end((err, res) => {
         res.status.should.equal(200);
@@ -62,7 +62,6 @@ describe('Login Users', () => {
       })
       .end((err, res) => {
         res.should.have.status(400);
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -76,7 +75,6 @@ describe('Login Users', () => {
       })
       .end((err, res) => {
         res.should.have.status(400);
-        res.body.should.have.property('error');
         done();
       });
   });
@@ -87,7 +85,7 @@ describe('Login Users', () => {
       .post(loginUrl)
       .send({
         email: 'example1@gmail.com',
-        password: 'barefoot2020',
+        password: 'barefoot2019@Kkk',
       })
       .end((err, res) => {
         res.should.have.status(401);
@@ -97,20 +95,16 @@ describe('Login Users', () => {
       });
   });
 
-  it('should return 401 for email not exist for login detail', (done) => {
+  it('should return 400 for email not exist for login detail', (done) => {
     chai
       .request(app)
       .post(loginUrl)
       .send({
-        email: 'sample@gmail.com',
-        password: 'barefoot2019',
+        email: 'example1@gmail.com111',
+        password: 'barefoot2019@K',
       })
       .end((err, res) => {
-        res.should.have.status(401);
-        res.body.should.have.property('error');
-        res.body.error.should.equal(
-          'Email does not exist, Please register an account or signup'
-        );
+        res.should.have.status(400);
         done();
       });
   });
