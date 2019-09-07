@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import UsersController from '../../controllers/userController';
-// import UsersValidation from '../../validation/userValidation';
 import { validationForSignIn } from '../../middlewares/validation/validation';
 import { SendVerificationEmail, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
 import emailverification from '../../controllers/emailController';

@@ -22,7 +22,7 @@ export const validationForSignIn = (req, res, next) => {
     req.user = value;
     return next();
   } catch (error) {
-    util.setError(400, error);
+    util.setError(500, error);
     return util.send(res);
   }
 };

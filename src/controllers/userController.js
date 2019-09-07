@@ -25,44 +25,40 @@ class UserController {
         id: loggedUser.dataValues.id,
         email: loggedUser.dataValues.email,
       };
-      if (loggedUser) {
-        const validPassword = await comparePassword(
-          loggedUser.password,
-          password
+      const correctPassword = await comparePassword(
+        loggedUser.password,
+        password
+      );
+      if (correctPassword) {
+        const lastLogin = await userService.findLastLogin(
+          loggedUser.dataValues.email
         );
-        if (validPassword) {
-          const lastLogin = await userService.findLastLogin(
-            loggedUser.dataValues.email
-          );
-          if (!lastLogin) {
-            const saveUserLoggedTime = {
-              email: loggedUser.dataValues.email,
-              password: loggedUser.password,
-            };
-            await userService.addLoggedInUser(saveUserLoggedTime);
-          } else {
-            await logins.update({ lastLogin: new Date(), }, {
-              where: {
-                email: loggedUser.email
-              }
-            });
-          }
-          const token = await jwtSignUser(userDetail);
-          const { id } = loggedUser.dataValues;
-          return res.status(200).json({
-            data: {
-              token,
-              id,
-            },
-            message: 'Welcome back, your login was successful',
+        if (!lastLogin) {
+          const saveUserLoggedTime = {
+            email: loggedUser.dataValues.email,
+            password: loggedUser.password,
+          };
+          await userService.addLoggedInUser(saveUserLoggedTime);
+        } else {
+          await logins.update({ lastLogin: new Date(), }, {
+            where: {
+              email: loggedUser.email
+            }
           });
         }
-        return res.status(401).json({
-          error: 'Email or password incorrect.',
+        const token = await jwtSignUser(userDetail);
+        return res.status(200).json({
+          data: {
+            token,
+          },
+          message: 'Welcome back, your login was successful',
         });
       }
+      return res.status(401).json({
+        error: 'Email or password incorrect.',
+      });
     } catch (error) {
-      res.status(500).json({ status: 500, error: error.message });
+      res.status(500).json({ status: 'Server Error', error: error.message });
     }
   }
 }

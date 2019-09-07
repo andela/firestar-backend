@@ -8,7 +8,7 @@ export const signInValidationSchema = Joi.object().keys({
     })),
   email: Joi.string().email({ minDomainSegments: 2 }).required()
     .error((errors) => ({
-      message: 'Your email is not valid'
+      message: 'Invalid login credentials'
     }))
 });
 
