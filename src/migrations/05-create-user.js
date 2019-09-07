@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Users', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('users', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -20,23 +20,58 @@ export default {
     },
     email: {
       allowNull: false,
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      validate: {
+        isEmail: true
+      }
     },
     password: {
       type: Sequelize.STRING
     },
     gender: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      validate: {
+        isIn: [['male', 'female', 'other']]
+      }
     },
     dateOfBirth: {
       type: Sequelize.DATEONLY
     },
     isProfileSaved: {
-      type: Sequelize.BOOLEAN
+      type: Sequelize.BOOLEAN,
+      defaultValue: true,
     },
     isVerified: {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
+    },
+    preferredCurrencyId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Currencies',
+        key: 'id',
+      }
+    },
+    preferredLanguageId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'LanguageOption',
+        key: 'id',
+      }
+    },
+    departmentId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Department',
+        key: 'id',
+      }
+    },
+    roleId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Role',
+        key: 'id',
+      }
     },
     createdAt: {
       allowNull: false,

@@ -8,7 +8,6 @@ export default (sequelize, DataTypes) => {
       values: ['open', 'accepted', 'rejected'],
       defaultValue: 'open',
     },
-    trip: DataTypes.REAL,
   }, {});
   return Request;
 };

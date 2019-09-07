@@ -3,6 +3,6 @@ import Requests from '../../controllers/Requests';
 
 const router = Router();
 
-router.get('/:userId', Requests.getAUserRequest);
+router.get('/users/:userId/requests', Requests.getAUserRequest);
 
 export default router;

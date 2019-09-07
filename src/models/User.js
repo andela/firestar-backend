@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     firstName: DataTypes.STRING,
@@ -9,10 +11,23 @@ export default (sequelize, DataTypes) => {
     dateOfBirth: DataTypes.DATEONLY,
     isProfileSaved: DataTypes.BOOLEAN,
     isVerified: DataTypes.BOOLEAN,
-    prefferedCurrencyId: DataTypes.INTEGER,
-    prefferedLanguageId: DataTypes.INTEGER,
+    preferredCurrencyId: DataTypes.INTEGER,
+    preferredLanguageId: DataTypes.INTEGER,
     departmentId: DataTypes.INTEGER,
     roleId: DataTypes.INTEGER,
   }, {});
+  User.beforeCreate(async (user) => {
+    user.password = await bcrypt.hash(user.password, 10);
+  });
+
+  User.beforeUpdate(async (user) => {
+    user.password = await bcrypt.hash(user.password, 10);
+  });
+
+  User.prototype.verifyPassword = async function verifyPassword(inputPassword) {
+    const isPasswordCorrect = await bcrypt
+      .compare(inputPassword, this.password);
+    return isPasswordCorrect;
+  };
   return User;
 };

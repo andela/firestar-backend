@@ -6,14 +6,39 @@ export default {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    type: {
-      type: Sequelize.STRING
+    tripType: {
+      type: Sequelize.STRING,
+      validate: {
+        isIn: [['one-way', 'return-trip']]
+      }
+    },
+    requestId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Request',
+        key: 'id',
+      }
+    },
+    departureLocationId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'OfficeBranch',
+        key: 'id',
+      }
     },
     destinationId: {
-      type: Sequelize.ARRAY(Sequelize.INTEGER)
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'OfficeBranch',
+        key: 'id',
+      }
     },
     accommodationId: {
-      type: Sequelize.ARRAY(Sequelize.INTEGER)
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Accommodation',
+        key: 'id',
+      }
     },
     departureDate: {
       type: Sequelize.DATE

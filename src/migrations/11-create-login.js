@@ -1,15 +1,12 @@
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('CountryCodes', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Logins', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    code: {
-      type: Sequelize.STRING
-    },
-    country: {
+    email: {
       type: Sequelize.STRING
     },
     createdAt: {
@@ -22,5 +19,5 @@ export default {
     }
   }),
   // eslint-disable-next-line no-unused-vars
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('CountryCodes')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('Logins')
 };

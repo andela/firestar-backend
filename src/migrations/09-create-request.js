@@ -8,10 +8,18 @@ export default {
       type: Sequelize.INTEGER
     },
     requesterId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'User',
+        key: 'id'
+      }
     },
     managerId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'User',
+        key: 'id'
+      }
     },
     reasons: {
       type: Sequelize.STRING
@@ -20,9 +28,6 @@ export default {
       type: Sequelize.ENUM,
       values: ['open', 'accepted', 'rejected'],
       defaultValue: 'open',
-    },
-    trip: {
-      type: Sequelize.REAL
     },
     createdAt: {
       allowNull: false,
