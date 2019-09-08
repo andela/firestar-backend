@@ -1,10 +1,9 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import sinon from 'sinon';
-// import sinonchai from 'sinon-chai';
-
 import 'chai/register-should';
 
+import db from '../models';
+const { Users } = db;
 import app from '../index'
 import {
   userId, wrongId, updateUser, validToken,
@@ -13,19 +12,19 @@ import {
 } from '../__mocks__/userMock';
 
 chai.use(chaiHttp);
-// chai.use(sinonchai)
+
 const { expect } = chai;
 
 const BASE_URL = '/api/v1/users';
 
-// let request;
-
 describe('User Profile Route', () => {
   before(async () => {
-    // request = chai.request(app).keepOpen();
+    // await Users.sync({ force: true });
   });
 
-  // afterEach(() => sinon.restore());
+  after(async () => {
+    // await db.Users.destroy({ where: {} });
+  });
 
   describe('GET /users/:id/profile', () => {
     it('should get user details', async () => {
