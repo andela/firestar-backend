@@ -20,6 +20,7 @@ const BASE_URL = '/api/v1/users';
 describe('User Profile Route', () => {
   before(async () => {
     await Users.create({ updateUser });
+    await Users.create({ updateUser2 })
   });
 
   after(async () => {
