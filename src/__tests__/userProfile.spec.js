@@ -1,28 +1,31 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
+// import sinonchai from 'sinon-chai';
+
 import 'chai/register-should';
 
 import app from '../index'
 import {
   userId, wrongId, updateUser, validToken,
-  inValidToken2, invalidUserData, inValidRequest, invalidSyntax,
+  inValidToken2, inValidRequest, invalidSyntax,
   updateUser2
 } from '../__mocks__/userMock';
 
 chai.use(chaiHttp);
+// chai.use(sinonchai)
 const { expect } = chai;
 
 const BASE_URL = '/api/v1/users';
 
-let request;
+// let request;
 
 describe('User Profile Route', () => {
   before(async () => {
-    request = chai.request(app).keepOpen();
+    // request = chai.request(app).keepOpen();
   });
 
-  afterEach(() => sinon.restore());
+  // afterEach(() => sinon.restore());
 
   describe('GET /users/:id/profile', () => {
     it('should get user details', async () => {
@@ -33,9 +36,7 @@ describe('User Profile Route', () => {
         .send(updateUser);
       expect(response.status).to.equal(200);
       expect(response.body.status).to.equal('success');
-      expect(response.body.message).to.equal(
-        'Succesfully found user'
-      );
+      expect(response.body.message).to.equal('Succesfully found user');
     });
   });
 
@@ -48,9 +49,7 @@ describe('User Profile Route', () => {
         .send(updateUser);
       expect(response.status).to.equal(401);
       expect(response.body.status).to.equal('error');
-      expect(response.body.message).to.equal(
-        `User with id: ${wrongId} not found`
-      );
+      expect(response.body.message).to.equal(`User with id: ${wrongId} not found`);
     });
   });
 
@@ -63,9 +62,7 @@ describe('User Profile Route', () => {
         .send(updateUser);
       expect(response.status).to.equal(401);
       expect(response.body.status).to.equal('error');
-      expect(response.body.message).to.equal(
-        `User with id: ${wrongId} not found`
-      );
+      expect(response.body.message).to.equal(`User with id: ${wrongId} not found`);
     });
   });
 
@@ -76,11 +73,9 @@ describe('User Profile Route', () => {
         .get(`${BASE_URL}/${invalidSyntax}/profile`)
         .set('Content-Type', 'application/json')
         .send(updateUser);
-      expect(response.status).to.equal(501);
+      expect(response.status).to.equal(500);
       expect(response.body.status).to.equal('error');
-      expect(response.body.message).to.equal(
-        `invalid input syntax for integer: "${invalidSyntax}"`
-      );
+      expect(response.body.message).to.equal(`invalid input syntax for integer: "${invalidSyntax}"`);
     });
   });
 
@@ -93,9 +88,7 @@ describe('User Profile Route', () => {
         .send(updateUser);
       expect(response.status).to.equal(401);
       expect(response.body.status).to.equal('error');
-      expect(response.body.message).to.equal(
-        'Provide user token'
-      );
+      expect(response.body.message).to.equal('Provide user token');
     });
   });
 
@@ -108,9 +101,7 @@ describe('User Profile Route', () => {
         .send(updateUser);
       expect(response.status).to.equal(401);
       expect(response.body.status).to.equal('error');
-      expect(response.body.message).to.equal(
-        'Provide user token'
-      );
+      expect(response.body.message).to.equal('Provide user token');
     });
   });
 
@@ -123,9 +114,7 @@ describe('User Profile Route', () => {
         .send(updateUser);
       expect(response.status).to.equal(201);
       expect(response.body.status).to.equal('success');
-      expect(response.body.message).to.equal(
-        'You ve successfully updated your profile'
-      );
+      expect(response.body.message).to.equal('You ve successfully updated your profile');
     });
   });
 
@@ -138,9 +127,7 @@ describe('User Profile Route', () => {
         .send(updateUser);
       expect(response.status).to.equal(403);
       expect(response.body.status).to.equal('error');
-      expect(response.body.message).to.equal(
-        'Unauthorized'
-      );
+      expect(response.body.message).to.equal('Unauthorized');
     });
   });
 
@@ -153,9 +140,7 @@ describe('User Profile Route', () => {
         .send(updateUser);
       expect(response.status).to.equal(400);
       expect(response.body.status).to.equal('error');
-      expect(response.body.message).to.equal(
-        'You are not logged in'
-      );
+      expect(response.body.message).to.equal('You are not logged in');
     });
   });
 
@@ -168,9 +153,7 @@ describe('User Profile Route', () => {
         .send(inValidRequest);
       expect(response.status).to.equal(403);
       expect(response.body.status).to.equal('error');
-      expect(response.body.message).to.equal(
-        'undefined property'
-      );
+      expect(response.body.message).to.equal('undefined property');
     });
   });
 
