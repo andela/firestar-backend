@@ -19,11 +19,15 @@ const BASE_URL = '/api/v1/users';
 
 describe('User Profile Route', () => {
   before(async () => {
-    // await Users.sync({ force: true });
+    await Users.create({ updateUser });
   });
 
   after(async () => {
-    // await db.Users.destroy({ where: {} });
+    try {
+      await Users.destroy({ where: {} });
+    } catch (error) {
+      throw error
+    }
   });
 
   describe('GET /users/:id/profile', () => {

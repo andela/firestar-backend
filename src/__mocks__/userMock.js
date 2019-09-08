@@ -1,6 +1,7 @@
 const faker = require('faker');
 const gender = ['male', 'female'];
 const language = ['English', 'French'];
+
 export const updateUser = {
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
