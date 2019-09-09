@@ -1,8 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import 'chai/register-should';
-import db from '../models';
-const { Users } = db;
+
 import app from '../index'
 import {
   userId, wrongId, updateUser, validToken,

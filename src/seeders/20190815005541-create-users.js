@@ -5,7 +5,7 @@ const language = ['English', 'French'];
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-      'Users',
+      'users',
       [
         {
           firstName: faker.name.firstName(),
@@ -49,6 +49,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Users', null, {});
+    return queryInterface.bulkDelete('users', null, {});
   }
 };

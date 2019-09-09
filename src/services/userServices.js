@@ -1,5 +1,5 @@
 import db from '../models';
-const { Users } = db;
+const { users } = db;
 
 /** Class representing user controller */
 class UserService {
@@ -10,7 +10,7 @@ class UserService {
 */
   static async findUserById(id) {
     try {
-      const user = await Users.findOne({
+      const user = await users.findOne({
         where: { id }
       });
       return user;
@@ -20,22 +20,22 @@ class UserService {
   }
 
   /**
- * Helper function to find to update user
+ * Helper function to find and update user
  * @returns {Promise} - sequelize response
  * @param {Integer} id - user's id
  * @param {Object} user
 */
   static async updateUser(id, user) {
     try {
-      const userToUpdate = await Users.findOne({
+      const userToUpdate = await users.findOne({
         where: { id }
       });
       if (userToUpdate) {
-        const Users = await db.Users.update(user, {
+        const newProfile = await db.users.update(user, {
           where: { id },
           returning: true
         });
-        return Users[1][0].dataValues;
+        return newProfile[1][0].dataValues;
       }
       return null;
     } catch (error) {
