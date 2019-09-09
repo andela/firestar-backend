@@ -18,6 +18,7 @@ app.enable('trust proxy');
 
 // Configure dotEnv
 dotEnv.config();
+console.log(process.env.DATABASE_URL)
 // Normal express config defaults
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
