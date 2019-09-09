@@ -1,4 +1,3 @@
-=======
 # Barefoot Nomad - Making company travel and accomodation easy and convinient.
 
 ## Vision
@@ -46,7 +45,7 @@ $ docker build -t firestar-backend .
 ```
 You can now view web in the browser.
 
-  Local:            http://localhost:4000/
+  Local:            http://localhost:4001/
 
 ```
 [![Build Status](https://travis-ci.com/andela/firestar-backend.svg?branch=stage)](https://travis-ci.com/andela/firestar-backend)    [![Coverage Status](https://coveralls.io/repos/github/andela/firestar-backend/badge.svg?branch=coveralls)](https://coveralls.io/github/andela/firestar-backend?branch=coveralls)   [![](https://img.shields.io/badge/Protected_by-Hound-a873d1.svg)](https://houndci.com)
