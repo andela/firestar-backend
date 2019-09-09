@@ -42,7 +42,6 @@ export default class UserController {
       });
       return util.send(res);
     } catch (error) {
-      console.log(error)
       if (error.original.routine === '_bt_check_unique') {
         util.setError(409, 'Email already exist');
         return util.send(res);
