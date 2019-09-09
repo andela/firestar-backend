@@ -26,6 +26,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
     "@hapi/joi": "^15.1.1",
     "@sendgrid/mail": "^6.4.0",
     "bcryptjs": "^2.4.3",
@@ -60,7 +61,6 @@
     "underscore": "^1.9.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
