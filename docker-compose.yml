@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres
+    container_name: firestar-db
+    networks:
+      - webnet
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ./pgdata:/var/
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+  server:
+    image: firestar-backend
+    build: .
+    env_file:
+      - .env
+    environment:
+      API_HOST: ${CLIENT_URL}
+      API_SERVER_PORT: ${PORT}
+      DB_HOST: db
+    restart: on-failure
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - "db"
+    links:
+      - db
+    networks:
+      - webnet
+    command: npm start
+networks:
+  webnet:
