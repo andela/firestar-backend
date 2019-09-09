@@ -10,7 +10,7 @@
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/ --fix",
     "clean": "rm -rf ./dist && mkdir dist",
     "build": "npm run clean && babel ./src -d dist",
-    "heroku-postinstall": "sequelize db:migrate:undo && sequelize db:migrate && sequelize db:seed:all",
+    "heroku-postbuild": "sequelize db:migrate:undo && sequelize db:migrate && sequelize db:seed:all",
     "start": "npm run build && node dist/index.js",
     "start:dev": "nodemon --exec babel-node -- src/index.js",
     "migrate:dev": "sequelize db:migrate",
