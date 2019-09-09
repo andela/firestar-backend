@@ -1,6 +1,6 @@
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.bulkInsert('resets', [{
+  up: (queryInterface) => queryInterface.bulkInsert('resets', [{
     email: 'youremail10@andela.com',
     resetToken: '$2a$10$Yc4fNidn3ih0Z0wRajFhq.AwneQLYR2RWWYQT7PGJdJj4UN1BGJ1K',
     createdAt: new Date(),
@@ -13,5 +13,5 @@ module.exports = {
     updatedAt: new Date()
   }], {}),
 
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('resets', null, {})
+  down: (queryInterface) => queryInterface.bulkDelete('resets', null, {})
 };

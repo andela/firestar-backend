@@ -1,6 +1,8 @@
+const dotenv = require('dotenv');
 
+dotenv.config();
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.bulkInsert('logins', [{
+  up: (queryInterface) => queryInterface.bulkInsert('logins', [{
     email: 'youremail10@andela.com',
     password: 'password',
     createdAt: new Date(),
@@ -19,5 +21,5 @@ module.exports = {
     updatedAt: new Date()
   }], {}),
 
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('logins', null, {})
+  down: (queryInterface) => queryInterface.bulkDelete('logins', null, {})
 };
