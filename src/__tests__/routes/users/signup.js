@@ -53,6 +53,7 @@ describe('SIGNUP ROUTE', () => {
         password: 'EMma8760@@',
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
+      console.log(response.body)
       token = response.body.data.token;
       tokenEmail = response.body.data.emailToken;
       UserId = response.body.data.id;
