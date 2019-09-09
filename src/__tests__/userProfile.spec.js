@@ -1,7 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import 'chai/register-should';
-
 import db from '../models';
 const { Users } = db;
 import app from '../index'
@@ -18,19 +17,6 @@ const { expect } = chai;
 const BASE_URL = '/api/v1/users';
 
 describe('User Profile Route', () => {
-  before(async () => {
-    await Users.create({ updateUser });
-    await Users.create({ updateUser2 })
-  });
-
-  after(async () => {
-    try {
-      await Users.destroy({ where: {} });
-    } catch (error) {
-      throw error
-    }
-  });
-
   describe('GET /users/:id/profile', () => {
     it('should get user details', async () => {
       const response = await chai

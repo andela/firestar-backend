@@ -33,7 +33,9 @@ export const updateUser2 = {
   countryCode: faker.address.countryCode(),
   birthdate: faker.date.past(),
   department: faker.commerce.department(),
-  lineManager: faker.name.jobType()
+  lineManager: faker.name.jobType(),
+  createdAt: faker.date.recent(),
+  updatedAt: faker.date.recent()
 }
 
 

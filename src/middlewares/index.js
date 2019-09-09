@@ -4,7 +4,7 @@ import util from '../utils/response';
 
 const Util = new util()
 dotenv.config();
-const secretKey = process.env.JWT_SECRET_KEY;
+const secretKey = process.env.JWT_SECRET;
 
 class Helper {
   /**
