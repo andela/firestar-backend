@@ -1,13 +1,20 @@
-export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('languageOptions', {
+
+module.exports = {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('logins', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    name: {
+    email: {
       type: Sequelize.STRING
+    },
+    password: {
+      type: Sequelize.STRING
+    },
+    lastLogin: {
+      type: Sequelize.DATE
     },
     createdAt: {
       allowNull: false,
@@ -19,5 +26,5 @@ export default {
     }
   }),
   // eslint-disable-next-line no-unused-vars
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('languageOptions')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('logins')
 };

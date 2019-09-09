@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Departments', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('departments', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -19,5 +19,5 @@ export default {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Departments')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('departments')
 };

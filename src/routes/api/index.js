@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import Root from '../../controllers/index';
+import users from './users';
 
 const router = Router();
-router.get('/', Root.getRoot);
+
+router.use(users);
 
 export default router;

@@ -48,28 +48,31 @@ export default {
     preferredCurrencyId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'Currencies',
+        model: 'currencies',
         key: 'id',
       }
     },
     preferredLanguageId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'LanguageOption',
+        model: 'languageOptions',
         key: 'id',
       }
     },
     departmentId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'Department',
+        model: 'departments',
         key: 'id',
       }
     },
     roleId: {
       type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 5,
+      onDelete: 'CASCADE',
       references: {
-        model: 'Role',
+        model: 'roles',
         key: 'id',
       }
     },
@@ -82,5 +85,5 @@ export default {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Users')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('users')
 };

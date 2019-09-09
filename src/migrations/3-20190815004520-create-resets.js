@@ -1,5 +1,6 @@
-export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Logins', {
+
+module.exports = {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('resets', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -8,6 +9,12 @@ export default {
     },
     email: {
       type: Sequelize.STRING
+    },
+    resetToken: {
+      type: Sequelize.STRING
+    },
+    expireTime: {
+      type: Sequelize.DATE
     },
     createdAt: {
       allowNull: false,
@@ -19,5 +26,5 @@ export default {
     }
   }),
   // eslint-disable-next-line no-unused-vars
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Logins')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('resets')
 };

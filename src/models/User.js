@@ -29,5 +29,16 @@ export default (sequelize, DataTypes) => {
       .compare(inputPassword, this.password);
     return isPasswordCorrect;
   };
+  User.associate = (models) => {
+    User.hasOne(models.Login, {
+      foreignKey: 'email',
+      onDelete: 'CASCADE',
+    });
+
+    User.hasOne(models.Reset, {
+      foreignKey: 'email',
+      onDelete: 'CASCADE',
+    });
+  };
   return User;
 };

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Currencies', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('currencies', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -19,5 +19,5 @@ export default {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Currencies')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('currencies')
 };
