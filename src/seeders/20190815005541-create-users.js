@@ -1,13 +1,13 @@
-'use strict'
-// import faker from 'faker';
 const faker = require('faker');
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('users', [{
+  // eslint-disable-next-line no-unused-vars
+  up: (queryInterface, Sequelize) => queryInterface.bulkInsert('users', [
+    {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: 'youremail10@andela.com',
+      roleId: 4,
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -15,6 +15,7 @@ module.exports = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: 'youremail20@andela.com',
+      roleId: 5,
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -22,12 +23,42 @@ module.exports = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: process.env.YOUR_EMAIL,
+      roleId: 3,
       createdAt: new Date(),
       updatedAt: new Date()
-    }], {});
-  },
+    },
+    {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      roleId: 1,
+      email: 'barefoot@gmail.com',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: 'abc123@gmail.com',
+      roleId: 2,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      roleId: 3,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      roleId: 4,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }], {}),
 
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('users', null, {});
-  }
-}
+  down: (queryInterface) => queryInterface.bulkDelete('users', null, {})
+};

@@ -7,7 +7,7 @@ export const authorization = (req, res, next) => {
   const header = req.header('Authorization');
 
   if (typeof header !== 'undefined') {
-    const token = header.split(' ')[1];
+    const [, token] = header.split(' ');
     req.token = token;
     next();
   } else {

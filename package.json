@@ -4,7 +4,6 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
-    "pretest": "npm run undo:test && npm run migrate:test",
     "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --require @babel/polyfill -r dotenv/config ./src/__tests__/index --timeout 20000 --exit",
     "coverage": "nyc report --reporter=text",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
@@ -18,6 +17,7 @@
     "migrate:prod": "cross-env NODE_ENV=production sequelize db:migrate",
     "undo:dev": "sequelize db:migrate:undo:all",
     "undo:test": "cross-env NODE_ENV=test sequelize db:migrate:undo:all",
+    "undo:prod": "cross-env NODE_ENV=prooduction sequelize db:migrate:undo",
     "seed:dev": "sequelize db:seed:all",
     "seed:test": "cross-env NODE_ENV=test sequelize db:seed:all"
   },

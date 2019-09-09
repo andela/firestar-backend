@@ -14,9 +14,10 @@ const util = new Response();
 const { users, logins, resets } = db;
 const { errorResponse, successResponse } = Response;
 
+
 /**
- * @param { class } provide response to email request.
- */
+ @description Class based Controller for Roles
+*/
 export default class UserController {
   /**
  * @param {req} req that contains the req body object.
@@ -26,6 +27,7 @@ export default class UserController {
   static async addUser(req, res) {
     const { user, emailToken } = req;
     const lastLogin = new Date();
+    // user.roleId = 5;
     try {
       const hashpassword = await hashPassword(user.password);
       user.password = hashpassword;
@@ -54,9 +56,10 @@ export default class UserController {
    * @static
    * @param {*} req
    * @param {*} res
-   * @returns Promise {UserController} A reset link for new password
+   * @returns {UserController} A reset link for new password
    * @memberof UserController
    * @returns {object} Success or failure response on adding a specific user
+   * @type {object} return an object
    */
   static async forgotPassword(req, res) {
     try {
@@ -108,7 +111,7 @@ export default class UserController {
    * @static
    * @param {*} req
    * @param {*} res
-   * @returns Promise {UserController} A new password record
+   * @returns {UserController} A new password record
    * @memberof UserController
    * @returns {object} Success or failure response on adding a specific user
    */
@@ -137,7 +140,7 @@ export default class UserController {
 
         // If reset link is valid and not expired
         const validReset = moment().isBefore(tokenExpireTime)
-          && Hash.compareWithHash(resetToken, userRequestresets.resetToken);
+          && Hash.compareWithHash(resetToken, userRequestReset.resetToken);
 
         if (validReset) {
           // Store hash of new password in login
@@ -159,6 +162,37 @@ export default class UserController {
       return errorResponse(res, 400, 'Invalid or expired reset token');
     } catch (error) {
       return errorResponse(res, 500, error);
+    }
+  }
+
+  /**
+ * @description Sets the permission for a given role to a particular resource
+ * @static
+ * @param {object} req object
+ * @param {object} res object
+ * @param {method} next method
+ * @returns { object } Sets Role for a given user
+ * @memberof Roles
+ * @type {object}
+ */
+  static async changeRole(req, res, next) {
+    const { email, roleId } = req.body;
+    try {
+      const updatedUser = await db.users.update({ roleId },
+        {
+          returning: true,
+          plain: true,
+          where: {
+            email
+          }
+        });
+      return res.status(200).json({
+        status: 'success',
+        data: updatedUser[1].dataValues
+      });
+    } catch (error) {
+      error.status = 404;
+      return next(error);
     }
   }
 }

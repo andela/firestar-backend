@@ -23,14 +23,14 @@ const seedTestDb = async () => {
     firstName: 'futhermaths',
     lastName: 'Physics',
     email: 'youremail3@andela.com',
-    role: 'passenger'
+    roleId: 5
   });
 
   await db.users.create({
     firstName: 'futhermaths',
     lastName: 'Physics',
     email: 'youremail4@andela.com',
-    role: 'passenger'
+    roleId: 5
   });
 
   await db.logins.create({
@@ -73,7 +73,9 @@ const clearTestDb = async () => {
 // clear database and seed data before test
 before(async () => {
   try {
-    await clearTestDb();
+    await db.users.sync({ force: true });
+    await db.logins.sync({ force: true });
+    await db.resets.sync({ force: true });
     await seedTestDb();
   } catch (err) {
     throw err;
@@ -114,7 +116,7 @@ describe('Forgot and Reset Password Test', () => {
         .post(`${forgotPasswordURL}`)
         .send({ email: newReset.email })
         .end(async () => {
-          expect(await resetMailStub).to.be.true;
+          expect(await resetMailStub).to.be.equal(true);
         });
     });
 
@@ -125,14 +127,13 @@ describe('Forgot and Reset Password Test', () => {
         .post(`${forgotPasswordURL}`)
         .send({ email: newReset2.email })
         .end(async (err, res) => {
-          expect(await signupMailStub).to.be.true;
+          expect(await signupMailStub).to.be.equal(true);
           expect(await signupMailStub.firstCall.args[0]).to.equal(newReset2.email);
           expect(res).to.have.status(200);
           expect(res.body.status).to.be.equal('success');
           expect(res.body.message).to.be.equal(
             'Check your mail for further instruction'
           );
-          done();
         });
     });
   });

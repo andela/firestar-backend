@@ -9,6 +9,8 @@ import { hashPassword, comparePassword } from '../../../helpers/hashpassword';
 import { validateData, signUpValidationSchema } from '../../../helpers/validation/signupValidation';
 import { jwtVerify, authorization } from '../../../middlewares/auth/auth';
 import userController from '../../../controllers/userController';
+import db from '../../../models';
+import { roles } from '../../../__mocks__/userRoles';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -23,9 +25,23 @@ let UserId;
 describe('SIGNUP ROUTE', () => {
   before(async () => {
     request = chai.request(app).keepOpen();
+    const {
+      superAdmin, travelAdmin, travelTeamMember, manager, requester
+    } = roles;
+    await db.roles.sync({ force: true });
+    await db.users.sync({ force: true });
+    await db.logins.sync({ force: true });
+    await db.roles.bulkCreate([superAdmin, travelAdmin, travelTeamMember, manager, requester]);
   });
 
-  afterEach(() => sinon.restore());
+  afterEach(async () => {
+    sinon.restore();
+  });
+  after(async () => {
+    await db.logins.destroy({ where: {} });
+    await db.users.destroy({ where: {} });
+    await db.roles.destroy({ where: {} });
+  });
 
 
   describe('SIGNUP SUCCESSFULLY', () => {
@@ -34,7 +50,7 @@ describe('SIGNUP ROUTE', () => {
         email: 'akps.i@yahoo.com',
         firstName: 'Aniefiok',
         lastName: 'Akpan',
-        password: 'EMma8760@@'
+        password: 'EMma8760@@',
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       token = response.body.data.token;

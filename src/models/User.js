@@ -19,6 +19,7 @@ const users = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      primaryKey: true
     },
     phoneNumber: {
       type: DataTypes.STRING,
@@ -28,14 +29,16 @@ const users = (sequelize, DataTypes) => {
       defaultValue: false
     },
     roleId: {
-      type: DataTypes.STRING
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 5
     },
     gender: {
       type: DataTypes.STRING,
     },
     preferredCurrency: {
       type: DataTypes.STRING,
-    },
+    }
   });
 
   User.associate = (models) => {
@@ -48,6 +51,7 @@ const users = (sequelize, DataTypes) => {
       foreignKey: 'email',
       onDelete: 'CASCADE',
     });
+    
   };
 
   return User;

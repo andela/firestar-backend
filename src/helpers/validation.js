@@ -1,10 +1,10 @@
 export default class Validation {
   static isEmpty(value) {
     return (
-      value === null ||
-      value === undefined ||
-      (typeof value === 'object' && Object.keys(value).length === 0) ||
-      (typeof value === 'string' && value.trim().length === 0)
+      value === null
+      || value === undefined
+      || (typeof value === 'object' && Object.keys(value).length === 0)
+      || (typeof value === 'string' && value.trim().length === 0)
     );
   }
 
