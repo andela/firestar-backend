@@ -17,6 +17,6 @@ module.exports = {
     operatorsAliases: false
   },
   production: {
-    use_env_variable: 'DATABASE_URI'
+    use_env_variable: 'URI'
   }
 };
