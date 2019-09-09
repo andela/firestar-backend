@@ -1,0 +1,66 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres
+<<<<<<< HEAD
+    container_name: firestar-db
+=======
+>>>>>>> 91ce023eea6cd9f5a5f98551e5e7d9640b9239d5
+    networks:
+      - webnet
+    restart: always
+    env_file:
+      - .env
+    environment:
+<<<<<<< HEAD
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_NAME}
+=======
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_DB: ${DATABASE_URL}
+>>>>>>> 91ce023eea6cd9f5a5f98551e5e7d9640b9239d5
+    volumes:
+      - ./pgdata:/var/
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+<<<<<<< HEAD
+=======
+    command: npm start
+>>>>>>> 91ce023eea6cd9f5a5f98551e5e7d9640b9239d5
+  server:
+    image: firestar-backend
+    build: .
+    env_file:
+      - .env
+    environment:
+<<<<<<< HEAD
+      API_HOST: ${CLIENT_URL}
+      API_SERVER_PORT: ${PORT}
+=======
+      API_HOST: ${API_HOST}
+      API_SERVER_PORT: ${SERVER_PORT}
+>>>>>>> 91ce023eea6cd9f5a5f98551e5e7d9640b9239d5
+      DB_HOST: db
+    restart: on-failure
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+<<<<<<< HEAD
+      - ${PORT}:${PORT}
+=======
+      - ${SERVER_PORT}:${SERVER_PORT}
+      - ${DEBUG_PORT}:${DEBUG_PORT}
+>>>>>>> 91ce023eea6cd9f5a5f98551e5e7d9640b9239d5
+    depends_on:
+      - "db"
+    links:
+      - db
+    networks:
+      - webnet
+    command: npm start
+networks:
+  webnet:
