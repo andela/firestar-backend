@@ -17,7 +17,8 @@ class userService {
   }
 
   /**
-   * @param { newUser } newUser to be added to login table.
+   * @param { email } email of newly registered to be added to login table.
+   * @param { userlogged } userlogged of newly registered to be added to login table.
  * @returns {object} containing newly added user to login table.
  */
   static async addLogin(email, userlogged) {

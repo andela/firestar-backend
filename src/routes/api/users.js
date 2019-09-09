@@ -8,7 +8,7 @@ import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/us
 import isLoggedIn from '../../middlewares/login';
 import { roleIds } from '../../helpers/default';
 import userController from '../../controllers/userController';
-import index from '../../controllers/indexController';
+import indexController from '../../controllers/indexController';
 import validate from '../../middlewares/validate';
 import { findByEmail } from '../../utils/searchDb';
 
@@ -29,10 +29,12 @@ router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
  * Simply call the authorization and jwtVerify middleware in the route you want
  * to protect
  */
-router.get('/users/myaccount', authorization, jwtVerify, index.Welcome);
+router.get('/users/myaccount', authorization, jwtVerify, indexController.Welcome);
 
 router.patch('/users/roles', [isLoggedIn, validateSetRole, permit([roleIds.superAdmin]), checkRoleConflict], userController.changeRole);
 
+router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
+router.patch('/users/roles', [isLoggedIn, validateSetRole, permit([roleIds.superAdmin]), checkRoleConflict], userController.changeRole);
 router.post('/auth/login', async (req, res, next) => {
   try {
     const user = await findByEmail(req.body.email);

@@ -13,16 +13,14 @@ chai.use(chaiHttp);
 const { assert } = chai;
 
 describe('User Role Setting', () => {
-
   before(async () => {
     const {
       superAdmin, travelAdmin, travelTeamMember, manager, requester
     } = roles;
-      await models.users.sync({ force: true });
-      await models.roles.sync({ force: true });
-      await models.users.bulkCreate([users.superAdmin, users.nonadmin]);
-     await models.roles.bulkCreate([superAdmin, travelAdmin, travelTeamMember, manager, requester]);
-   
+    await models.users.sync({ force: true });
+    await models.roles.sync({ force: true });
+    await models.users.bulkCreate([users.superAdmin, users.nonadmin]);
+    await models.roles.bulkCreate([superAdmin, travelAdmin, travelTeamMember, manager, requester]);
   });
   after(async () => {
     await models.users.destroy({ where: {} });

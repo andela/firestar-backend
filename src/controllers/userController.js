@@ -58,7 +58,6 @@ export default class UserController {
    * @param {*} res
    * @returns {UserController} A reset link for new password
    * @memberof UserController
-   * @returns {object} Success or failure response on adding a specific user
    * @type {object} return an object
    */
   static async forgotPassword(req, res) {
@@ -86,14 +85,14 @@ export default class UserController {
 
         // Generate Reset token
         const resetToken = await crypto.randomBytes(32).toString('hex');
-        newresets.resetToken = await Hash.hash(resetToken);
+        newReset.resetToken = await Hash.hash(resetToken);
 
         // Remove all reset token for this user if it exists
         await resets.destroy({
-          where: { email: newresets.dataValues.email }
+          where: { email: newReset.dataValues.email }
         });
         // console.log('newReset', newReset);
-        await newresets.save();
+        await newReset.save();
         // Send reset link to user email
         const mailSent = sendResetMail(user, resetToken);
         if (!mailSent) {
@@ -128,7 +127,7 @@ export default class UserController {
       // Find user reset request by email
       user
         ? (userRequestReset = await resets.findOne({
-          where: { email: users.email }
+          where: { email: user.email }
         }))
         : null;
 
@@ -151,10 +150,10 @@ export default class UserController {
               password: hashed,
               lastLogin: new Date()
             },
-            { where: { email: userRequestresets.email } }
+            { where: { email: userRequestReset.email } }
           );
           // Delete reset request from database
-          await resets.destroy({ where: { email: userRequestresets.email } });
+          await resets.destroy({ where: { email: userRequestReset.email } });
           return successResponse(res, 200, 'Password updated successfully');
         }
         return errorResponse(res, 400, 'Invalid or expired reset token');

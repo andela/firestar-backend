@@ -24,14 +24,14 @@ const users = (sequelize, DataTypes) => {
     phoneNumber: {
       type: DataTypes.STRING,
     },
-    isVerified: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
     roleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 5
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     gender: {
       type: DataTypes.STRING,
@@ -51,7 +51,6 @@ const users = (sequelize, DataTypes) => {
       foreignKey: 'email',
       onDelete: 'CASCADE',
     });
-    
   };
 
   return User;

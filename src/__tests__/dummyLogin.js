@@ -32,7 +32,6 @@ describe('Login', () => {
       .request(server)
       .post('/api/v1/auth/login')
       .send({ email: 'doesnotexist@gmail.com' });
-    
 
     assert.equal(res.status, 404);
   });

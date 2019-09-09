@@ -14,6 +14,7 @@ module.exports = {
         model: 'users',
         key: 'email',
       }
+
     },
     resetToken: {
       type: Sequelize.STRING
