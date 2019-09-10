@@ -10,7 +10,7 @@
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/ --fix",
     "clean": "rm -rf ./dist && mkdir dist",
     "build": "npm run clean && babel ./src -d dist",
-    "heroku-postbuild": "npm run build && npm run migrate:prod",
+    "heroku-postbuild": "npm run build && npm run undo:prod && npm run migrate:prod",
     "start": "node dist/index.js",
     "test:script": "cross-env NODE_ENV=development babel-node src/helpers/test.js",
     "start:dev": "cross-env NODE_ENV=development nodemon --exec babel-node -- src/index.js",
@@ -19,7 +19,7 @@
     "migrate:prod": "cross-env NODE_ENV=production sequelize db:migrate",
     "undo:dev": "sequelize db:migrate:undo:all",
     "undo:test": "cross-env NODE_ENV=test sequelize db:migrate:undo:all",
-    "undo:prod": "cross-env NODE_ENV=prooduction sequelize db:migrate:undo",
+    "undo:prod": "cross-env NODE_ENV=prooduction sequelize db:migrate:undo:all",
     "seed:dev": "sequelize db:seed:all",
     "seed:test": "cross-env NODE_ENV=test sequelize db:seed:all"
   },
