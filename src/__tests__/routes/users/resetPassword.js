@@ -58,9 +58,9 @@ const seedTestDb = async () => {
 // Clear tables of seed
 const clearTestDb = async () => {
   try {
-    await models.User.destroy({ where: {}, force: true });
-    await models.Login.destroy({ where: {}, force: true });
-    await models.Reset.destroy({ where: {}, force: true });
+    await models.User.sync({ force: true });
+    await models.Login.sync({ force: true });
+    await models.Reset.sync({ force: true });
   } catch (err) {
     throw err;
   }
