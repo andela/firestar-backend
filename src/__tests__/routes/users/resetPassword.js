@@ -47,7 +47,7 @@ const seedTestDb = async () => {
     email: 'youremail3@andela.com',
     expireTime: new Date(),
     resetToken: '$2a$10$Yc4fNidn3ih0Z0wRajFhq.AwneQLYR2RWWYQT7PGJdJj4UN1BGJ1K'
-  }),
+  });
 
   await db.resets.create({
     email: 'youremail4@andela.com',
