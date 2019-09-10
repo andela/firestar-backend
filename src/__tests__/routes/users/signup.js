@@ -127,6 +127,72 @@ describe('SIGNUP ROUTE', () => {
   });
 
   describe('SIGNUP NOT SUCCESSFULLY', () => {
+    it('should have a status of 400 with a message of "Email, firstname, lastname and password is required"', async () => {
+      const response = await request.post('/api/v1/users/auth/register');
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('Email, firstname, lastname and password is required');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "email is missing"', async () => {
+      const body = {
+        firstName: 'An',
+        lastName: 'Akpan',
+        password: 'EMma250@@'
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('email is missing');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "firstName is missing"', async () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        lastName: 'Akpan',
+        password: 'EMma250@@'
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('firstName is missing');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "Password is missing"', async () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        firstName: 'An',
+        lastName: 'Akpan',
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('password is missing');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "lastName is missing"', async () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        firstName: 'An',
+        password: 'EMma250@@'
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('lastName is missing');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "lastName and firstName is missing"', async () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        password: 'EMma250@@'
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('firstName and lastName is missing');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
     it('should have a status of 400 with a message of "firstname must be a minimum of 3 character and max of 30" when firstName is below two character or above 30', async () => {
       const body = {
         email: 'akps.i@yahoo.com',

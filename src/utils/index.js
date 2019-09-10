@@ -28,3 +28,22 @@ export const jwtVerifyUserToken = (token) => new Promise((resolve, reject) => {
   if (result) return resolve(result);
   if (!result) return reject(ERROR);
 });
+
+export const isEmptyBody = (object) => {
+  if (Object.keys(object).length > 0) {
+    return false;
+  }
+  return true;
+};
+export const isMissingBodyProperty = async (Body) => {
+  const requiredBodyProperty = ['email', 'firstName', 'lastName', 'password'];
+  const submittedBodyProperty = Object.keys(Body);
+  const res = await requiredBodyProperty.filter(
+    function (n) { return !this.has(n); },
+    new Set(submittedBodyProperty)
+  );
+  if (res) {
+    return res;
+  }
+  return false;
+};

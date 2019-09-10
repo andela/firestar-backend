@@ -46,6 +46,10 @@ export default class UserController {
         util.setError(409, 'Email already exist');
         return util.send(res);
       }
+      if (error.name === 'SequelizeForeignKeyConstraintError') {
+        util.setError(500, 'roles Table must be seeded with all roles value before a user can signup');
+        return util.send(res);
+      }
       util.setError(400, error);
       return util.send(res);
     }

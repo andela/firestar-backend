@@ -2,7 +2,7 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { SendVerificationEmail, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
 import { authorization, jwtVerify } from '../../middlewares/auth/auth';
-import { validationForSignUp } from '../../middlewares/validation/validation';
+import { validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty } from '../../middlewares/validation/validation';
 import emailController from '../../controllers/emailController';
 import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/users';
 import isLoggedIn from '../../middlewares/login';
@@ -20,7 +20,9 @@ const router = Router();
 
 router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationEmail, emailController.signUp);
 
-router.post('/users/auth/register', validationForSignUp, SendVerificationEmail, userController.addUser);
+router.post('/users/auth/register', ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
+
+  validationForSignUp, SendVerificationEmail, userController.addUser);
 
 router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
 
