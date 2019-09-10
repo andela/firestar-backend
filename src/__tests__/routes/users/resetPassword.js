@@ -62,9 +62,9 @@ const seedTestDb = async () => {
 // Clear tables of seed
 const clearTestDb = async () => {
   try {
-    await db.users.destroy({ where: {}, force: true });
-    await db.logins.destroy({ where: {}, force: true });
-    await db.resets.destroy({ where: {}, force: true });
+    await db.users.sync({ force: true });
+    await db.logins.sync({ force: true });
+    await db.resets.sync({ force: true });
   } catch (err) {
     throw err;
   }
