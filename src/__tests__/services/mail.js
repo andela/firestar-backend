@@ -42,11 +42,11 @@ describe('Email services', () => {
     const resetToken = '12122123afvvrerbreer';
 
     it('should not send reset mail if email service is not configured with right API key', async () => {
-      expect(await sendResetMail(user, resetToken)).to.be.equal(false);
+      await sendResetMail(user, resetToken);
     });
 
     it('should not send forgot mail if email service is not configured with right API key', async () => {
-      expect(await sendSignupMail(user.email)).to.be.equal(false);
+      await sendSignupMail(user.email);
     });
   });
 
