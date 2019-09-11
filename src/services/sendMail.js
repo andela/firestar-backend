@@ -18,7 +18,7 @@ const sendResetMail = async (user, resetToken) => {
 
   try {
     const sendMailResponse = await new Mail(emailDetails, msg).main();
-    console.log(sendMailResponse)
+    console.log(sendMailResponse);
 
     if (sendMailResponse.message) {
       return false;
