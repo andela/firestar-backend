@@ -35,7 +35,7 @@ describe('Email services', () => {
 
     const user = {
       id: 2000000,
-      email: `${process.env.YOUR_EMAIL}`,
+      email: 'akp.ania@yahoo.com',
       firstName: 'Fake',
       lastName: 'Somebody'
     };
