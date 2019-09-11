@@ -18,7 +18,7 @@ export const validateProfileData = async (req, res, next) => {
       gender: Joi.string(),
       company: Joi.string(),
       lineManager: Joi.string(),
-      birthDate: Joi.string(),
+      dateOfBirth: Joi.string(),
       department: Joi.string(),
       countryCode: Joi.string().min(2),
       preferredLanguage: Joi.string(),

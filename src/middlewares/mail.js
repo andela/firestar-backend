@@ -1,9 +1,11 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
 import { verifyEmailTemplate } from '../services/mail/template/verifyEmail';
 import { emailVerifyToken } from '../utils/index';
-import { emailRegex } from '../validation/emailValidation';
+import validation from '../helpers/validation';
 import Mail from '../services/mail/Mail';
 
+const { isValidEmail } = validation;
 
 /**
  * @param {req} req contains the express object.
@@ -20,8 +22,9 @@ export const SendVerificationEmail = async (req, res, next) => {
   /**
    * @var {id} id is the user unique id from Table column
    */
-  const id = 'some_encoded_identiity';
+  const id = req.user ? req.user.email : 'nodedeweb@yahoo.com';
   const token = await emailVerifyToken(id);
+
   const emaildDetails = {
     Subject: 'Email Verification',
     Recipient: email,
@@ -36,7 +39,6 @@ export const SendVerificationEmail = async (req, res, next) => {
     lastName,
     link,
   };
-
   try {
     const send = new Mail(emaildDetails, verifyEmailTemplate(data));
     const response = await send.main();
@@ -48,7 +50,10 @@ export const SendVerificationEmail = async (req, res, next) => {
       return res.status(403).json({ status: 403, error: response.message });
     }
     if (response.message === 'queryA ECONNREFUSED smtp.gmail.com') {
-      return res.status(409).json({ status: 409, error: response.message });
+      return res.status(511).json({ status: 511, error: 'Network error occured, please check your network' });
+    }
+    if (response.message === 'queryA EREFUSED smtp.gmail.com') {
+      return res.status(511).json({ status: 511, error: 'Network error occured, please check your network' });
     }
     if (response) {
       req.verificationMailResponse = response;
@@ -82,7 +87,7 @@ export const handleEmptyEmailBody = (req, res, next) => {
   }
 };
 export const handleInvalidEmail = (req, res, next) => {
-  const emailCheck = emailRegex(req.body.email);
+  const emailCheck = isValidEmail(req.body.email);
   if (emailCheck) {
     next();
   } else {

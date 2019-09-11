@@ -33,20 +33,20 @@ class Mail {
   }
 
   /**
- *  When sending to multiple users.
+ *  When sending to  user.
  * @returns { object } It returns either an object which
  *  contain either a success or failure mail response
  */
   async main() {
     const { subject, recipient, content } = this;
-    // create reusable transporter object using the default SMTP transport
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     const transporter = nodemailer.createTransport({
-      service: process.env.LAYER,
+      host: `${process.env.HOST_EMAIL}`,
+      port: `${process.env.PORT_EMAIL}`,
+      secure: `${process.env.SECURE_EMAIL}`,
       auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD,
-      },
+        user: `${process.env.EMAIL}`,
+        pass: `${process.env.PASSWORD_EMAIL}`
+      }
     });
 
 
@@ -66,6 +66,5 @@ class Mail {
     }
   }
 }
-
 
 export default Mail;

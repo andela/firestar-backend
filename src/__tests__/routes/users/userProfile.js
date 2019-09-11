@@ -2,12 +2,12 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import 'chai/register-should';
 
-import app from '../index'
+import app from '../../../index'
 import {
   userId, wrongId, updateUser, validToken,
   inValidToken2, inValidRequest, invalidSyntax,
   updateUser2
-} from '../__mocks__/userMock';
+} from '../../../__mocks__/userMock';
 
 chai.use(chaiHttp);
 
@@ -114,7 +114,7 @@ describe('User Profile Route', () => {
         .patch(`${BASE_URL}/${wrongId}/profile`)
         .set('token', validToken)
         .send(updateUser);
-      expect(response.status).to.equal(403);
+      expect(response.status).to.equal(401);
       expect(response.body.status).to.equal('error');
       expect(response.body.message).to.equal('Unauthorized');
     });

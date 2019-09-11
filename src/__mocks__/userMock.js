@@ -14,7 +14,7 @@ export const updateUser = {
   prefferedCurrency: faker.finance.currencyName(),
   residentialLocation: faker.address.streetAddress(),
   countryCode: faker.address.countryCode(),
-  birthdate: faker.date.past(),
+  dateOfBirth: faker.date.past(),
   department: faker.commerce.department(),
   lineManager: faker.name.jobType()
 }
@@ -31,7 +31,7 @@ export const updateUser2 = {
   prefferedCurrency: faker.finance.currencyName(),
   residentialLocation: faker.address.streetAddress(),
   countryCode: faker.address.countryCode(),
-  birthdate: faker.date.past(),
+  dateOfBirth: faker.date.past(),
   department: faker.commerce.department(),
   lineManager: faker.name.jobType(),
   createdAt: faker.date.recent(),

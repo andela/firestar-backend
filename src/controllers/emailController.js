@@ -1,7 +1,16 @@
+/* eslint-disable camelcase */
 
 /* eslint-disable import/prefer-default-export */
-import jwt from 'jsonwebtoken';
+import Jwt from 'jsonwebtoken';
 import url from 'url';
+import dotenv from 'dotenv';
+import userservices from '../services/userservice';
+import Util from '../utils/response';
+
+
+dotenv.config();
+const util = new Util();
+
 
 /**
  * @param { class } provide response to email request.
@@ -31,20 +40,20 @@ export default class emailVerificationController {
  * @param {res} res content to be rendered.
  * @returns {object} Success email response for email token sent to mail
  */
-  static confirmEmailVerificaionToken(req, res) {
+  static async confirmEmailVerificaionToken(req, res) {
     const { id } = url.parse(req.url, true).query;
-
     try {
-      jwt.verify(id, process.env.SECRET_KEY_EMAIL_VERIFY_TOKEN);
-      return res.status(200).json({
-        status: 200,
-        data: { message: 'Your Account has been successfully verified.' }
-      });
+      const decoded = await Jwt.verify(id, process.env.EMAIL_VERIFY_TOKEN_SECRET_KEY);
+      const isVerified = { isVerified: true };
+      const updateResponse = await userservices.updateUserByEmail(decoded.id, isVerified);
+      if (updateResponse.isVerified) {
+        util.setSuccess(200, 'Your account has been successfully verified');
+        return util.send(res);
+      }
     } catch (err) {
-      return res.status(400).json({
-        status: 400,
-        error: 'Sorry your account can\'t be verified because your token has an issue.'
-      });
+      util.setSuccess(400, `We are sorry, Your account cannot be verified at the moment, 
+      the link is expired, please login to your account and click resend verification mail`, err);
+      return util.send(res);
     }
   }
 }
