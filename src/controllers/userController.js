@@ -5,12 +5,12 @@ import Response from '../utils/response';
 import Hash from '../utils/hash';
 import models from '../models';
 import userService from '../services/userService';
-import { jwtSignUser, jwtVerifyUserToken } from '../utils/index';
+import { jwtSignUser } from '../utils/index';
 
 const { User, Login, Reset } = models;
 const { errorResponse, successResponse } = Response;
-const { findUserInUsersDb, findUserInLoginsDb } = userService;
-const { hash, compareWithHash } = Hash;
+const { findUserInUsersDb } = userService;
+const { compareWithHash } = Hash;
 
 
 /**
@@ -26,62 +26,51 @@ export default class UserController {
    * @returns {string} loginUsers
    */
   static async loginAUser(req, res) {
-    const { email, password } = req.body;
-    const token = req.headers.authorization || req.cookies;
     try {
-      if (token) {
-        const validToken = jwtVerifyUserToken(req.cookies.token);
-        if (validToken) {
-          return successResponse(res, 200, 'User is already logged in');
-        } else token = null;
+      const { email, password } = req.body;
+      const user = await findUserInUsersDb(email);
+      if (!user) {
+        return errorResponse(res, 404, 'You don\'t have have an account. Please signup');
       }
-      if (!token) {
-        const user = await findUserInUsersDb(email);
-        if (!user) {
-          return errorResponse(res, 404, 'You don\'t have have an account. Please signup');
-        }
 
-        if (!user.dataValues.isVerified) {
-          return errorResponse(res, 401, 'Account is not verified');
-        }
-
-        const loggedUser = await Login.findOne({ where: { email } });
-
-        if (loggedUser) {
-          const correctPassword = await compareWithHash(password, loggedUser.password)
-          if (!correctPassword) {
-            return errorResponse(res, 401, 'Email or password incorrect');
-          }
-          const loginData = {
-            email: loggedUser.email,
-            password: await hash(password),
-            lastLogin: new Date(),
-          };
-
-          const token = await jwtSignUser(loginData);
-          const isSecure = req.app.get('env') !== 'development';
-
-          // set token in browser cookie
-          res.cookie('token', loginData.token, {
-            httpOnly: true,
-            secure: isSecure,
-          });
-          
-          await userService.updateLogins(loginData);
-
-          return res.status(200).json({
-            data: {
-              token,
-              id: user.id,
-            },
-            message: 'Welcome back, your login was successful',
-          });
-        }
-        
-        return errorResponse(res, 401, 'Email or password incorrect');
+      if (!user.dataValues.isVerified) {
+        return errorResponse(res, 401, 'Account is not verified');
       }
-    } catch (error) { 
-      return errorResponse(res, 500, error) 
+
+      const loggedUser = await Login.findOne({ where: { email } });
+
+      if (loggedUser) {
+        const correctPassword = await compareWithHash(password, loggedUser.password);
+        if (!correctPassword) {
+          return errorResponse(res, 401, 'Email or password incorrect');
+        }
+        const loginData = {
+          lastLogin: new Date(),
+        };
+
+        const returnData = {
+          id: user.id,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          lastLogin: loggedUser.lastLogin
+        };
+
+        const token = await jwtSignUser({ id: user.id, email: user.email });
+
+        await userService.updateLogins(loginData);
+        return res.status(200).json({
+          data: {
+            token,
+            returnData
+          },
+          message: 'Welcome back, your login was successful',
+        });
+      }
+      return errorResponse(res, 401, 'Email or password incorrect');
+    } catch (error) {
+      return errorResponse(res, 500, error);
     }
   }
 
