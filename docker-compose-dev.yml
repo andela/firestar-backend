@@ -9,42 +9,35 @@ services:
     restart: always
     env_file:
       - .env
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: firestar_test
-      NODE_ENV: development
-      DB_HOST: localhost
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    networks:
-      - webnet
   server:
     image: firestar-backend
     container_name: firestar-server-dev
     build: .
     env_file: .env
+    environment:
+      API_HOST: ${HOST}
+      API_SERVER_PORT: 4001
+      DB_HOST: db
+      NODE_ENV: development
+      DEV_DATABASE_URL: postgres://postgres@postgres:5432/firestar_test
     restart: on-failure
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - 4001:4000
-      - 9229:9229
+      - "9229:9229"
     depends_on:
-      - db
+      - "db"
     links:
       - db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: firestar_test
-      NODE_ENV: development
-      DB_HOST: postgres
     entrypoint: ["/bin/sh", "./entrypoint.sh"]
     networks:
       - webnet
+    command: ["npm", "run", "migrate:dev", "&&", "npm", "run", "start:dev"]
 networks:
   webnet:
-volumes:
-  entrypoint.sh:
