@@ -4,7 +4,7 @@ export default (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     numberOfTimesUsed: DataTypes.INTEGER,
     address: DataTypes.STRING,
-    nameOFFacility: DataTypes.STRING,
+    nameOfFacility: DataTypes.STRING,
     imageUrl: DataTypes.STRING,
     numberOfRooms: DataTypes.INTEGER,
     officeBranchId: DataTypes.INTEGER,

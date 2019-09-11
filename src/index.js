@@ -3,9 +3,7 @@ import express from 'express';
 import errorHandler from 'errorhandler';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
-import root from './routes/api/index';
-import requests from './routes/api/requests';
-import auth from './routes/api/auth';
+import root from './routes/root';
 import routes from './routes';
 import swaggerDocument from '../swagger.json';
 
@@ -31,8 +29,7 @@ app.use(express.static(`${__dirname}/public`));
 if (!isProduction) {
   app.use(errorHandler());
 }
-app.use('/api/v1/requests', requests);
-app.use('/api/v1/auth', auth);
+
 app.use(root);
 app.use(routes);
 
@@ -64,6 +61,7 @@ if (!isProduction) {
 
 // finally, let's start our server...
 const server = app.listen(process.env.PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Listening on port ${server.address().port}`);
 });
 

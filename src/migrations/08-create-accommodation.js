@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('accommodation', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Accommodation', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -16,7 +16,7 @@ export default {
     address: {
       type: Sequelize.STRING
     },
-    nameOFFacility: {
+    nameOfFacility: {
       type: Sequelize.STRING
     },
     imageUrl: {

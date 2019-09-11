@@ -1,5 +1,5 @@
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('officeBranches', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('OfficeBranch', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -22,5 +22,5 @@ export default {
     }
   }),
   // eslint-disable-next-line no-unused-vars
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('officeBranches')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('OfficeBranch')
 };

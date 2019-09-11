@@ -1,5 +1,5 @@
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('languageOptions', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('LanguageOptions', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -19,5 +19,5 @@ export default {
     }
   }),
   // eslint-disable-next-line no-unused-vars
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('languageOptions')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('LanguageOptions')
 };

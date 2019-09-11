@@ -1,5 +1,5 @@
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('trips', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Trips', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -15,28 +15,28 @@ export default {
     requestId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'requests',
+        model: 'Requests',
         key: 'id',
       }
     },
     departureLocationId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'officeBranches',
+        model: 'OfficeBranch',
         key: 'id',
       }
     },
     destinationId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'officeBranches',
+        model: 'OfficeBranch',
         key: 'id',
       }
     },
     accommodationId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'accommodation',
+        model: 'Accommodation',
         key: 'id',
       }
     },
@@ -56,5 +56,5 @@ export default {
     }
   }),
   // eslint-disable-next-line no-unused-vars
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('trips')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('Trips')
 };

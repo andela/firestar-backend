@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('requests', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Requests', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -10,14 +10,14 @@ export default {
     requesterId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'users',
+        model: 'Users',
         key: 'id'
       }
     },
     managerId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'users',
+        model: 'Users',
         key: 'id'
       }
     },
@@ -38,5 +38,5 @@ export default {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('requests')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('Requests')
 };

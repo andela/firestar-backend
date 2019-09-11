@@ -4,7 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --require @babel/polyfill -r dotenv/config ./src/__tests__/index --timeout 20000 --exit",
+    "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --require @babel/polyfill -r dotenv/config ./src/__tests__/* --timeout 20000 --exit",
     "coverage": "nyc report --reporter=text",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/ --fix",
@@ -24,9 +24,9 @@
   "license": "MIT",
   "dependencies": {
     "@babel/register": "^7.5.5",
-    "bcrypt": "^3.0.6",
     "@hapi/joi": "^15.1.1",
     "@sendgrid/mail": "^6.4.0",
+    "bcrypt": "^3.0.6",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "core-js": "^3.2.1",
@@ -56,7 +56,8 @@
     "sequelize": "^5.15.2",
     "sequelize-cli": "^5.5.0",
     "swagger-ui-express": "^4.0.7",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",

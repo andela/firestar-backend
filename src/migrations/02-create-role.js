@@ -1,5 +1,5 @@
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('roles', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Roles', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -19,5 +19,5 @@ export default {
     }
   }),
   // eslint-disable-next-line no-unused-vars
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('roles')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('Roles')
 };

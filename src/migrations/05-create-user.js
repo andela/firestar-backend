@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('users', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Users', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -26,7 +26,8 @@ export default {
       }
     },
     password: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false,
     },
     gender: {
       type: Sequelize.STRING,
@@ -48,21 +49,21 @@ export default {
     preferredCurrencyId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'currencies',
+        model: 'Currency',
         key: 'id',
       }
     },
     preferredLanguageId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'languageOptions',
+        model: 'LanguageOptions',
         key: 'id',
       }
     },
     departmentId: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'departments',
+        model: 'Departments',
         key: 'id',
       }
     },
@@ -72,7 +73,7 @@ export default {
       defaultValue: 5,
       onDelete: 'CASCADE',
       references: {
-        model: 'roles',
+        model: 'Roles',
         key: 'id',
       }
     },
@@ -85,5 +86,5 @@ export default {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('users')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('Users')
 };
