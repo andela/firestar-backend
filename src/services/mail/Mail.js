@@ -40,12 +40,11 @@ class Mail {
   async main() {
     const { subject, recipient, content } = this;
     // create reusable transporter object using the default SMTP transport
-    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 587,
       secure: false,
-      requireTLS: true,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.PASSWORD,
