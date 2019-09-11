@@ -1,6 +1,6 @@
-import datastore from '../models';
+import models from '../models';
 
-const { users, logins } = datastore;
+const { User, Login } = models;
 /**
  * @class
  */
@@ -10,9 +10,9 @@ class userService {
    * @param {string} email
    * @returns {string} loginAUser
    */
-  static async loginAUser(email) {
+  static async findUserInUsersDb(email) {
     try {
-      const loggedUser = await users.findOne({
+      const loggedUser = await User.findOne({
         where: {
           email
         }
@@ -28,9 +28,9 @@ class userService {
    * @param {string} email
    * @returns {string} findLastLogin
    */
-  static async findLastLogin(email) {
+  static async findUserInLoginsDb(email) {
     try {
-      const lastLogin = await logins.findOne({
+      const lastLogin = await Login.findOne({
         where: {
           email
         }
@@ -46,14 +46,30 @@ class userService {
    * @param {string} addUser
    * @returns {string} addLoggedInUser
    */
-  static async addLoggedInUser(addUser) {
+  static async addUserInLogins(addUser) {
     try {
-      return await logins.create(addUser);
+      return await Login.create(addUser);
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  /**
+   * @static
+   * @param {string} addUser
+   * @returns {string} addLoggedInUser
+   */
+  static async updateLogins(addUser) {
+    try {
+      return await Login.update({
+        where: {
+          email: addUser.email
+        }
+      });
     } catch (error) {
       return error.message;
     }
   }
 }
-
 
 export default userService;

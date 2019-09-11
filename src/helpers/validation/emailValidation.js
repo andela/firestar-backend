@@ -1,6 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-
-import { regexForEmail } from '../helpers/default';
+import { regexForEmail } from '../default';
 
 export const emailRegex = (email) => {
   const Regex = regexForEmail;

@@ -1,18 +1,19 @@
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+import fs from 'fs';
+import path from 'path';
+
 const basename = path.basename(__filename);
+const models = {};
+
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.js')[env];
-const db = {};
+// eslint-disable-next-line import/no-dynamic-require
+const config = require(`${__dirname}/../config/config.js`)[env];
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+const sequelize = config.use_env_variable
+  ? new Sequelize(process.env[config.use_env_variable], config)
+  : new Sequelize(config.database, config.username, config.password, config);
 
+// Import the models
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -20,16 +21,17 @@ fs
   })
   .forEach(file => {
     const model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
+    const modelName = model.name.charAt(0).toUpperCase() + model.name.slice(1);
+    models[modelName] = model;
   });
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+// and combine those models and resolve their associations using the Sequelize API
+Object.keys(models).forEach((key) => {
+  if ('associate' in models[key]) {
+    models[key].associate(models);
   }
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+export { sequelize };
 
-module.exports = db;
+export default models;

@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
-import app from '../index';
+import app from '../../index';
 
 chai.use(chaiHttp);
 let request;
@@ -21,7 +21,7 @@ describe('EMAIL ROUTE', () => {
       const response = await request.post('/');
 
       expect(response.status).to.equal(404);
-      expect(response.body.errors.message).to.equal('Not Found');
+      expect(response.body.message).to.equal('Not Found');
     });
   });
 });

@@ -1,4 +1,3 @@
-
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('users', {
     id: {
@@ -7,29 +6,36 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    username: {
-      type: Sequelize.STRING
-    },
     firstName: {
       type: Sequelize.STRING
     },
     lastName: {
       type: Sequelize.STRING
     },
+    username: {
+      type: Sequelize.STRING
+    },
     email: {
       type: Sequelize.STRING
     },
-    password: {
+    phoneNumber: {
       type: Sequelize.STRING
-    },
-    isVerified: {
-      type: Sequelize.BOOLEAN
-    },
-    roleId: {
-      type: Sequelize.INTEGER
     },
     gender: {
       type: Sequelize.STRING
+    },
+    roleId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 5,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'roles',
+        key: 'id',
+      }
+    },
+    isVerified: {
+      type: Sequelize.BOOLEAN
     },
     dateOfBirth: {
       type: Sequelize.DATE
@@ -40,11 +46,11 @@ module.exports = {
     preferredCurrency: {
       type: Sequelize.STRING
     },
-    residetialLocation: {
+    residentialLocation: {
       type: Sequelize.STRING
     },
-    department: {
-      type: Sequelize.STRING
+    departmentId: {
+      type: Sequelize.INTEGER
     },
     saveProfile: {
       type: Sequelize.BOOLEAN
@@ -61,5 +67,5 @@ module.exports = {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('users')
+  down: (queryInterface) => queryInterface.dropTable('users')
 };

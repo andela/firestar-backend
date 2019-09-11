@@ -1,22 +1,30 @@
-module.exports = (sequelize, DataTypes) => {
-  const users = sequelize.define('users', {
+const users = (sequelize, DataTypes) => {
+  const User = sequelize.define('user', {
+    id: {
+      type: DataTypes.INTEGER,
+      unique: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
     username: {
       type: DataTypes.STRING,
-    },
-    firstName: {
-      type: DataTypes.STRING,
-    },
-    lastName: {
-      type: DataTypes.STRING,
+      unique: true,
     },
     email: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      validate: {
+        notEmpty: true,
+        isEmail: true
+      }
     },
-    password: {
+    phoneNumber: {
       type: DataTypes.STRING,
+      unique: true
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
@@ -24,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     roleId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
     },
     gender: {
       type: DataTypes.STRING,
@@ -42,13 +49,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    residetialLocation: {
+    residentialLocation: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    department: {
-      type: DataTypes.STRING,
-      allowNull: true,
+    departmentId: {
+      type: DataTypes.INTEGER,
     },
     saveProfile: {
       type: DataTypes.BOOLEAN,
@@ -58,12 +64,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     }
-  }, {});
-  users.associate = (models) => {
-    users.hasOne(models.logins, {
+  });
+
+  User.associate = (models) => {
+    User.hasOne(models.Login, {
+      foreignKey: 'email',
+      onDelete: 'CASCADE',
+    });
+
+    User.hasOne(models.Reset, {
       foreignKey: 'email',
       onDelete: 'CASCADE',
     });
   };
-  return users;
+
+  return User;
 };
+
+export default users;
