@@ -70,14 +70,14 @@ describe('Email services', () => {
         throw err;
       }
     });
-    afterEach(() => sinon.restore());
 
+    afterEach(() => sinon.restore());
     it('should send reset mail if email service is configured with right API key', async () => {
-      expect(await sendResetMail(user, resetToken)).to.be.equal(true);
+      expect(await sendResetMail(newReset, newReset.resetToken)).to.be.equal(true);
     });
 
     it('should send signup mail if email service is configured with right API key', async () => {
-      expect(await sendSignupMail(user.email)).to.be.equal(true);
+      expect(await sendSignupMail(newReset.email)).to.be.equal(true);
     });
   });
 });
