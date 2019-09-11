@@ -1,14 +1,12 @@
 # Use Node v10 installed in a alpine Linux image
 FROM node:12-alpine as builder
-COPY init.sql /docker-entrypoint-initdb.d/
-
-RUN apk update && apk add \
-    curl \
-    git
+ADD docker-entrypoint.sh /docker-entrypoint-initdb.d/
 
 # Set development as default environment
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
+ENV POSTGRES_DB=firestar_test
+ENV POSTGRES_USER=postgres
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -23,10 +21,8 @@ RUN npm install
 
 # Bundle app source
 COPY . .
-COPY ormconfig.docker.json ./ormconfig.json
 
 # entrypoint script to initialize container data at runtime
-COPY ./docker-entrypoint.sh /
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
@@ -34,7 +30,7 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 # RUN npm run build
 RUN npm run build
 
-# Expose 4000 ports of the Dockerized app to localhost
+# Expose 4001 ports of the Dockerized app to localhost
 EXPOSE 4001
 
 # Run the start script
