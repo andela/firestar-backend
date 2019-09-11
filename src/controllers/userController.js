@@ -132,7 +132,6 @@ export default class UserController {
         }))
         : null;
 
-        console.log(userRequestReset);
 
       // Check if user has requested password reset
       if (user && userRequestReset) {
