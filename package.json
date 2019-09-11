@@ -10,7 +10,7 @@
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/ --fix",
     "clean": "rm -rf ./dist && mkdir dist",
     "build": "npm run clean && babel ./src -d dist",
-    "heroku-postbuild": "npm run build && npm run migrate:prod",
+    "heroku-postbuild": "npm run build && npm run undo:prod && npm run migrate:prod",
     "start": "node dist/index.js",
     "test:script": "cross-env NODE_ENV=development babel-node src/helpers/test.js",
     "start:dev": "cross-env NODE_ENV=development nodemon --exec babel-node -- src/index.js",
