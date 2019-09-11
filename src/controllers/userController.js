@@ -208,6 +208,7 @@ export default class UserController {
    * @description get details of registered user
    */
   static async getUserProfile(req, res) {
+
     const { id } = req.params;
     try {
       const user = await findUserById(id);
@@ -238,27 +239,29 @@ export default class UserController {
   */
   static async updateUserProfile(req, res) {
     const { id } = req.params;
-    if (req.user.id !== id) {
+
+    if (req.result.id !== id) {
       util.setError(403, 'Unauthorized')
       return util.send(res)
     }
 
     const {
-      firstName, lastName, dateOfBirth, preferredLanguage,
+      firstName, lastName, username, dateOfBirth, preferredLanguage,
       preferredCurrency, gender, company, lineManager,
-      residentialLocation, countryCode, department
+      residentialLocation, countryCode, department, phoneNumber
     } = req.body;
 
     try {
       const userDetails = {
-        firstName, lastName, dateOfBirth, preferredLanguage,
+        firstName, lastName, username, dateOfBirth, preferredLanguage,
         preferredCurrency, gender, company, lineManager,
-        residentialLocation, countryCode, department
+        residentialLocation, countryCode, department, phoneNumber
       };
       const updatedUser = await updateUser(id, userDetails);
 
       delete updatedUser.saveProfile
       delete updatedUser.isVerified
+
       util.setSuccess(
         201,
         'You ve successfully updated your profile',

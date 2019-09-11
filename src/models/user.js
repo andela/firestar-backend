@@ -31,7 +31,7 @@ const users = (sequelize, DataTypes) => {
       defaultValue: false
     },
     dateOfBirth: {
-      type: DataTypes.INTEGER
+      type: DataTypes.DATE
     },
     preferredLanguage: {
       type: DataTypes.STRING

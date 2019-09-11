@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken';
 import { SendVerificationEmail, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
 import { authorization, jwtVerify } from '../../middlewares/auth/auth';
 import {
-  validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty, EmptySignUpBodyPropertyValue
+  validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty, EmptySignUpBodyPropertyValue,
+  validateProfileData
 } from '../../middlewares/validation/validation';
 import emailController from '../../controllers/emailController';
 import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/users';
@@ -13,16 +14,14 @@ import userController from '../../controllers/userController';
 import indexController from '../../controllers/indexController';
 import validate from '../../middlewares/validate';
 import { findByEmail } from '../../utils/searchDb';
-import Helper from '../../middlewares/index'
-import { validateProfileData } from '../../validation/userValidation'
 
 const { forgotPasswordCheck, resetPasswordCheck } = validate;
-const { forgotPassword, resetPassword } = userController;
+const { forgotPassword, resetPassword, getUserProfile, updateUserProfile } = userController;
 
 const router = Router();
 
-router.get('/users/:id/profile', userController.getUserProfile);
-router.patch('/users/:id/profile', validateProfileData, Helper.verifyToken, userController.updateUserProfile);
+router.get('/users/:id/profile', getUserProfile);
+router.patch('/users/:id/profile', validateProfileData, authorization, jwtVerify, updateUserProfile);
 
 router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationEmail, emailController.signUp);
 
