@@ -3,6 +3,7 @@ module.exports = {
     id: {
       allowNull: false,
       autoIncrement: true,
+      unique: true,
       primaryKey: true,
       type: Sequelize.INTEGER
     },
@@ -13,7 +14,10 @@ module.exports = {
       type: Sequelize.STRING
     },
     email: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      unique: true,
+      primaryKey: true,
+      allowNull: false
     },
     phoneNumber: {
       type: Sequelize.STRING

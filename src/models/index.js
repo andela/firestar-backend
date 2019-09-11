@@ -12,7 +12,11 @@ const models = {
   User: sequelize.import('./user.js'),
   Login: sequelize.import('./login.js'),
   Reset: sequelize.import('./reset.js'),
-  Role: sequelize.import('./role.js')
+  Role: sequelize.import('./role.js'),
+  Request: sequelize.import('./request.js'),
+  Trip: sequelize.import('./trip.js'),
+  Accommodation: sequelize.import('./accommodation.js'),
+  Department: sequelize.import('./department.js')
 };
 
 // and combine those models and resolve their associations using the Sequelize API

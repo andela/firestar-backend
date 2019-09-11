@@ -1,4 +1,12 @@
+/**
+ * @description Validation class
+ */
 export default class Validation {
+  /**
+   * @description Checks if an object is empty
+   * @param {object} value
+   * @returns {boolean} returns true or false
+   */
   static isEmpty(value) {
     return (
       value === null
@@ -7,7 +15,11 @@ export default class Validation {
       || (typeof value === 'string' && value.trim().length === 0)
     );
   }
-
+/**
+ * @description Checks if an email is valid
+ * @param {object} email
+ * @returns {boolean} returns true or false
+ */
   static isValidEmail(email) {
     const re = /^\S+@\S+[\.][0-9a-z]+$/;
     return re.test(email);

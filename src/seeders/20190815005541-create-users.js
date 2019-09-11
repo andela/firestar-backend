@@ -46,15 +46,15 @@ module.exports = {
     {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      email: faker.internet.email(),
-      roleId: 3,
+      email: 'barefoot1@gmail.com',
+      roleId: 4,
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      email: faker.internet.email(),
+      email: 'barefoot2@gmail.com',
       roleId: 4,
       createdAt: new Date(),
       updatedAt: new Date()
