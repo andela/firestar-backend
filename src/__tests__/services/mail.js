@@ -24,11 +24,11 @@ describe('Email services', () => {
 
     it('should not send reset mail if email is not provided', async () => {
       expect(await sendResetMail(user, resetToken)).to.be.equal(false);
-    });
+    }).timeout(0);
 
     it('should not send forgot mail if email is not provided', async () => {
       expect(await sendSignupMail(user.email)).to.be.equal(false);
-    });
+    }).timeout(0);
   });
 
   describe('Should send reset mail', async () => {
@@ -43,10 +43,10 @@ describe('Email services', () => {
 
     it('should send reset mail if email service is configured with proper information', async () => {
       expect(await sendResetMail(user, resetToken)).to.be.equal(true);
-    });
+    }).timeout(0);
 
     it('should send signup mail if email service is configured with proper information', async () => {
       expect(await sendSignupMail(user.email)).to.be.equal(true);
-    });
+    }).timeout(0);
   });
 });
