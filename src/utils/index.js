@@ -67,7 +67,12 @@ export const isMissingBodyPropertyValue = (object) => {
   const arrayProperty = [];
   for (const key in object) {
     object[key].trim();
-    if (whiteSpaceRegex.test(object[key]) || object[key].length < 1) {
+    if (whiteSpaceRegex.test(object[key])) {
+      if (object[key].trim().length <= 0) {
+        arrayProperty.push(key);
+      }
+    }
+    if (!object[key]) {
       arrayProperty.push(key);
     }
   }

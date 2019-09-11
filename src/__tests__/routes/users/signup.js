@@ -268,6 +268,19 @@ describe('SIGNUP ROUTE', () => {
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
+    it('should have a status of 400 with a message of "lastName field cannot be Empty"', async () => {
+      const body = {
+        email: '   hghhg',
+        password: 'ghghg  ',
+        firstName: 'bb',
+        lastName: '   '
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('lastName field cannot be Empty');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
     it('should have a status of 400 with a message of "email, password, firstName and lastName field cannot be Empty"', async () => {
       const body = {
         email: '',
