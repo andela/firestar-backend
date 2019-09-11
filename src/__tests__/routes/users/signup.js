@@ -61,15 +61,6 @@ describe('SIGNUP ROUTE', () => {
     }).timeout(0);
   });
 
-  describe('ACCOUNT VERIFICATION DURING SIGNUP', () => {
-    it('should have a status of 200 when user verify is account', async () => {
-      const id = tokenEmail;
-      const response = await request.get(`/api/v1/users/email/verify?id=${id}`);
-      expect(response.status).to.equal(200);
-      expect(response.body).to.be.a('object');
-    }).timeout(0);
-  });
-
   describe('JWT VERIFY SIGNUP TOKEN', () => {
     it('should verify token', async () => {
       const response = await jwtVerifyUserToken(token);

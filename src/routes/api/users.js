@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
-import { SendVerificationEmail, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
+import { SendVerificationToken, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
 import { authorization, jwtVerify } from '../../middlewares/auth/auth';
 import {
- validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty, EmptySignUpBodyPropertyValue 
+  validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
+  EmptySignUpBodyPropertyValue
 } from '../../middlewares/validation/validation';
 import emailController from '../../controllers/emailController';
 import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/users';
@@ -20,11 +21,12 @@ const { forgotPassword, resetPassword } = userController;
 
 const router = Router();
 
-router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationEmail, emailController.signUp);
+router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationToken,
+  emailController.signUp);
 
 router.post('/users/auth/register', ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
 
-  EmptySignUpBodyPropertyValue, validationForSignUp, SendVerificationEmail, userController.addUser);
+  EmptySignUpBodyPropertyValue, validationForSignUp, SendVerificationToken, userController.addUser);
 
 router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
 
