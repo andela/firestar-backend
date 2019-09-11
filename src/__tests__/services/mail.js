@@ -35,7 +35,7 @@ describe('Email services', () => {
 
     const user = {
       id: 2000000,
-      email: 'akp.ania@yahoo.com',
+      email: 'akp.ani@yahoo.com',
       firstName: 'Fake',
       lastName: 'Somebody'
     };
