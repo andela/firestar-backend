@@ -33,7 +33,7 @@ class Mail {
   }
 
   /**
- *  When sending to multiple users.
+ *  When sending to  user.
  * @returns { object } It returns either an object which
  *  contain either a success or failure mail response
  */

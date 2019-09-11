@@ -134,7 +134,7 @@ describe('SIGNUP ROUTE', () => {
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
-    it('should have a status of 400 with a message of "email is missing"', async () => {
+    it('should have a status of 400 with a message of "email field is missing"', async () => {
       const body = {
         firstName: 'An',
         lastName: 'Akpan',
@@ -142,7 +142,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('email is missing');
+      expect(response.body.message).to.equal('email field is missing');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -154,7 +154,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName is missing');
+      expect(response.body.message).to.equal('firstName field is missing');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -166,7 +166,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('password is missing');
+      expect(response.body.message).to.equal('password field is missing');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -178,7 +178,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('lastName is missing');
+      expect(response.body.message).to.equal('lastName field is missing');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -189,7 +189,95 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName and lastName is missing');
+      expect(response.body.message).to.equal('firstName and lastName field is missing');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "lastName, firstName and password field is missing"', async () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('firstName , lastName and password field is missing');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "lastName and firstName field cannot be Empty"', async () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        password: 'EMma250@@',
+        firstName: '',
+        lastName: ''
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('firstName and lastName field cannot be Empty');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "lastName field cannot be Empty"', async () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        password: 'EMma250@@',
+        firstName: 'dsd',
+        lastName: ''
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('lastName field cannot be Empty');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "password field cannot be Empty"', async () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        password: '',
+        firstName: 'dsd',
+        lastName: 'xfd'
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('password field cannot be Empty');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "email field cannot be Empty"', async () => {
+      const body = {
+        email: '',
+        password: 'dd',
+        firstName: 'dsd',
+        lastName: 'xfd'
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('email field cannot be Empty');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "email, password and firstName field cannot be Empty"', async () => {
+      const body = {
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: 'xfd'
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('email , password and firstName field cannot be Empty');
+      expect(response.body).to.be.a('object');
+    }).timeout(0);
+
+    it('should have a status of 400 with a message of "email, password, firstName and lastName field cannot be Empty"', async () => {
+      const body = {
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: ''
+      };
+      const response = await request.post('/api/v1/users/auth/register').send(body);
+      expect(response.status).to.equal(400);
+      expect(response.body.message).to.equal('email , password , firstName and lastName field cannot be Empty');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 

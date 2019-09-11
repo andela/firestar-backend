@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
@@ -29,21 +31,45 @@ export const jwtVerifyUserToken = (token) => new Promise((resolve, reject) => {
   if (!result) return reject(ERROR);
 });
 
+/**
+ * @param {object} object This is the obeject to check if it is empty.
+ * @return {boolean} returns true or false depending if the body is empty or not.
+ */
 export const isEmptyBody = (object) => {
   if (Object.keys(object).length > 0) {
     return false;
   }
   return true;
 };
-export const isMissingBodyProperty = async (Body) => {
+
+/**
+ * @param {object} object This is the obeject to check if it has property in it.
+ * @return {Array} returns an array of mismatch property.
+ */
+export const isMissingBodyProperty = (object) => {
   const requiredBodyProperty = ['email', 'firstName', 'lastName', 'password'];
-  const submittedBodyProperty = Object.keys(Body);
-  const res = await requiredBodyProperty.filter(
-    function (n) { return !this.has(n); },
-    new Set(submittedBodyProperty)
-  );
+  const submittedBodyProperty = Object.keys(object);
+  const res = requiredBodyProperty.filter(function (n) {
+    return !this.has(n);
+  }, new Set(submittedBodyProperty));
   if (res) {
     return res;
   }
   return false;
+};
+
+/**
+ * @param {object} object This is the obeject to check if it has property in it.
+ * @return {Array} returns an array of mismatch property value.
+ */
+export const isMissingBodyPropertyValue = (object) => {
+  const whiteSpaceRegex = /\s/g;
+  const arrayProperty = [];
+  for (const key in object) {
+    object[key].trim();
+    if (whiteSpaceRegex.test(object[key]) || object[key].length < 1) {
+      arrayProperty.push(key);
+    }
+  }
+  return arrayProperty;
 };
