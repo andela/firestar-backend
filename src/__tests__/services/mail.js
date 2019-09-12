@@ -6,6 +6,7 @@ import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 import { sendResetMail, sendSignupMail } from '../../services/sendMail';
 
+
 dotenv.config();
 
 const apiKey = process.env.SENDGRID_API_KEY;
