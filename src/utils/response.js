@@ -31,7 +31,7 @@ export default class Response {
 
 	  static successResponse(res, statusCode, msg) {
     return res.status(statusCode).json({
-		  status: 'success',
+		  success: true,
 		  message: msg
     });
 	  }

@@ -6,6 +6,5 @@ const router = Router();
 
 
 router.post('/requests', [validateRequestInput, validateTripData, validateTripInput], requestController.createTrip);
-router.get('/requests', requestController.getRequest);
 
 export default router;

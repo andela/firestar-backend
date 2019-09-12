@@ -6,11 +6,11 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    to: {
+    destinationLocationId: {
       type: Sequelize.INTEGER,
       allowNull: false
     },
-    from: {
+    departureLocationId: {
       type: Sequelize.INTEGER,
       allowNull: false
     },
@@ -30,7 +30,7 @@ module.exports = {
         key: 'id'
       }
     },
-    tripDate: {
+    departureDate: {
       type: Sequelize.DATE,
       allowNull: false,
     },

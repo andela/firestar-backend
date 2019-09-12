@@ -1,12 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
   const department = sequelize.define('departments', {
     name: DataTypes.STRING,
-    managerId: DataTypes.STRING
+    managerId: DataTypes.INTEGER
   }, {});
   department.associate = (models) => {
     department.belongsTo(models.users, {
       foreignKey: 'managerId',
-      as: 'manager'
+      as: 'manager',
+      key: 'id'
     });
   };
   return department;

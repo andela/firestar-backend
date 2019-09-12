@@ -10,11 +10,11 @@ module.exports = {
       type: Sequelize.STRING
     },
     managerId: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
-        key: 'email',
+        key: 'id',
         as: 'manager'
       }
     },

@@ -1,10 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
   const request = sequelize.define('requests', {
-    tripType: DataTypes.STRING,
+    tripType: DataTypes.ENUM(['oneWay', 'return', 'multiCity']),
     requesterId: DataTypes.STRING,
     reason: DataTypes.STRING,
-    managerId: DataTypes.STRING,
-    departmentId: DataTypes.INTEGER
+    managerId: DataTypes.INTEGER,
+    departmentId: DataTypes.INTEGER,
+    status: DataTypes.ENUM(['open', 'approved', 'rejected'])
   }, {});
   request.associate = (models) => {
     request.hasMany(models.trips, {
@@ -15,13 +16,17 @@ module.exports = (sequelize, DataTypes) => {
     request.belongsTo(models.users, {
       foreignKey: {
         name: 'requesterId',
-        allowNull: false
+        allowNull: false,
+        key: 'id',
+        as: 'requester'
       }
     });
     request.belongsTo(models.users, {
       foreignKey: {
         name: 'managerId',
-        allowNull: false
+        allowNull: false,
+        key: 'id',
+        as: 'manager'
       }
     });
     request.belongsTo(models.departments, {

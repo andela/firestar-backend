@@ -12,11 +12,12 @@ module.exports = {
       allowNull: false,
     },
     requesterId: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
-        key: 'email'
+        key: 'id',
+        as: 'requester'
       }
     },
     reason: {
@@ -32,11 +33,12 @@ module.exports = {
       }
     },
     managerId: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
-        key: 'email'
+        key: 'id',
+        as: 'manager'
       }
     },
     status: {

@@ -1,10 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const trip = sequelize.define('trips', {
-    to: DataTypes.INTEGER,
-    from: DataTypes.INTEGER,
+    destinationLocationId: DataTypes.INTEGER,
+    departureLocationId: DataTypes.INTEGER,
     accommodationId: DataTypes.INTEGER,
     requestId: DataTypes.INTEGER,
-    tripDate: DataTypes.DATE
+    departureDate: DataTypes.DATE
   }, {});
   trip.associate = (models) => {
     trip.belongsTo(models.accommodations, {

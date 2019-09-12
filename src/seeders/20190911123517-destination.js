@@ -24,6 +24,14 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date()
     },
+    {
+      name: 'Mount Will',
+      country: 'Tanzania',
+      city: 'unknown',
+      address: 'unknown',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
   ], {}),
 
   down: (queryInterface) => queryInterface.bulkDelete('destinations', null, {})

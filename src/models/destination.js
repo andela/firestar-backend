@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   destination.associate = (models) => {
     destination.hasMany(models.trips, {
-      foreignKey: 'to'
+      foreignKey: 'destinationLocationId'
     });
     destination.hasMany(models.trips, {
-      foreignKey: 'from'
+      foreignKey: 'departureLocationId'
     });
   };
   return destination;

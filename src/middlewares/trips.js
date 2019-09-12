@@ -22,8 +22,8 @@ export const validateTripData = async (req, res, next) => {
   try {
     const validatedData = req.body.trips.map(async (trip, index) => {
       await checkIfExistsInDb(models.accommodations, trip.accommodationId, `The accommodation in trip ${index + 1} does not exist`);
-      await checkIfExistsInDb(models.destinations, trip.to, `Trip ${index + 1} destination does not exist`);
-      await checkIfExistsInDb(models.destinations, trip.from, `Trip ${index + 1} departure location does not exist`);
+      await checkIfExistsInDb(models.destinations, trip.destinationLocationId, `Trip ${index + 1} destination does not exist`);
+      await checkIfExistsInDb(models.destinations, trip.departureLocationId, `Trip ${index + 1} departure location does not exist`);
       return trip;
     });
     await Promise.all(validatedData);
@@ -41,12 +41,10 @@ export const validateTripData = async (req, res, next) => {
 };
 
 export const validateTripInput = async (req, res, next) => {
-  req.id = req.body.userId;
-
   try {
     const foundRequest = await models.requests.findOne({
       where: {
-        requesterId: req.id,
+        requesterId: 50,
         status: 'open'
       }
     });

@@ -1,25 +1,25 @@
 module.exports = {
   up: (queryInterface) => queryInterface.bulkInsert('departments', [{
     name: 'IT',
-    managerId: 'barefoot1@gmail.com',
+    managerId: 1,
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     name: 'ACCOUNTS',
-    managerId: 'barefoot2@gmail.com',
+    managerId: 2,
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     name: 'ADMINISTARTION',
-    managerId: 'youremail10@andela.com',
+    managerId: 3,
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     name: 'HUMAN RESOURCES',
-    managerId: 'youremail20@andela.com',
+    managerId: 4,
     createdAt: new Date(),
     updatedAt: new Date()
   }], {}),
