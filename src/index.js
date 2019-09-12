@@ -32,10 +32,8 @@ if (!isProduction) {
 app.use(routes);
 
 // / catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use('*', (req, res) => {
+  res.status(404).json({ status: 404, message: 'That routes is not a known route' });
 });
 
 

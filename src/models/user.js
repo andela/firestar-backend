@@ -1,30 +1,31 @@
 const users = (sequelize, DataTypes) => {
-  const User = sequelize.define('user', {
+  const User = sequelize.define('users', {
     id: {
       type: DataTypes.INTEGER,
       unique: true,
+      primaryKey: true,
       allowNull: false,
       autoIncrement: true,
     },
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
     username: {
       type: DataTypes.STRING,
       unique: true,
+    firstName: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    lastName: {
+      allowNull: false,
+      type: DataTypes.STRING
     },
     email: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
-      primaryKey: true,
-      validate: {
-        notEmpty: true,
-        isEmail: true
-      }
+      primaryKey: true
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      unique: true
     },
     isVerified: {
       type: DataTypes.BOOLEAN,
@@ -32,47 +33,28 @@ const users = (sequelize, DataTypes) => {
     },
     roleId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 5
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     gender: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
-    dateOfBirth: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    preferredLanguage: {
-      type: DataTypes.DATE,
-      allowNull: true,
     },
     preferredCurrency: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    residentialLocation: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
-    departmentId: {
-      type: DataTypes.INTEGER,
-    },
-    saveProfile: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    countryCode: {
-      type: DataTypes.STRING,
-      allowNull: true,
     }
   });
 
   User.associate = (models) => {
-    User.hasOne(models.Login, {
+    User.hasOne(models.logins, {
       foreignKey: 'email',
       onDelete: 'CASCADE',
     });
 
-    User.hasOne(models.Reset, {
+    User.hasOne(models.resets, {
       foreignKey: 'email',
       onDelete: 'CASCADE',
     });
