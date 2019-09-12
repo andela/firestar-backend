@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '../../../index';
 
-import { jwtVerifyUserToken } from '../../../utils/index';
+import { jwtVerifyUserToken, emailVerifyToken } from '../../../utils/index';
 import { hashPassword, comparePassword } from '../../../helpers/hashpassword';
 import { validateData, signUpValidationSchema } from '../../../helpers/validation/signupValidation';
 import { jwtVerify, authorization } from '../../../middlewares/auth/auth';
@@ -54,8 +54,9 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       token = response.body.data.token;
-      tokenEmail = response.body.data.emailToken;
-      UserId = response.body.data.id;
+      const verifyTokenForUser = await jwtVerifyUserToken(token);
+      tokenEmail = await emailVerifyToken(token);
+      UserId = verifyTokenForUser.id;
       expect(response.status).to.equal(201);
       expect(response.body).to.be.a('object');
     }).timeout(0);

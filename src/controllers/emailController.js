@@ -50,8 +50,7 @@ export default class emailVerificationController {
         return util.send(res);
       }
     } catch (err) {
-      util.setSuccess(400, `We are sorry, Your account cannot be verified at the moment, 
-      the link is expired, please login to your account and click resend verification mail`, err);
+      util.setError(400, 'Invalid or expired verification link', err);
       return util.send(res);
     }
   }

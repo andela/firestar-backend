@@ -24,7 +24,7 @@ export default class UserController {
  * @returns {object} Success or failure response on adding a specific user
  */
   static async addUser(req, res) {
-    const { user, emailToken } = req;
+    const { user } = req;
     const lastLogin = new Date();
     // user.roleId = 5;
     try {
@@ -35,10 +35,10 @@ export default class UserController {
       } = await userService.addUser(user);
       const newLoggedDetails = { email, password: user.password, lastLogin };
       await userService.addLogin(email, newLoggedDetails);
-      const token = await jwtSignUser(id);
-      util.setSuccess(201, 'user Added!', {
-        token, emailToken, id, email, firstName, lastName,
+      const token = await jwtSignUser({
+        id, email, firstName, lastName
       });
+      util.setSuccess(201, 'Successfully signed up', { token });
       return util.send(res);
     } catch (error) {
       if (error.original.routine === '_bt_check_unique') {
@@ -46,10 +46,10 @@ export default class UserController {
         return util.send(res);
       }
       if (error.name === 'SequelizeForeignKeyConstraintError') {
-        util.setError(500, 'roles Table must be seeded with all roles value before a user can signup');
+        util.setError(500, 'Internal server error');
         return util.send(res);
       }
-      util.setError(400, error);
+      util.setError(500, error);
       return util.send(res);
     }
   }

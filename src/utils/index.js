@@ -17,8 +17,8 @@ export const emailVerifyToken = (id) => new Promise((resolve) => {
  * @param {id} id of newly registered user from the user Table.
  * @return {string} generated token that is a string data type.
  */
-export const jwtSignUser = (id) => new Promise((resolve, reject) => {
-  const token = jwt.sign({ id }, process.env.SECRET_KEY_SIGN_UP);
+export const jwtSignUser = (user) => new Promise((resolve, reject) => {
+  const token = jwt.sign({ user }, process.env.SECRET_KEY_SIGN_UP);
   if (token) return resolve(token);
   const ERROR = 'Token cannot be assigned because your secret key is has an issue';
   if (!token) return reject(ERROR);
