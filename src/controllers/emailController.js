@@ -22,15 +22,14 @@ export default class emailVerificationController {
  * @returns {object} Success email response for email token sent to mail
  */
   static signUp(req, res) {
-    const { verificationMailResponse, emailToken } = req;
+    const { emailToken } = req;
 
     return res.status(200).json({
       status: 200,
       data: {
         token: emailToken,
         message:
-        'Message successfully sent, please check your email',
-        verificationMailResponse
+          'Message successfully sent, please check your email'
       }
     });
   }
@@ -51,8 +50,7 @@ export default class emailVerificationController {
         return util.send(res);
       }
     } catch (err) {
-      util.setSuccess(400, `We are sorry, Your account cannot be verified at the moment, 
-      the link is expired, please login to your account and click resend verification mail`, err);
+      util.setError(400, 'Invalid or expired verification link', err);
       return util.send(res);
     }
   }

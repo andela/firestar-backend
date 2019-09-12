@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
-import { SendVerificationEmail, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
+import { SendVerificationToken, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
 import { authorization, jwtVerify } from '../../middlewares/auth/auth';
 import {
-  validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty, EmptySignUpBodyPropertyValue,
-  validateProfileData
+  validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
+  EmptySignUpBodyPropertyValue, validateProfileData
 } from '../../middlewares/validation/validation';
 import emailController from '../../controllers/emailController';
 import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/users';
@@ -20,14 +20,12 @@ const { forgotPassword, resetPassword, getUserProfile, updateUserProfile } = use
 
 const router = Router();
 
-router.get('/users/:id/profile', authorization, jwtVerify, getUserProfile);
-router.patch('/users/:id/profile', validateProfileData, authorization, jwtVerify, updateUserProfile);
-
-router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationEmail, emailController.signUp);
+router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationToken,
+  emailController.signUp);
 
 router.post('/users/auth/register', ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
 
-  EmptySignUpBodyPropertyValue, validationForSignUp, SendVerificationEmail, userController.addUser);
+  EmptySignUpBodyPropertyValue, validationForSignUp, SendVerificationToken, userController.addUser);
 
 router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
 
@@ -70,5 +68,8 @@ router.post('/users/passwords/forgot', forgotPasswordCheck, forgotPassword);
 // @desc Resets a User Password / Returns a new Password
 // @access Public
 router.post('/users/passwords/reset/:userId', resetPasswordCheck, resetPassword);
+
+router.get('/users/:id/profile', authorization, jwtVerify, getUserProfile);
+router.patch('/users/:id/profile', validateProfileData, authorization, jwtVerify, updateUserProfile);
 
 export default router;

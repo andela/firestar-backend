@@ -43,23 +43,23 @@ export const EmptySignUpBodyPropertyValue = async (req, res, next) => {
   let missingDetails;
   switch (response.length) {
     case 2:
-      missingDetails = response.join(' and ');
+      missingDetails = [`${response[0]} field cannot be Empty`, `${response[1]} field cannot be Empty`];
       break;
     case 3:
-      missingDetails = `${response.slice(0, 2).join(' , ')} and ${response[2]}`;
+      missingDetails = [`${response[0]} field cannot be Empty`, `${response[1]} field cannot be Empty`, `${response[2]} field cannot be Empty`];
       break;
     case 4:
-      missingDetails = `${response.slice(0, 3).join(' , ')} and ${response[3]}`;
+      missingDetails = [`${response[0]} field cannot be Empty`,
+      `${response[1]} field cannot be Empty`, `${response[2]} field cannot be Empty`,
+      `${response[3]} field cannot be Empty`];
       break;
     default:
-      missingDetails = response.join('');
+      missingDetails = [`${response[0]} field cannot be Empty`];
       break;
   }
 
-  const errMessage = `${missingDetails} field cannot be Empty`;
-
   if (response.length > 0) {
-    util.setError(400, errMessage);
+    util.setError(400, missingDetails);
     return util.send(res);
   }
   return next();
@@ -67,23 +67,25 @@ export const EmptySignUpBodyPropertyValue = async (req, res, next) => {
 
 export const ValidateEmptySignUpBodyProperty = async (req, res, next) => {
   const response = await isMissingBodyProperty(req.body);
+
   let missingDetails;
   switch (response.length) {
     case 2:
-      missingDetails = response.join(' and ');
+      missingDetails = [`${response[0]} field is missing`, `${response[1]} field is missing`];
       break;
     case 3:
-      missingDetails = `${response.slice(0, 2).join(' , ')} and ${response[2]}`;
+      missingDetails = [`${response[0]} field is missing`, `${response[1]} field is missing`, `${response[2]} field is missing`];
+      break;
+    case 4:
+      missingDetails = [`${response[0]} field is missing`,
+      `${response[1]} field is missing`, `${response[2]} field is missing`, `${response[3]} field is missing`];
       break;
     default:
-      missingDetails = response.join('');
+      missingDetails = `${response[0]} field is missing`;
       break;
   }
-
-  const errMessage = `${missingDetails} field is missing`;
-
   if (response.length > 0) {
-    util.setError(400, errMessage);
+    util.setError(400, missingDetails);
     return util.send(res);
   }
   return next();

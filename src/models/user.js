@@ -1,6 +1,9 @@
 const users = (sequelize, DataTypes) => {
   const User = sequelize.define('users', {
     id: {
+      type: DataTypes.INTEGER,
+      unique: true,
+      primaryKey: true,
       allowNull: false,
       autoIncrement: true,
       unique: true,
@@ -17,6 +20,7 @@ const users = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
+
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -57,12 +61,7 @@ const users = (sequelize, DataTypes) => {
     roleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 5,
-      onDelete: 'CASCADE',
-      references: {
-        model: 'roles',
-        key: 'id',
-      }
+      defaultValue: 5
     },
     lineManager: {
       type: DataTypes.STRING

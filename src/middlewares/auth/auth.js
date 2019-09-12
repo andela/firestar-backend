@@ -19,7 +19,7 @@ export const jwtVerify = (req, res, next) => {
   const { token } = req;
   jwt.verify(token, process.env.SECRET_KEY_SIGN_UP, (err, result) => {
     if (err) {
-      res.status(401).json({ status: 401, error: err.message });
+      res.status(401).json({ status: 401, error: 'Invalid Token provided' });
     } else {
       req.result = result;
       next();

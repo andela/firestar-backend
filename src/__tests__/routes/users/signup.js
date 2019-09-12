@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '../../../index';
 
-import { jwtVerifyUserToken } from '../../../utils/index';
+import { jwtVerifyUserToken, emailVerifyToken } from '../../../utils/index';
 import { hashPassword, comparePassword } from '../../../helpers/hashpassword';
 import { validateData, signUpValidationSchema } from '../../../helpers/validation/signupValidation';
 import { jwtVerify, authorization } from '../../../middlewares/auth/auth';
@@ -54,18 +54,10 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       token = response.body.data.token;
-      tokenEmail = response.body.data.emailToken;
-      UserId = response.body.data.id;
+      const verifyTokenForUser = await jwtVerifyUserToken(token);
+      tokenEmail = await emailVerifyToken(token);
+      UserId = verifyTokenForUser.id;
       expect(response.status).to.equal(201);
-      expect(response.body).to.be.a('object');
-    }).timeout(0);
-  });
-
-  describe('ACCOUNT VERIFICATION DURING SIGNUP', () => {
-    it('should have a status of 200 when user verify is account', async () => {
-      const id = tokenEmail;
-      const response = await request.get(`/api/v1/users/email/verify?id=${id}`);
-      expect(response.status).to.equal(200);
       expect(response.body).to.be.a('object');
     }).timeout(0);
   });
@@ -146,7 +138,7 @@ describe('SIGNUP ROUTE', () => {
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
-    it('should have a status of 400 with a message of "firstName is missing"', async () => {
+    it('should have a status of 400 with a message of "firstName field is missing"', async () => {
       const body = {
         email: 'akps.dd@yahoo.com',
         lastName: 'Akpan',
@@ -154,7 +146,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName field is missing');
+      expect(response.body.message.length).to.equal(26);
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -166,7 +158,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('password field is missing');
+      expect(response.body.message.length).to.equal(25);
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -178,7 +170,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('lastName field is missing');
+      expect(response.body.message.length).to.equal(25);
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -189,7 +181,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName and lastName field is missing');
+      expect(response.body.message.length).to.equal(2);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -199,7 +192,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName , lastName and password field is missing');
+      expect(response.body.message.length).to.equal(3);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -212,7 +206,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName and lastName field cannot be Empty');
+      expect(response.body.message.length).to.equal(2);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -225,7 +220,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('lastName field cannot be Empty');
+      expect(response.body.message.length).to.equal(1);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -238,7 +234,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('password field cannot be Empty');
+      expect(response.body.message.length).to.equal(1);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -251,7 +248,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('email field cannot be Empty');
+      expect(response.body.message.length).to.equal(1);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -264,7 +262,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('email , password and firstName field cannot be Empty');
+      expect(response.body.message.length).to.equal(3);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -277,7 +276,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('lastName field cannot be Empty');
+      expect(response.body.message.length).to.equal(1);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -290,7 +290,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('email , password , firstName and lastName field cannot be Empty');
+      expect(response.body.message).to.be.a('array');
+      expect(response.body.message.length).to.equal(4);
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -371,8 +372,8 @@ describe('SIGNUP ROUTE', () => {
         token: tokenEmail,
       };
       const res = {
-        status() {},
-        json() {},
+        status() { },
+        json() { },
       };
 
       sinon.stub(res, 'status').returnsThis();
@@ -388,8 +389,8 @@ describe('SIGNUP ROUTE', () => {
         token: `bearer ${token}`,
       };
       const res = {
-        status() {},
-        json() {},
+        status() { },
+        json() { },
       };
 
       const next = () => 2;
@@ -403,11 +404,11 @@ describe('SIGNUP ROUTE', () => {
 
     it('reproduce server response when token is not available in Header as Authorization', async () => {
       const req = {
-        header() {}
+        header() { }
       };
       const res = {
-        status() {},
-        json() {},
+        status() { },
+        json() { },
       };
 
       sinon.stub(res, 'status').returnsThis();
@@ -430,8 +431,8 @@ describe('SIGNUP ROUTE', () => {
         tokenEmail
       };
       const res = {
-        status() {},
-        json() {},
+        status() { },
+        json() { },
       };
 
       sinon.stub(res, 'status').returnsThis();
@@ -452,8 +453,8 @@ describe('SIGNUP ROUTE', () => {
         tokenEmail
       };
       const res = {
-        status() {},
-        json() {},
+        status() { },
+        json() { },
       };
 
       sinon.stub(res, 'status').returnsThis();

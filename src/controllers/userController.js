@@ -1,21 +1,20 @@
 import moment from 'moment';
 import crypto from 'crypto';
-import { sendResetMail, sendSignupMail } from '../services/sendMail';
 import Response from '../utils/response';
 import Hash from '../utils/hash';
 import db from '../models';
 import userService from '../services/userservice';
 import { jwtSignUser } from '../utils/index';
 import { hashPassword } from '../helpers/hashpassword';
-
-import Helper from '../middlewares/index';
 const { findUserById, updateUser } = userService;
 
 const util = new Response();
 
 const { users, logins, resets } = db;
 const { errorResponse, successResponse } = Response;
+import dotenv from 'dotenv';
 
+dotenv.config();
 /**
  @description Class based Controller for Roles
 */
@@ -26,7 +25,7 @@ export default class UserController {
  * @returns {object} Success or failure response on adding a specific user
  */
   static async addUser(req, res) {
-    const { user, emailToken } = req;
+    const { user } = req;
     const lastLogin = new Date();
     // user.roleId = 5;
     try {
@@ -37,10 +36,10 @@ export default class UserController {
       } = await userService.addUser(user);
       const newLoggedDetails = { email, password: user.password, lastLogin };
       await userService.addLogin(email, newLoggedDetails);
-      const token = await jwtSignUser(id);
-      util.setSuccess(201, 'user Added!', {
-        token, emailToken, id, email, firstName, lastName,
+      const token = await jwtSignUser({
+        id, email, firstName, lastName
       });
+      util.setSuccess(201, 'Successfully signed up', { token });
       return util.send(res);
     } catch (error) {
       if (error.original.routine === '_bt_check_unique') {
@@ -48,10 +47,10 @@ export default class UserController {
         return util.send(res);
       }
       if (error.name === 'SequelizeForeignKeyConstraintError') {
-        util.setError(500, 'roles Table must be seeded with all roles value before a user can signup');
+        util.setError(500, 'Internal server error');
         return util.send(res);
       }
-      util.setError(400, error);
+      util.setError(500, error);
       return util.send(res);
     }
   }
@@ -74,37 +73,35 @@ export default class UserController {
 
       // Check for user
       if (!user) {
-        const mailSent = sendSignupMail(email);
-        if (!mailSent) {
-          return errorResponse(res, 500, 'Error in sending email');
-        }
-      } else {
-        const newReset = new resets({
-          email: user.email,
-          resetToken: '',
-          expireTime: moment
-            .utc()
-            .add(process.env.TOKENEXPIRY, 'seconds')
-            .toLocaleString()
-        });
-
-        // Generate Reset token
-        const resetToken = await crypto.randomBytes(32).toString('hex');
-        newReset.resetToken = await Hash.hash(resetToken);
-
-        // Remove all reset token for this user if it exists
-        await resets.destroy({
-          where: { email: newReset.dataValues.email }
-        });
-        // console.log('newReset', newReset);
-        await newReset.save();
-        // Send reset link to user email
-        const mailSent = sendResetMail(user, resetToken);
-        if (!mailSent) {
-          return errorResponse(res, 500, 'Error in sending email');
-        }
+        return errorResponse(res, 500, 'Error in sending email');
       }
-      successResponse(res, 200, 'Check your mail for further instruction');
+      const newReset = new resets({
+        email: user.email,
+        resetToken: '',
+        expireTime: moment
+          .utc()
+          .add(process.env.TOKENEXPIRY, 'seconds')
+          .toLocaleString()
+      });
+
+      // Generate Reset token
+      const resetToken = await crypto.randomBytes(32).toString('hex');
+      newReset.resetToken = await Hash.hash(resetToken);
+
+      // Remove all reset token for this user if it exists
+      await resets.destroy({
+        where: { email: newReset.dataValues.email }
+      });
+      // console.log('newReset', newReset);
+      await newReset.save();
+      // Send reset link to user email
+      if (!resetToken) {
+        return errorResponse(res, 500, 'Error in generatingtoken');
+      }
+      util.setSuccess(201, 'user reset token generate', {
+        resetToken, email: newReset.email, resetid: newReset.id, userId: user.id
+      });
+      return util.send(res);
     } catch (error) {
       return errorResponse(res, 500, error);
     }
@@ -135,6 +132,7 @@ export default class UserController {
           where: { email: user.email }
         }))
         : null;
+
 
       // Check if user has requested password reset
       if (user && userRequestReset) {
@@ -208,15 +206,18 @@ export default class UserController {
    * @description get details of registered user
    */
   static async getUserProfile(req, res) {
-
+    // console.log('controller', req.result)
     const { id } = req.params;
-    const converToString = req.result.id.toString()
+
+    const converToString = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? req.result.id.toString() : req.result.user.id.toString();
+    // req.result.user.id.toString()
     if (converToString !== id) {
       util.setError(403, 'Unauthorized')
       return util.send(res)
     }
     try {
       const user = await findUserById(id);
+
       const token = await jwtSignUser(id);
 
       if (!user) {
@@ -235,16 +236,18 @@ export default class UserController {
   }
 
   /**
-  * update user profile
-  * @param {Object} req - server request
-  * @param {Object} res - server response
-  * @returns {Object} - custom response
-  * @description get's details of registered user
-  */
+   * update user profile
+   * @param {Object} req - server request
+   * @param {Object} res - server response
+   * @returns {Object} - custom response
+   * @description get's details of registered user
+   */
   static async updateUserProfile(req, res) {
+
     const { id } = req.params;
 
-    if (req.result.id !== id) {
+    const converToString = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? req.result.user.toString() : req.result.user.id.toString();
+    if (converToString !== id) {
       util.setError(403, 'Unauthorized')
       return util.send(res)
     }

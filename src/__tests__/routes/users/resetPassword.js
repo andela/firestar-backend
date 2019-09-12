@@ -5,7 +5,6 @@ import sinonChai from 'sinon-chai';
 import moment from 'moment';
 import app from '../../../index';
 import db from '../../../models';
-import { sendResetMail, sendSignupMail } from '../../../services/sendMail';
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -107,28 +106,13 @@ describe('Forgot and Reset Password Test', () => {
       resetToken: 'theResetToken'
     };
 
-    // it('should send reset mail to the email of an existing user', async () => {
-    //   // stub send mail functions
-    //   const resetMailStub = sinon.stub(await sendResetMail());
-    //   resetMailStub.returns(true);
-    //   chai
-    //     .request(app)
-    //     .post(`${forgotPasswordURL}`)
-    //     .send({ email: newReset.email })
-    //     .end(async () => {
-    //       expect(await resetMailStub).to.be.equal(true);
-    //     });
-    // });
 
     it('should send signup mail to the email of a non user', async () => {
-      const signupMailStub = sinon.stub(await sendSignupMail());
       chai
         .request(app)
         .post(`${forgotPasswordURL}`)
         .send({ email: newReset2.email })
         .end(async (err, res) => {
-          expect(await signupMailStub).to.be.equal(true);
-          expect(await signupMailStub.firstCall.args[0]).to.equal(newReset2.email);
           expect(res).to.have.status(200);
           expect(res.body.status).to.be.equal('success');
           expect(res.body.message).to.be.equal(
