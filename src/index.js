@@ -3,6 +3,7 @@ import express from 'express';
 import errorHandler from 'errorhandler';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
+import root from './routes/root';
 import routes from './routes';
 import swaggerDocument from '../swagger.json';
 
@@ -29,7 +30,9 @@ if (!isProduction) {
   app.use(errorHandler());
 }
 
+app.use(root);
 app.use(routes);
+
 
 // / catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -58,6 +61,7 @@ if (!isProduction) {
 
 // finally, let's start our server...
 const server = app.listen(process.env.PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Listening on port ${server.address().port}`);
 });
 

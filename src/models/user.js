@@ -1,32 +1,34 @@
-const users = (sequelize, DataTypes) => {
-  const User = sequelize.define('user', {
-    id: {
-      type: DataTypes.INTEGER,
-      unique: true,
-      allowNull: false,
-      autoIncrement: true,
-    },
+import bcrypt from 'bcrypt';
+
+export default (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
-    email: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
-      primaryKey: true,
-      validate: {
-        notEmpty: true,
-        isEmail: true
-      }
-    },
-    phoneNumber: {
-      type: DataTypes.BIGINT,
-      unique: true
-    },
-    roleId: {
-      type: DataTypes.INTEGER,
-    }
+    userName: DataTypes.STRING,
+    email: DataTypes.STRING,
+    password: DataTypes.STRING,
+    gender: DataTypes.STRING,
+    dateOfBirth: DataTypes.DATEONLY,
+    isProfileSaved: DataTypes.BOOLEAN,
+    isVerified: DataTypes.BOOLEAN,
+    preferredCurrencyId: DataTypes.INTEGER,
+    preferredLanguageId: DataTypes.INTEGER,
+    departmentId: DataTypes.INTEGER,
+    roleId: DataTypes.INTEGER,
+  }, {});
+  User.beforeCreate(async (user) => {
+    user.password = await bcrypt.hash(user.password, 10);
   });
 
+  User.beforeUpdate(async (user) => {
+    user.password = await bcrypt.hash(user.password, 10);
+  });
+
+  User.prototype.verifyPassword = async function verifyPassword(inputPassword) {
+    const isPasswordCorrect = await bcrypt
+      .compare(inputPassword, this.password);
+    return isPasswordCorrect;
+  };
   User.associate = (models) => {
     User.hasOne(models.Login, {
       foreignKey: 'email',
@@ -38,8 +40,5 @@ const users = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
   };
-
   return User;
 };
-
-export default users;

@@ -1,14 +1,14 @@
-module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('roles', {
+/* eslint-disable no-unused-vars */
+export default {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Rooms', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false
+    type: {
+      type: Sequelize.STRING
     },
     createdAt: {
       allowNull: false,
@@ -19,5 +19,5 @@ module.exports = {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface) => queryInterface.dropTable('roles')
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('Rooms')
 };

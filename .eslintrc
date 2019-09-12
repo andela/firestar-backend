@@ -29,6 +29,7 @@
               "MethodDefinition": true,
               "ClassDeclaration": true
           }
-      }]
+      }],
+      "linebreak-style": ["error", "windows"]
     }
 }

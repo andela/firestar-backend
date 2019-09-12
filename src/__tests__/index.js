@@ -7,3 +7,4 @@ import './validations/resetPassword';
 import './emailverification';
 import './dummyLogin';
 import './routes/users/userRole';
+import './routes/requests/root';
