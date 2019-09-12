@@ -160,8 +160,7 @@ describe('Login Users', () => {
       })
       .end((err, res) => {
         res.status.should.equal(200);
-        res.body.should.have.property('data');
-        res.body.data.should.have.property('token');
+        res.body.message.should.equal('Welcome back, your login was successful');
         const validUser = Helper.verifyToken(userToken);
         validUser.should.be.an('boolean');
         done();
@@ -178,8 +177,6 @@ describe('Login Users', () => {
       })
       .end((err, res) => {
         res.status.should.equal(200);
-        res.body.should.have.property('data');
-        res.body.data.should.have.property('token');
         res.body.message.should.equal('Welcome back, your login was successful');
         done();
       });
@@ -206,6 +203,19 @@ describe('Login Users', () => {
       .post(loginUrl)
       .send({
         email: 'example@gmail.com'
+      })
+      .end((err, res) => {
+        res.should.have.status(400);
+        done();
+      });
+  });
+
+  it('should return 400 for undefined Login email detail', (done) => {
+    chai
+      .request(app)
+      .post(loginUrl)
+      .send({
+        password: 'firestar2019@K',
       })
       .end((err, res) => {
         res.should.have.status(400);
