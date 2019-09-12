@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     from: DataTypes.INTEGER,
     accommodationId: DataTypes.INTEGER,
     requestId: DataTypes.INTEGER,
-    departureDate: DataTypes.TIMESTAMP
+    tripDate: DataTypes.DATE
   }, {});
   trip.associate = (models) => {
     trip.belongsTo(models.Accommodation, {

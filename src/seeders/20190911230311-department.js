@@ -13,13 +13,13 @@ module.exports = {
   },
   {
     name: 'ADMINISTARTION',
-    managerId: 'yoremail10@gmail.com',
+    managerId: 'youremail10@andela.com',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     name: 'HUMAN RESOURCES',
-    managerId: 'youremail20@gmail.com',
+    managerId: 'youremail20@andela.com',
     createdAt: new Date(),
     updatedAt: new Date()
   }], {}),

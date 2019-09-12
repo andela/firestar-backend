@@ -30,8 +30,8 @@ module.exports = {
         key: 'id'
       }
     },
-    departureDate: {
-      type: Sequelize.TIMESTAMP,
+    tripDate: {
+      type: Sequelize.DATE,
       allowNull: false,
     },
     createdAt: {

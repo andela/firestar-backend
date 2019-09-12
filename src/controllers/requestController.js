@@ -5,60 +5,65 @@ import models from '../models';
 export default class Requests {
 
   static async createTrip(req, res, next) {
-    const { tripType, managerId, reason } = req.body;
+    const {
+      tripType, departmentId, reason, trips
+    } = req.body;
     const requesterId = 'abc123@gmail.com';
-    const { trips } = req.body;
+    const { managerId } = req;
     try {
-        const newRequest = await models.Request.create({
-            tripType,
-            requesterId,
-            managerId,
-            reason
-        });
+      const newRequest = await models.Request.create({
+        tripType,
+        requesterId,
+        departmentId,
+        managerId,
+        reason
+      });
 
-       const a = trips.map(async (trip) => {
-            trip.requestId = newRequest.id;
-            const createdTrip = await models.Trip.create(trip);
-            return createdTrip.dataValues;          
-        });
-        const an = await Promise.all(a)
-        const ab = await models.Request.findOne(
+      const a = trips.map(async (trip) => {
+        console.log(trip);
+        trip.requestId = newRequest.id;
+        const createdTrip = await models.Trip.create(trip);
+        return createdTrip.dataValues;
+      });
+      const an = await Promise.all(a);
+      const ab = await models.Request.findOne(
+        {
+          include: [
             {
-                include: [
-                    {
-                        model: models.Trip,
-                    }
-                ],
-                where: {
-                    id: newRequest.dataValues.id
-                },
+              model: models.Trip,
+            }
+          ],
+          where: {
+            id: newRequest.dataValues.id
+          },
         }
-        
-        )
-        res.send(ab)
+
+      );
+      res.send(ab);
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-    
+
   }
 
-  static async getRequest(req, res, next){
-      try {
-          const requests = await models.Request.findOne(
-              {
-                include: [
-                    {
-                        model: models.Trip,
-                    }
-                ],
-                where: {
-                    id: 24
-                }
-              });
-          res.send(requests)
-      } catch (error) {
-          console.log(error)
-      }
-     
+  static async getRequest(req, res, next) {
+    try {
+      const requests = await models.Request.findOne(
+        {
+          include: [
+            {
+              model: models.Trip,
+            }
+          ],
+          where: {
+            id: 24
+          }
+        }
+      );
+      res.send(requests);
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 }
