@@ -15,7 +15,8 @@ export default class Validation {
       || (typeof value === 'string' && value.trim().length === 0)
     );
   }
-/**
+
+  /**
  * @description Checks if an email is valid
  * @param {object} email
  * @returns {boolean} returns true or false
@@ -62,5 +63,17 @@ export default class Validation {
       errors,
       isValid: this.isEmpty(errors)
     };
+  }
+
+  /**
+ * @description A method to validate integers
+ * @param {*} id Integer to be validated
+ * @returns {boolean} Returns true or false
+ */
+  static validateInteger(id) {
+    if (typeof id !== 'number' && !parseInt(id, 10)) {
+      return false;
+    }
+    return true;
   }
 }

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const trip = sequelize.define('trip', {
+  const trip = sequelize.define('trips', {
     to: DataTypes.INTEGER,
     from: DataTypes.INTEGER,
     accommodationId: DataTypes.INTEGER,
@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     tripDate: DataTypes.DATE
   }, {});
   trip.associate = (models) => {
-    trip.belongsTo(models.Accommodation, {
+    trip.belongsTo(models.accommodations, {
       foreignKey: 'accommodationId'
     });
-    trip.belongsTo(models.Request, {
+    trip.belongsTo(models.requests, {
       foreignKey: 'requestId'
     });
   };
