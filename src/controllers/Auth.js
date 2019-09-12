@@ -1,6 +1,10 @@
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import ValidateAuth from '../validation/ValidateAuth';
 import Response from '../helpers/Response';
 import db from '../models/index';
+
+dotenv.config();
 
 const { User } = db;
 /**
@@ -35,7 +39,22 @@ class Auth {
       lastName,
       password,
     });
- 
+    const {
+      id, email: userEmail, isVerified, roleId
+    } = data;
+
+    const token = jwt.sign({
+      _id: id,
+      _email: userEmail,
+      _isVerified: isVerified,
+      _roleId: roleId,
+    }, process.env.jwtPrivateKey);
+
+    res.header('token', token).send({
+      status: 200,
+      data,
+      token,
+    });
   }
 }
 export default Auth;
