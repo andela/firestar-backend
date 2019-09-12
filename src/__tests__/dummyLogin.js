@@ -10,11 +10,11 @@ const { assert } = chai;
 
 describe('Login', () => {
   before(async () => {
-    await models.User.sync({ force: true });
-    await models.User.bulkCreate([users.superAdmin, users.nonadmin]);
+    await models.users.sync({ force: true });
+    await models.users.bulkCreate([users.superAdmin, users.nonadmin]);
   });
   after(async () => {
-    await models.User.destroy({ where: {} });
+    await models.users.destroy({ where: {} });
   });
   it('Should generate Token', async () => {
     const res = await chai
@@ -28,6 +28,7 @@ describe('Login', () => {
   });
   it('Should not generate Token', async () => {
     const res = await chai
+
       .request(server)
       .post('/api/v1/auth/login')
       .send({ email: 'doesnotexist@gmail.com' });

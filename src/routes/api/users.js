@@ -1,11 +1,17 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
-import { SendVerificationEmail, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
-import emailverification from '../../controllers/emailController';
+import { SendVerificationToken, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
+import { authorization, jwtVerify } from '../../middlewares/auth/auth';
+import {
+  validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
+  EmptySignUpBodyPropertyValue
+} from '../../middlewares/validation/validation';
+import emailController from '../../controllers/emailController';
 import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/users';
 import isLoggedIn from '../../middlewares/login';
 import { roleIds } from '../../helpers/default';
 import userController from '../../controllers/userController';
+import indexController from '../../controllers/indexController';
 import validate from '../../middlewares/validate';
 import { findByEmail } from '../../utils/searchDb';
 
@@ -15,9 +21,25 @@ const { forgotPassword, resetPassword } = userController;
 
 const router = Router();
 
-router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationEmail, emailverification.signUp);
+router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationToken,
+  emailController.signUp);
 
-router.get('/users/email/verify', emailverification.confirmEmailVerificaionToken);
+router.post('/users/auth/register', ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
+
+  EmptySignUpBodyPropertyValue, validationForSignUp, SendVerificationToken, userController.addUser);
+
+router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
+
+/**
+ * Example of how to make use of a protected route
+ * Simply call the authorization and jwtVerify middleware in the route you want
+ * to protect
+ */
+router.get('/users/myaccount', authorization, jwtVerify, indexController.Welcome);
+
+router.patch('/users/roles', [isLoggedIn, validateSetRole, permit([roleIds.superAdmin]), checkRoleConflict], userController.changeRole);
+
+router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
 router.patch('/users/roles', [isLoggedIn, validateSetRole, permit([roleIds.superAdmin]), checkRoleConflict], userController.changeRole);
 router.post('/auth/login', async (req, res, next) => {
   try {

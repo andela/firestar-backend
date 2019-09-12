@@ -7,22 +7,52 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
+    username: {
+      type: Sequelize.STRING
+    },
     firstName: {
+      allowNull: false,
       type: Sequelize.STRING
     },
     lastName: {
+      allowNull: false,
       type: Sequelize.STRING
     },
     email: {
       type: Sequelize.STRING,
       unique: true,
-      primaryKey: true,
-      allowNull: false
+      allowNull: false,
+      primaryKey: true
     },
     phoneNumber: {
       type: Sequelize.STRING
     },
+    isVerified: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    dateOfBirth: {
+      type: Sequelize.DATE
+    },
+    preferredLanguage: {
+      type: Sequelize.STRING
+    },
     gender: {
+      type: Sequelize.STRING,
+    },
+    preferredCurrency: {
+      type: Sequelize.STRING,
+    },
+    residetialLocation: {
+      type: Sequelize.STRING
+    },
+    department: {
+      type: Sequelize.STRING
+    },
+    saveProfile: {
+      type: Sequelize.BOOLEAN
+    },
+    countryCode: {
       type: Sequelize.STRING
     },
     roleId: {

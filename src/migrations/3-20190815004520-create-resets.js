@@ -7,7 +7,13 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     email: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'users',
+        key: 'email',
+      }
+
     },
     resetToken: {
       type: Sequelize.STRING
