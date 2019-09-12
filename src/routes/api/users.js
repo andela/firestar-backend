@@ -20,7 +20,7 @@ const { forgotPassword, resetPassword, getUserProfile, updateUserProfile } = use
 
 const router = Router();
 
-router.get('/users/:id/profile', getUserProfile);
+router.get('/users/:id/profile', authorization, jwtVerify, getUserProfile);
 router.patch('/users/:id/profile', validateProfileData, authorization, jwtVerify, updateUserProfile);
 
 router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationEmail, emailController.signUp);

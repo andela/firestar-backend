@@ -210,9 +210,13 @@ export default class UserController {
   static async getUserProfile(req, res) {
 
     const { id } = req.params;
+    const converToString = req.result.id.toString()
+    if (converToString !== id) {
+      util.setError(403, 'Unauthorized')
+      return util.send(res)
+    }
     try {
       const user = await findUserById(id);
-      // const token = Helper.generateToken(id);
       const token = await jwtSignUser(id);
 
       if (!user) {

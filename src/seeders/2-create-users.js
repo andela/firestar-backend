@@ -60,42 +60,6 @@ module.exports = {
       roleId: 4,
       createdAt: new Date(),
       updatedAt: new Date()
-    },
-    {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      username: faker.name.firstName(),
-      email: 'alliolawale@gmail.com',
-      gender: faker.random.arrayElement(gender),
-      roleId: 5,
-      preferredLanguage: faker.random.arrayElement(language),
-      preferredCurrency: faker.finance.currencyName(),
-      residentialLocation: faker.address.streetAddress(),
-      countryCode: faker.address.countryCode(),
-      dateOfBirth: new Date(),
-      department: faker.commerce.department(),
-      lineManager: faker.name.jobType(),
-      phoneNumber: faker.phone.phoneNumber(),
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      username: faker.name.firstName(),
-      email: 'dolapoakpan@gmail.com',
-      gender: faker.random.arrayElement(gender),
-      roleId: 3,
-      preferredLanguage: faker.random.arrayElement(language),
-      preferredCurrency: faker.finance.currencyName(),
-      residentialLocation: faker.address.streetAddress(),
-      countryCode: faker.address.countryCode(),
-      dateOfBirth: new Date(),
-      department: faker.commerce.department(),
-      lineManager: faker.name.jobType(),
-      phoneNumber: faker.phone.phoneNumber(),
-      createdAt: new Date(),
-      updatedAt: new Date()
     }
   ], {}),
 
