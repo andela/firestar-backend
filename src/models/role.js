@@ -1,7 +1,9 @@
-
 export default (sequelize, DataTypes) => {
-  const Role = sequelize.define('Role', {
-    name: DataTypes.STRING
-  }, {});
+  const Role = sequelize.define('role', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+  });
   return Role;
 };
