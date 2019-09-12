@@ -210,24 +210,19 @@ export default class UserController {
     const { id } = req.params;
 
     const converToString = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? req.result.id.toString() : req.result.user.id.toString();
-    // req.result.user.id.toString()
     if (converToString !== id) {
-      util.setError(403, 'Unauthorized')
-      return util.send(res)
+      util.setError(403, 'Unauthorized');
+      return util.send(res);
     }
+    // req.result.user.id.toString()
     try {
       const user = await findUserById(id);
-
-      const token = await jwtSignUser(id);
-
       if (!user) {
         util.setError(401, `User with id: ${id} not found`);
         return util.send(res);
       }
-      util.setSuccess(200, 'Succesfully found user', {
-        user,
-        token
-      });
+
+      util.setSuccess(200, 'Succesfully found user', user);
       return util.send(res);
     } catch (error) {
       util.setError(500, error.message);
