@@ -137,7 +137,7 @@ describe('SIGNUP ROUTE', () => {
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
-    it('should have a status of 400 with a message of "firstName is missing"', async () => {
+    it('should have a status of 400 with a message of "firstName field is missing"', async () => {
       const body = {
         email: 'akps.dd@yahoo.com',
         lastName: 'Akpan',
@@ -145,7 +145,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName field is missing');
+      expect(response.body.message.length).to.equal(26);
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -157,7 +157,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('password field is missing');
+      expect(response.body.message.length).to.equal(25);
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -169,7 +169,7 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('lastName field is missing');
+      expect(response.body.message.length).to.equal(25);
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -180,7 +180,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName and lastName field is missing');
+      expect(response.body.message.length).to.equal(2);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -190,7 +191,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName , lastName and password field is missing');
+      expect(response.body.message.length).to.equal(3);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -203,7 +205,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('firstName and lastName field cannot be Empty');
+      expect(response.body.message.length).to.equal(2);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -216,7 +219,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('lastName field cannot be Empty');
+      expect(response.body.message.length).to.equal(1);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -229,7 +233,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('password field cannot be Empty');
+      expect(response.body.message.length).to.equal(1);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -242,7 +247,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('email field cannot be Empty');
+      expect(response.body.message.length).to.equal(1);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -255,7 +261,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('email , password and firstName field cannot be Empty');
+      expect(response.body.message.length).to.equal(3);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -268,7 +275,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('lastName field cannot be Empty');
+      expect(response.body.message.length).to.equal(1);
+      expect(response.body.message).to.be.a('array');
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
@@ -281,7 +289,8 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal('email , password , firstName and lastName field cannot be Empty');
+      expect(response.body.message).to.be.a('array');
+      expect(response.body.message.length).to.equal(4);
       expect(response.body).to.be.a('object');
     }).timeout(0);
 
