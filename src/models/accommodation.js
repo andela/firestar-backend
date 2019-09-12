@@ -1,4 +1,3 @@
-
 export default (sequelize, DataTypes) => {
   const Accommodation = sequelize.define('Accommodation', {
     name: DataTypes.STRING,
