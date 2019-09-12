@@ -17,9 +17,6 @@ module.exports = {
       allowNull: false,
       type: Sequelize.STRING
     },
-    username: {
-      type: Sequelize.STRING
-    },
     email: {
       type: Sequelize.STRING,
       unique: true,
@@ -67,29 +64,11 @@ module.exports = {
         key: 'id',
       }
     },
-    isVerified: {
-      type: Sequelize.BOOLEAN
-    },
-    dateOfBirth: {
-      type: Sequelize.DATE
-    },
-    preferredLanguage: {
-      type: Sequelize.STRING
-    },
-    preferredCurrency: {
-      type: Sequelize.STRING
-    },
     residentialLocation: {
       type: Sequelize.STRING
     },
     departmentId: {
       type: Sequelize.INTEGER
-    },
-    saveProfile: {
-      type: Sequelize.BOOLEAN
-    },
-    countryCode: {
-      type: Sequelize.STRING
     },
     createdAt: {
       allowNull: false,

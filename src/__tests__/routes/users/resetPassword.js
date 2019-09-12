@@ -4,12 +4,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import moment from 'moment';
 import app from '../../../index';
-<<<<<<< HEAD
-import models from '../../../models';
-import { sendResetMail, sendSignupMail } from '../../../services/sendMail';
-=======
 import db from '../../../models';
->>>>>>> 8eac525db30ef17cb3a4cfac88fe67990f72229b
 
 const { expect } = chai;
 chai.use(chaiHttp);

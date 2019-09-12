@@ -10,6 +10,7 @@ const users = (sequelize, DataTypes) => {
     username: {
       type: DataTypes.STRING,
       unique: true,
+    },
     firstName: {
       allowNull: false,
       type: DataTypes.STRING
@@ -35,10 +36,6 @@ const users = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 5
-    },
-    isVerified: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
     },
     gender: {
       type: DataTypes.STRING,

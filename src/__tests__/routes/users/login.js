@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import Helper from '../../../helpers/helperUtils';
-import models from '../../../models';
+import db from '../../../models';
 import app from '../../../index';
 
 chai.use(chaiHttp);
@@ -24,7 +24,7 @@ const userToken = '';
 // Create table and seed database
 const seedTestDb = async () => {
   try {
-    await models.User.create({
+    await db.users.create({
       username: 'iammarusoft',
       firstName: 'alimi',
       lastName: 'marusoft',
@@ -35,7 +35,7 @@ const seedTestDb = async () => {
       updatedAt: new Date()
     });
 
-    await models.User.create({
+    await db.users.create({
       username: 'iammarusoft1',
       firstName: 'alimi1',
       lastName: 'marusoft1',
@@ -46,7 +46,7 @@ const seedTestDb = async () => {
       updatedAt: new Date()
     });
 
-    await models.User.create({
+    await db.users.create({
       username: 'iammarusoft2',
       firstName: 'alimi2',
       lastName: 'marusoft2',
@@ -57,7 +57,7 @@ const seedTestDb = async () => {
       updatedAt: new Date()
     });
 
-    await models.User.create({
+    await db.users.create({
       username: 'iammarusoft3',
       firstName: 'alimi3',
       lastName: 'marusoft3',
@@ -68,7 +68,7 @@ const seedTestDb = async () => {
       updatedAt: new Date()
     });
 
-    await models.Login.create({
+    await db.logins.create({
       email: 'example@gmail.com',
       password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
       lastLogin: new Date(),
@@ -76,7 +76,7 @@ const seedTestDb = async () => {
       updatedAt: new Date()
     });
 
-    await models.Login.create({
+    await db.logins.create({
       email: 'example1@gmail.com',
       password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
       lastLogin: new Date(),
@@ -84,7 +84,7 @@ const seedTestDb = async () => {
       updatedAt: new Date()
     });
 
-    await models.Login.create({
+    await db.logins.create({
       email: 'example2@gmail.com',
       password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
       lastLogin: new Date(),
@@ -92,7 +92,7 @@ const seedTestDb = async () => {
       updatedAt: new Date()
     });
 
-    await models.Login.create({
+    await db.logins.create({
       email: 'example3@gmail.com',
       password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
       lastLogin: new Date(),
@@ -108,8 +108,8 @@ const seedTestDb = async () => {
 // Clear tables of seed
 const clearTestDb = async () => {
   try {
-    await models.User.sync({ force: true });
-    await models.Login.sync({ force: true });
+    await db.users.sync({ force: true });
+    await db.logins.sync({ force: true });
   } catch (err) {
     throw err;
   }

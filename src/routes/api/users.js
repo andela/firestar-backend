@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import jwt from 'jsonwebtoken';
 import { SendVerificationToken, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
 import { authorization, jwtVerify } from '../../middlewares/auth/auth';
 import {
@@ -18,7 +17,6 @@ const { forgotPasswordCheck, resetPasswordCheck, loginCheck } = validate;
 const { forgotPassword, resetPassword, loginAUser } = userController;
 
 const router = Router();
-
 
 router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationToken,
   emailController.signUp);

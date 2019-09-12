@@ -4,7 +4,7 @@
 import Jwt from 'jsonwebtoken';
 import url from 'url';
 import dotenv from 'dotenv';
-import userservices from '../services/userservice';
+import userservices from '../services/userService';
 import Util from '../utils/response';
 
 
