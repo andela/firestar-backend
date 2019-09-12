@@ -2,12 +2,12 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import app from '../index';
-import { handleEmptyEmailBody } from '../middlewares/mail';
-import emailverification from '../controllers/emailController';
-import { emailVerifyToken } from '../utils/index';
-import validation from '../helpers/validation';
-import { idUnset, idWrong } from '../__mocks__/emailVerification';
+import app from '../../../index';
+import { handleEmptyEmailBody } from '../../../middlewares/mail';
+import emailverification from '../../../controllers/emailController';
+import { emailVerifyToken } from '../../../utils/index';
+import validation from '../../../helpers/validation';
+import { idUnset, idWrong } from '../../../__mocks__/emailVerification';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -25,10 +25,11 @@ describe('EMAIL ROUTE', () => {
 
   afterEach(() => sinon.restore());
 
+
   describe('EMAIL VERIFICATION ROUTE', () => {
     it('should have a status of 200 when message is sent succesfully', async () => {
       const body = {
-        email: 'akp.ani@yahoo.com',
+        email: 'akp.axcni@yahoo.com',
         firstName: 'Aniefiok',
         lastName: 'Akpan'
       };
@@ -52,7 +53,7 @@ describe('EMAIL ROUTE', () => {
 
     it('should have a status of 403 and a messsage of "Email, firstName and lastName is required"  when some body is not present', async () => {
       const body = {
-        email: 'akp.ani@yahoo.com',
+        email: 'akp.acni@yahoo.com',
         firstName: 'Aniefiok',
         lastName: ''
       };
@@ -84,19 +85,10 @@ describe('EMAIL ROUTE', () => {
   });
 
   describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
-    it('should have a status of 200 when valid token is sent as query string', async () => {
-      const id = tokenEmail;
-      const response = await request.get(`/api/v1/users/email/verify?id=${id}`);
-      expect(response.body.status).to.equal(200);
-      expect(response.body).to.be.a('object');
-    }).timeout(0);
-  });
-
-  describe('EMAIL TOKEN CONFIRMATION ROUTE', () => {
     it('should have a status of 400 when invalid token is sent as query string', async () => {
       const id = idWrong;
       const response = await request.get(`/api/v1/users/email/verify?id=${id}`);
-      expect(response.body.status).to.equal(400);
+      expect(response.status).to.equal(400);
       expect(response.body).to.be.a('object');
     }).timeout(0);
   });
@@ -105,7 +97,7 @@ describe('EMAIL ROUTE', () => {
     it('fakes server success for email verification controller', async () => {
       const req = {
         body: {
-          email: 'akp.ani@yahoo.com',
+          email: 'akp.anvfi@yahoo.com',
           firstName: 'Aniefiok',
           lastName: 'Akpan'
         },

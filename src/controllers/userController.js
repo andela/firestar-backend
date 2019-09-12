@@ -1,11 +1,16 @@
 import moment from 'moment';
 import crypto from 'crypto';
-import { sendResetMail, sendSignupMail } from '../services/sendMail';
 import Response from '../utils/response';
 import Hash from '../utils/hash';
-import models from '../models';
+import db from '../models';
+import userService from '../services/userservice';
+import { jwtSignUser } from '../utils/index';
+import { hashPassword } from '../helpers/hashpassword';
 
-const { User, Login, Reset } = models;
+
+const util = new Response();
+
+const { users, logins, resets } = db;
 const { errorResponse, successResponse } = Response;
 
 
@@ -13,6 +18,42 @@ const { errorResponse, successResponse } = Response;
  @description Class based Controller for Roles
 */
 export default class UserController {
+  /**
+ * @param {req} req that contains the req body object.
+ * @param {res} res content to be rendered.
+ * @returns {object} Success or failure response on adding a specific user
+ */
+  static async addUser(req, res) {
+    const { user } = req;
+    const lastLogin = new Date();
+    // user.roleId = 5;
+    try {
+      const hashpassword = await hashPassword(user.password);
+      user.password = hashpassword;
+      const {
+        id, email, firstName, lastName
+      } = await userService.addUser(user);
+      const newLoggedDetails = { email, password: user.password, lastLogin };
+      await userService.addLogin(email, newLoggedDetails);
+      const token = await jwtSignUser({
+        id, email, firstName, lastName
+      });
+      util.setSuccess(201, 'Successfully signed up', { token });
+      return util.send(res);
+    } catch (error) {
+      if (error.original.routine === '_bt_check_unique') {
+        util.setError(409, 'Email already exist');
+        return util.send(res);
+      }
+      if (error.name === 'SequelizeForeignKeyConstraintError') {
+        util.setError(500, 'Internal server error');
+        return util.send(res);
+      }
+      util.setError(500, error);
+      return util.send(res);
+    }
+  }
+
   /**
    * @description Generate link to reset a user password
    * @static
@@ -27,40 +68,39 @@ export default class UserController {
       const { email } = req.body;
 
       // Find user by email
-      const user = await User.findOne({ where: { email } });
+      const user = await users.findOne({ where: { email } });
+
       // Check for user
       if (!user) {
-        const mailSent = sendSignupMail(email);
-        if (!mailSent) {
-          return errorResponse(res, 500, 'Error in sending email');
-        }
-      } else {
-        const newReset = new Reset({
-          email: user.email,
-          resetToken: '',
-          expireTime: moment
-            .utc()
-            .add(process.env.TOKENEXPIRY, 'seconds')
-            .toLocaleString()
-        });
-
-        // Generate Reset token
-        const resetToken = await crypto.randomBytes(32).toString('hex');
-        newReset.resetToken = await Hash.hash(resetToken);
-
-        // Remove all reset token for this user if it exists
-        await Reset.destroy({
-          where: { email: newReset.dataValues.email }
-        });
-        // console.log('newReset', newReset);
-        await newReset.save();
-        // Send reset link to user email
-        const mailSent = sendResetMail(user, resetToken);
-        if (!mailSent) {
-          return errorResponse(res, 500, 'Error in sending email');
-        }
+        return errorResponse(res, 500, 'Error in sending email');
       }
-      successResponse(res, 200, 'Check your mail for further instruction');
+      const newReset = new resets({
+        email: user.email,
+        resetToken: '',
+        expireTime: moment
+          .utc()
+          .add(process.env.TOKENEXPIRY, 'seconds')
+          .toLocaleString()
+      });
+
+      // Generate Reset token
+      const resetToken = await crypto.randomBytes(32).toString('hex');
+      newReset.resetToken = await Hash.hash(resetToken);
+
+      // Remove all reset token for this user if it exists
+      await resets.destroy({
+        where: { email: newReset.dataValues.email }
+      });
+      // console.log('newReset', newReset);
+      await newReset.save();
+      // Send reset link to user email
+      if (!resetToken) {
+        return errorResponse(res, 500, 'Error in generatingtoken');
+      }
+      util.setSuccess(201, 'user reset token generate', {
+        resetToken, email: newReset.email, resetid: newReset.id, userId: user.id
+      });
+      return util.send(res);
     } catch (error) {
       return errorResponse(res, 500, error);
     }
@@ -73,6 +113,7 @@ export default class UserController {
    * @param {*} res
    * @returns {UserController} A new password record
    * @memberof UserController
+   * @returns {object} Success or failure response on adding a specific user
    */
   static async resetPassword(req, res) {
     try {
@@ -81,15 +122,16 @@ export default class UserController {
       const { password } = req.body;
 
       // Find user by user id
-      const user = await User.findOne({ where: { id: userId } });
+      const user = await users.findOne({ where: { id: userId } });
       let userRequestReset;
 
       // Find user reset request by email
       user
-        ? (userRequestReset = await Reset.findOne({
+        ? (userRequestReset = await resets.findOne({
           where: { email: user.email }
         }))
         : null;
+
 
       // Check if user has requested password reset
       if (user && userRequestReset) {
@@ -104,7 +146,7 @@ export default class UserController {
         if (validReset) {
           // Store hash of new password in login
           const hashed = await Hash.hash(password);
-          await Login.update(
+          await logins.update(
             {
               token: '',
               password: hashed,
@@ -113,7 +155,7 @@ export default class UserController {
             { where: { email: userRequestReset.email } }
           );
           // Delete reset request from database
-          await Reset.destroy({ where: { email: userRequestReset.email } });
+          await resets.destroy({ where: { email: userRequestReset.email } });
           return successResponse(res, 200, 'Password updated successfully');
         }
         return errorResponse(res, 400, 'Invalid or expired reset token');
@@ -137,7 +179,7 @@ export default class UserController {
   static async changeRole(req, res, next) {
     const { email, roleId } = req.body;
     try {
-      const updatedUser = await models.User.update({ roleId },
+      const updatedUser = await db.users.update({ roleId },
         {
           returning: true,
           plain: true,
