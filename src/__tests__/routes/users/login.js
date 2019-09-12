@@ -229,21 +229,6 @@ describe('Login Users', () => {
       });
   });
 
-  it('should return 401 for accounts that is not verified', (done) => {
-    chai
-      .request(app)
-      .post(loginUrl)
-      .send({
-        email: 'example3@gmail.com',
-        password: 'barefoot2019@K',
-      })
-      .end((err, res) => {
-        res.should.have.status(401);
-        res.body.error.should.be.equal('Account is not verified');
-        done();
-      });
-  });
-
   it('should return 404 for email not exist for login detail', (done) => {
     chai
       .request(app)

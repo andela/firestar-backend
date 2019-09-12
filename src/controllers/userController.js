@@ -34,7 +34,8 @@ export default class UserController {
       }
 
       if (!user.dataValues.isVerified) {
-        return errorResponse(res, 401, 'Account is not verified');
+        const token = await jwtSignUser(user.dataValues.id);
+        return successResponse(201, 'Please verify your account with the new verification token generated and try to login again!', { token });
       }
 
       const loggedUser = await Login.findOne({ where: { email } });
@@ -57,7 +58,13 @@ export default class UserController {
           lastLogin: loggedUser.lastLogin
         };
 
-        const token = await jwtSignUser({ id: user.id, email: user.email });
+        const token = await jwtSignUser({
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isVerified: user.isVerified
+        });
 
         await userService.updateLogins(loginData);
         return res.status(200).json({
