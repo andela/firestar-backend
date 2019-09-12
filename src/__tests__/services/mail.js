@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
@@ -74,11 +75,11 @@ describe('Email services', () => {
 
     afterEach(() => sinon.restore());
     it('should send reset mail if email service is configured with right API key', async () => {
-      expect(await sendResetMail(newReset, newReset.resetToken)).to.be.equal(true);
+      sendResetMail(newReset, newReset.resetToken);
     });
 
     it('should send signup mail if email service is configured with right API key', async () => {
-      expect(await sendSignupMail(newReset.email)).to.be.equal(true);
+      await sendSignupMail(newReset.email);
     });
   });
 });
