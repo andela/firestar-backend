@@ -8,6 +8,6 @@ import { roleIds } from '../../helpers/default';
 const router = Router();
 
 
-router.post('/requests', [isLoggedIn, permit([roleIds.requster]), validateRequestInput, validateTripData], requestController.createTrip);
+router.post('/requests', [isLoggedIn, permit([roleIds.requster]), validateRequestInput, validateTripData, checkPreviousRequest], requestController.createTrip);
 
 export default router;

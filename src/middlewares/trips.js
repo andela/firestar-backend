@@ -26,8 +26,10 @@ export const validateRequestInput = async (req, res, next) => {
 
 export const validateTripData = async (req, res, next) => {
   try {
-    const validatedData = req.body.trips.map(async (trip) => {
-      await checkIfExistsInDb(models.accommodations, parseInt(trip.accommodationId, 10), 'The accommodation in trip does not exist');
+    const validatedData = req.body.trips.map(async (trip, index) => {
+      if (req.body.tripType !== 'return' && index !== 1) {
+        await checkIfExistsInDb(models.accommodations, parseInt(trip.accommodationId, 10), 'The accommodation in trip does not exist');
+      }
       await checkIfExistsInDb(models.destinations, parseInt(trip.destinationLocationId, 10), 'Trip  destination does not exist');
       await checkIfExistsInDb(models.destinations, parseInt(trip.departureLocationId, 10), 'Trip  departure location does not exist');
       return trip;

@@ -26,7 +26,7 @@ export const validateTripObj = async (arr, type, err) => {
     } else if (!Validator.validateInteger(obj.departureLocationId)) {
       err[`trip ${index + 1} departure`] = `Invalid departure location id provided for the trip number ${index + 1}`;
     }
-    if (!obj.accommodationId && type !== 'return') {
+    if (!obj.accommodationId && type !== 'return' && index < 1) {
       err[`trip ${index + 1} accommodation`] = `No accommodation provided for the trip number ${index + 1}`;
     } else if (!Validator.validateInteger(obj.accommodationId) && obj.accommodationId) {
       err[`trip ${index + 1} accommodation`] = `Invalid accommodation id provided for the trip number ${index + 1}`;
@@ -55,12 +55,15 @@ export const validateTripObj = async (arr, type, err) => {
     } else {
       presentLocation = obj.destinationLocationId;
     }
-    const accommodation = await models.accommodations.findOne(
-      { where: { id: obj.accommodationId } }
-    );
-    if (accommodation && obj.destinationLocationId !== accommodation.destinationId) {
-      err[`trip ${index + 1} accomodation`] = 'Selected accommodation does not belong to the trip destination';
+    if (type !== 'return' && obj.accommodationId && index !== 1) {
+      const accommodation = await models.accommodations.findOne(
+        { where: { id: obj.accommodationId } }
+      );
+      if (accommodation && obj.destinationLocationId !== accommodation.destinationId) {
+        err[`trip ${index + 1} accomodation`] = 'Selected accommodation does not belong to the trip destination';
+      }
     }
+
     return obj;
   });
   return trips;
@@ -70,25 +73,20 @@ export const validateTripObj = async (arr, type, err) => {
 export const validateRequestObj = (body, errors) => {
   const stringRegex = /^[a-z\s]+$/i;
   const typeOfTrip = ['oneWay', 'return', 'multiCity'];
+  body.tripType = !body.tripType ? null : body.tripType.trim();
+  body.reason = !body.reason ? null : body.reason.trim();
   const {
-    reason, departmentId
+    reason, departmentId, tripType
   } = body;
-  let { tripType } = body;
   if (!reason) {
     errors.reason = 'Trip reason not provided';
-  } else {
-    body.reason = body.reason.trim();
-    if (!stringRegex.test(reason) && reason) {
-      errors.reason = 'Invalid travel reason';
-    }
+  } else if (!stringRegex.test(reason) && reason) {
+    errors.reason = 'Invalid travel reason';
   }
   if (!tripType) {
     errors.tripType = 'Type of trip not provided';
-  } else {
-    tripType = tripType.trim();
-    if (!typeOfTrip.includes(tripType)) {
-      errors.tripType = 'Invalid trip type';
-    }
+  } else if (!typeOfTrip.includes(tripType)) {
+    errors.tripType = 'Invalid trip type';
   }
   if (!departmentId) {
     errors.department = 'No department provided';
