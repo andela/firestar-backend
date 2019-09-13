@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const request = sequelize.define('requests', {
     tripType: DataTypes.ENUM(['oneWay', 'return', 'multiCity']),
-    requesterId: DataTypes.STRING,
+    requesterId: DataTypes.INTEGER,
     reason: DataTypes.STRING,
     managerId: DataTypes.INTEGER,
     departmentId: DataTypes.INTEGER,

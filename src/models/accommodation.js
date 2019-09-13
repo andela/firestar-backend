@@ -3,11 +3,15 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     noOfRooms: DataTypes.INTEGER,
     type: DataTypes.STRING,
-    timesVisited: DataTypes.INTEGER
+    timesVisited: DataTypes.INTEGER,
+    destinationId: DataTypes.INTEGER
   }, {});
   accommodation.associate = (models) => {
     accommodation.hasMany(models.trips, {
       foreignKey: 'accommodationId'
+    });
+    accommodation.belongsTo(models.destinations, {
+      foreignKey: 'destinationId'
     });
   };
   return accommodation;

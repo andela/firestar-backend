@@ -18,6 +18,14 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false
     },
+    destinationId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'destinations',
+        key: 'id'
+      }
+    },
     timesVisited: {
       type: Sequelize.INTEGER,
       allowNull: false,
@@ -32,5 +40,5 @@ module.exports = {
       type: Sequelize.DATE
     }
   }),
-  down: (queryInterface) => queryInterface.dropTable('accommodation')
+  down: (queryInterface) => queryInterface.dropTable('accommodations')
 };

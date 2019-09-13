@@ -7,6 +7,7 @@ export const checkIfExistsInDb = async (Model, id, errorMessage) => {
         id
       }
     });
+    console.log(exists)
     if (exists) return exists.dataValues;
     throw new Error(errorMessage);
   } catch (error) {

@@ -17,7 +17,7 @@ export default class Requests {
     const {
       tripType, departmentId, reason, trips
     } = req.body;
-    const requesterId = 5;
+    const requesterId = req.user.id;
     const { managerId } = req;
     try {
       const newRequest = await models.requests.create({
@@ -39,6 +39,7 @@ export default class Requests {
           include: [
             {
               model: models.trips,
+              include: [models.accommodations]
             }
           ],
           where: {

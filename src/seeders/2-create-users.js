@@ -58,6 +58,30 @@ module.exports = {
       roleId: 4,
       createdAt: new Date(),
       updatedAt: new Date()
+    },
+    {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: 'requester1@gmail.com',
+      roleId: 5,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: 'requester2@gmail.com',
+      roleId: 5,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: 'requester3@gmail.com',
+      roleId: 5,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }], {}),
 
   down: (queryInterface) => queryInterface.bulkDelete('users', null, {})
