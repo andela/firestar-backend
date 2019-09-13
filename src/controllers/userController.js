@@ -20,6 +20,43 @@ const { compareWithHash } = Hash;
  * @description Class based Controller for Roles
 */
 export default class UserController {
+  /**
+ * @param {req} req that contains the req body object.
+ * @param {res} res content to be rendered.
+ * @returns {object} Success or failure response on adding a specific user
+ */
+  static async addUser(req, res) {
+    const { user } = req;
+    const lastLogin = new Date();
+    // user.roleId = 5;
+    try {
+      const hashpassword = await hashPassword(user.password);
+      user.password = hashpassword;
+      const {
+        id, email, firstName, lastName
+      } = await userService.addUser(user);
+      const newLoggedDetails = { email, password: user.password, lastLogin };
+      await userService.addLogin(email, newLoggedDetails);
+      const token = await jwtSignUser({
+        id, email, firstName, lastName
+      });
+      util.setSuccess(201, 'Successfully signed up', { token });
+      return util.send(res);
+    } catch (error) {
+      if (error.original.routine === '_bt_check_unique') {
+        util.setError(409, 'Email already exist');
+        return util.send(res);
+      }
+      if (error.name === 'SequelizeForeignKeyConstraintError') {
+        util.setError(500, 'Internal server error');
+        return util.send(res);
+      }
+      util.setError(500, error);
+      return util.send(res);
+    }
+  }
+
+
   /** Login User
    * @description Logins a user
    * @static
@@ -64,42 +101,6 @@ export default class UserController {
       return errorResponse(res, 401, 'Email or password incorrect');
     } catch (error) {
       return errorResponse(res, 500, error);
-    }
-  }
-
-  /**
- * @param {req} req that contains the req body object.
- * @param {res} res content to be rendered.
- * @returns {object} Success or failure response on adding a specific user
- */
-  static async addUser(req, res) {
-    const { user } = req;
-    const lastLogin = new Date();
-    // user.roleId = 5;
-    try {
-      const hashpassword = await hashPassword(user.password);
-      user.password = hashpassword;
-      const {
-        id, email, firstName, lastName
-      } = await userService.addUser(user);
-      const newLoggedDetails = { email, password: user.password, lastLogin };
-      await userService.addLogin(email, newLoggedDetails);
-      const token = await jwtSignUser({
-        id, email, firstName, lastName
-      });
-      util.setSuccess(201, 'Successfully signed up', { token });
-      return util.send(res);
-    } catch (error) {
-      if (error.original.routine === '_bt_check_unique') {
-        util.setError(409, 'Email already exist');
-        return util.send(res);
-      }
-      if (error.name === 'SequelizeForeignKeyConstraintError') {
-        util.setError(500, 'Internal server error');
-        return util.send(res);
-      }
-      util.setError(500, error);
-      return util.send(res);
     }
   }
 

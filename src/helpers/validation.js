@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 export default class Validation {
   static isEmpty(value) {
     return (
@@ -14,7 +15,7 @@ export default class Validation {
   }
 
   static isValidPassword(password) {
-    const re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+    const re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!.@$%^&*-]).{8,}$/;
     return re.test(password);
   }
 
@@ -44,28 +45,6 @@ export default class Validation {
       }
       if (password !== confirmPassword) {
         errors.password = 'Passwords must match';
-      }
-    }
-
-    return {
-      errors,
-      isValid: this.isEmpty(errors)
-    };
-  }
-
-  static validateLogin({ email, password }) {
-    const errors = {};
-
-    if (!email) {
-      errors.email = 'Email is required';
-    } else if (!this.isValidEmail(email)) {
-      errors.email = 'Email is invalid';
-    }
-    if (!password) {
-      errors.password = 'Password is required';
-    } else {
-      if (!this.isValidPassword(password)) {
-        errors.password = 'Password is invalid';
       }
     }
 

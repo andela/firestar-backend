@@ -1,4 +1,5 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable require-jsdoc */
+
 import Response from '../utils/response';
 import Validation from '../helpers/validation';
 
@@ -21,15 +22,6 @@ export default class ValidateMiddleware {
       if (errors.password && errors.password === 'Passwords must match') {
         return errorResponse(res, 401, errors);
       }
-      return errorResponse(res, 400, errors);
-    }
-    next();
-  }
-
-  static loginCheck(req, res, next) {
-    const { errors, isValid } = Validation.validateLogin(req.body);
-    
-    if (!isValid) {
       return errorResponse(res, 400, errors);
     }
     next();

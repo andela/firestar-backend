@@ -2,9 +2,14 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import db from '../../../models';
 import app from '../../../index';
+import { jwtSignUser, jwtVerifyUserToken } from '../../../utils/index';
+import userController from '../../../controllers/userController';
+
+const { loginAUser } = userController;
 
 chai.use(chaiHttp);
 chai.should();
+const { expect } = chai;
 
 const loginUrl = '/api/v1/users/auth/login';
 
@@ -18,7 +23,6 @@ const userLoginDetails = {
   password: 'firestar2019@K',
 };
 
-// const userToken = '';
 
 // Create table and seed database
 const seedTestDb = async () => {
@@ -31,7 +35,7 @@ const seedTestDb = async () => {
       isVerified: true,
       roleId: 1,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     await db.users.create({
@@ -42,7 +46,7 @@ const seedTestDb = async () => {
       isVerified: true,
       roleId: 5,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     await db.users.create({
@@ -53,7 +57,7 @@ const seedTestDb = async () => {
       roleId: 5,
       isVerified: true,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     await db.users.create({
@@ -64,7 +68,7 @@ const seedTestDb = async () => {
       roleId: 5,
       isVerified: false,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     await db.logins.create({
@@ -72,7 +76,7 @@ const seedTestDb = async () => {
       password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
       lastLogin: new Date(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     await db.logins.create({
@@ -80,7 +84,7 @@ const seedTestDb = async () => {
       password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
       lastLogin: new Date(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     await db.logins.create({
@@ -88,7 +92,7 @@ const seedTestDb = async () => {
       password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
       lastLogin: new Date(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     await db.logins.create({
@@ -96,13 +100,12 @@ const seedTestDb = async () => {
       password: '$2a$10$yvbeeJa5YVri0P9R.BLrSOXDJlo09v22tyZz0ZIuJEFEDrJggvgzm',
       lastLogin: new Date(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   } catch (error) {
     throw error;
   }
 };
-
 
 // Clear tables of seed
 const clearTestDb = async () => {
@@ -135,17 +138,19 @@ function loadBeforeAndAfter() {
 
 describe('Login Users', () => {
   loadBeforeAndAfter();
-  it('should login a user and generate token for user', (done) => {
+  it('should not login a user without signup', (done) => {
     chai
       .request(app)
       .post(loginUrl)
       .send({
-        ...wrongUserLoginDetails
+        ...wrongUserLoginDetails,
       })
       .end((err, res) => {
         res.status.should.equal(404);
         res.body.should.have.property('error');
-        res.body.error.should.equal('You don\'t have have an account. Please signup');
+        res.body.error.should.equal(
+          "You don't have have an account. Please signup"
+        );
         done();
       });
   });
@@ -154,17 +159,55 @@ describe('Login Users', () => {
     chai
       .request(app)
       .post(loginUrl)
-      .send({
-        ...userLoginDetails
-      })
+      .send(userLoginDetails)
       .end((err, res) => {
         res.status.should.equal(200);
-        res.body.message.should.equal('Welcome back, your login was successful');
-        // const validUser = jwtVerifyUserToken(userToken);
-        // validUser.should.be.equal('true');
-        done();
+        res.body.message.should.equal(
+          'Welcome back, your login was successful'
+        );
+
+        jwtVerifyUserToken(res.body.token)
+          .then((payload) => {
+            payload.should.property('user');
+            done();
+          })
+          .catch((e) => done(e));
       });
   });
+
+  it('should not login a user token for user', (done) => {
+    chai
+      .request(app)
+      .post(loginUrl)
+      .send(userLoginDetails)
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.body.message.should.equal(
+          'Welcome back, your login was successful'
+        );
+
+        jwtVerifyUserToken(res.body.token)
+          .then((payload) => {
+            payload.should.property('user');
+            done();
+          })
+          .catch((e) => done(e));
+      });
+  });
+
+  it('it should assign a token to registered users', async () => {
+    const userDetails = {
+      id: loginAUser.id,
+      username: loginAUser.username,
+      email: loginAUser.email,
+      firstName: loginAUser.firstName,
+      lastName: loginAUser.lastName,
+      lastLogin: loginAUser.lastLogin
+    };
+    const token = await jwtSignUser(userDetails);
+    expect(token).to.equal(token);
+  }).timeout(0);
+
 
   it('should return 200 for successful Login', (done) => {
     chai
@@ -176,7 +219,9 @@ describe('Login Users', () => {
       })
       .end((err, res) => {
         res.status.should.equal(200);
-        res.body.message.should.equal('Welcome back, your login was successful');
+        res.body.message.should.equal(
+          'Welcome back, your login was successful'
+        );
         done();
       });
   });
@@ -191,7 +236,10 @@ describe('Login Users', () => {
       })
       .end((err, res) => {
         res.should.have.status(400);
-        res.body.error.should.deep.own.include({ email: 'Email is required', password: 'Password is required' });
+        res.body.should.have.property('message');
+        res.body.message.should.equal(
+          'Password must be at leat 8 character long, with at least an uppercase, lowercase, digit and special character'
+        );
         done();
       });
   });
@@ -201,7 +249,8 @@ describe('Login Users', () => {
       .request(app)
       .post(loginUrl)
       .send({
-        email: 'example@gmail.com'
+        email: 'example@gmail.com',
+        password: 'fires'
       })
       .end((err, res) => {
         res.should.have.status(400);
@@ -209,11 +258,12 @@ describe('Login Users', () => {
       });
   });
 
-  it('should return 400 for undefined Login email detail', (done) => {
+  it('should return 400 for invalid Login email detail', (done) => {
     chai
       .request(app)
       .post(loginUrl)
       .send({
+        email: '4444444444',
         password: 'firestar2019@K',
       })
       .end((err, res) => {
@@ -243,12 +293,14 @@ describe('Login Users', () => {
       .request(app)
       .post(loginUrl)
       .send({
-        email: 'example1@gmail.com111',
+        email: 'example11111@gmail.com',
         password: 'barefoot2019@K',
       })
       .end((err, res) => {
         res.should.have.status(404);
-        res.body.error.should.be.equal('You don\'t have have an account. Please signup');
+        res.body.error.should.be.equal(
+          "You don't have have an account. Please signup"
+        );
         done();
       });
   });

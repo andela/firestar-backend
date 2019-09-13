@@ -3,7 +3,7 @@ import { SendVerificationToken, handleInvalidEmail, handleEmptyEmailBody } from 
 import { authorization, jwtVerify } from '../../middlewares/auth/auth';
 import {
   validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
-  EmptySignUpBodyPropertyValue
+  EmptySignUpBodyPropertyValue, validationForSignIn
 } from '../../middlewares/validation/validation';
 import emailController from '../../controllers/emailController';
 import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/users';
@@ -13,7 +13,7 @@ import userController from '../../controllers/userController';
 import indexController from '../../controllers/indexController';
 import validate from '../../middlewares/validate';
 
-const { forgotPasswordCheck, resetPasswordCheck, loginCheck } = validate;
+const { forgotPasswordCheck, resetPasswordCheck } = validate;
 const { forgotPassword, resetPassword, loginAUser } = userController;
 
 const router = Router();
@@ -30,7 +30,7 @@ router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
 // @route POST /api/v1/users/auth/login
 // @desc Logins a verified User / Set JWT Token in cookies
 // @access Public
-router.post('/users/auth/login', loginCheck, loginAUser);
+router.post('/users/auth/login', validationForSignIn, loginAUser);
 
 
 /**
