@@ -15,7 +15,9 @@ const { expect } = chai;
 
 let request;
 let token;
+let token2;
 let UserId;
+let UserId2;
 
 describe('USER PROFILE', () => {
   before(async () => {
@@ -41,16 +43,28 @@ describe('USER PROFILE', () => {
   describe('SIGN UP USER FIRST', () => {
     it('should sign up user first to get user credentials', async () => {
       const body = {
-        email: 'akps.i@yahoo.com',
-        firstName: 'Aniefiok',
-        lastName: 'Akpan',
-        password: 'ADsd23$$'
+        user: {
+          email: 'akps.i@yahoo.com',
+          firstName: 'Aniefiok',
+          lastName: 'Akpan',
+          password: 'ADsd23$$'
+        },
+        user2: {
+          email: 'adewale@yahoo.com',
+          firstName: 'Alimi',
+          lastName: 'Alabi',
+          password: 'ADsd23$$'
+        }
       };
-      const response = await request.post(`/api/v1/users/auth/register`).send(body);
+      const response = await request.post(`/api/v1/users/auth/register`).send(body.user);
+      const response2 = await request.post(`/api/v1/users/auth/register`).send(body.user2);
+
       token = response.body.data.token;
+      token2 = response2.body.data.token;
 
       const decodeToken = await jwtVerifyUserToken(token);
       UserId = decodeToken.user.id;
+      UserId2 = decodeToken.user.id
 
       expect(response.status).to.equal(201);
       expect(response.body).to.be.a('object');
@@ -69,8 +83,19 @@ describe('USER PROFILE', () => {
   });
 
   describe('GET USER PROFILE', () => {
-    const idWrong = 22;
     it('should throw unauthorized error', async () => {
+      const tokenHeader = `Bearer ${token2}`
+      const response = await request.get(`/api/v1/users/${UserId2}/profile`)
+        .set('Authorization', tokenHeader)
+      expect(response.status).to.equal(403);
+      expect(response.body.status).to.equal('error');
+      expect(response.body.message).to.equal('Unauthorized');
+    }).timeout(0)
+  });
+
+  describe('GET USER PROFILE', () => {
+    const idWrong = 22;
+    it('should throw user not found', async () => {
       const tokenHeader = `Bearer ${token}`
       const response = await request.get(`/api/v1/users/${idWrong}/profile`)
         .set('Authorization', tokenHeader)
@@ -100,7 +125,7 @@ describe('USER PROFILE', () => {
     it('should allow user to update his profile only', async () => {
 
       const tokenHeader = `Bearer ${token}`
-      const response = await request.patch(`/api/v1/users/2/profile`)
+      const response = await request.patch(`/api/v1/users/5/profile`)
         .set('Authorization', tokenHeader)
       expect(response.status).to.equal(403);
       expect(response.body.status).to.equal('error');
