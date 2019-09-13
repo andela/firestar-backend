@@ -206,22 +206,19 @@ export default class UserController {
    * @description get details of registered user
    */
   static async getUserProfile(req, res) {
-    // console.log('controller', req.result)
     const { id } = req.params;
-
-    const converToString = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? req.result.id.toString() : req.result.user.id.toString();
-    if (converToString !== id) {
-      util.setError(403, 'Unauthorized');
-      return util.send(res);
-    }
-    // req.result.user.id.toString()
+    const converToString = req.result.user.id.toString()
     try {
       const user = await findUserById(id);
       if (!user) {
-        util.setError(401, `User with id: ${id} not found`);
+        util.setError(401, `User not found`);
         return util.send(res);
       }
 
+      if (converToString !== id) {
+        util.setError(403, 'Unauthorized');
+        return util.send(res);
+      }
       util.setSuccess(200, 'Succesfully found user', user);
       return util.send(res);
     } catch (error) {
@@ -238,10 +235,8 @@ export default class UserController {
    * @description get's details of registered user
    */
   static async updateUserProfile(req, res) {
-
     const { id } = req.params;
-
-    const converToString = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? req.result.user.toString() : req.result.user.id.toString();
+    const converToString = req.result.user.id.toString()
     if (converToString !== id) {
       util.setError(403, 'Unauthorized')
       return util.send(res)

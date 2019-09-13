@@ -5,9 +5,6 @@ import sinonChai from 'sinon-chai';
 import app from '../../../index';
 
 import { jwtVerifyUserToken } from '../../../utils/index';
-// import { validateData, validateProfileData } from '../../../middlewares/validation/validation';
-import { jwtVerify, authorization } from '../../../middlewares/auth/auth';
-// import userController from '../../../controllers/userController';
 import db from '../../../models';
 import { roles } from '../../../__mocks__/userRoles';
 
@@ -77,9 +74,9 @@ describe('USER PROFILE', () => {
       const tokenHeader = `Bearer ${token}`
       const response = await request.get(`/api/v1/users/${idWrong}/profile`)
         .set('Authorization', tokenHeader)
-      expect(response.status).to.equal(403);
+      expect(response.status).to.equal(401);
       expect(response.body.status).to.equal('error');
-      expect(response.body.message).to.equal('Unauthorized');
+      expect(response.body.message).to.equal('User not found');
     }).timeout(0)
   });
 
