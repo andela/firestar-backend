@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import Helper from '../../../helpers/helperUtils';
 import db from '../../../models';
 import app from '../../../index';
 
@@ -19,7 +18,7 @@ const userLoginDetails = {
   password: 'firestar2019@K',
 };
 
-const userToken = '';
+// const userToken = '';
 
 // Create table and seed database
 const seedTestDb = async () => {
@@ -161,8 +160,8 @@ describe('Login Users', () => {
       .end((err, res) => {
         res.status.should.equal(200);
         res.body.message.should.equal('Welcome back, your login was successful');
-        const validUser = Helper.verifyToken(userToken);
-        validUser.should.be.an('boolean');
+        // const validUser = jwtVerifyUserToken(userToken);
+        // validUser.should.be.equal('true');
         done();
       });
   });
