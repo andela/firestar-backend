@@ -20,8 +20,7 @@
     "undo:test": "cross-env NODE_ENV=test sequelize db:migrate:undo:all",
     "seed:dev": "cross-env NODE_ENV=development sequelize db:seed:all",
     "seed:test": "cross-env NODE_ENV=test sequelize db:seed:all",
-    "undo:seed": "cross-env NODE_ENV=development npx sequelize-cli db:seed:undo:all",
-    "undo:seedtest": "cross-env NODE_ENV=test npx sequelize-cli db:seed:undo:all"
+    "undo:seed": "cross-env NODE_ENV=development npx sequelize-cli db:seed:undo:all"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
@@ -30,7 +29,7 @@
     "@babel/core": "^7.6.0",
     "@babel/node": "^7.6.1",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-proposal-nullish-coaam lescing-operator": "^7.4.4",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
     "@hapi/joi": "^15.1.1",
