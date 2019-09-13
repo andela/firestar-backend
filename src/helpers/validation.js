@@ -47,7 +47,6 @@ export default class Validation {
         errors.password = 'Passwords must match';
       }
     }
-
     return {
       errors,
       isValid: this.isEmpty(errors)

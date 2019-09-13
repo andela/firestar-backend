@@ -105,7 +105,8 @@ export const validationForSignIn = (req, res, next) => {
   }
 
   const signInBody = {
-    email, password
+    email: email.trim(),
+    password: password.trim()
   };
 
   try {
