@@ -55,13 +55,5 @@ router.post('/users/passwords/forgot', forgotPasswordCheck, forgotPassword);
 // @access Public
 router.post('/users/passwords/reset/:userId', resetPasswordCheck, resetPassword);
 
-router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationToken,
-  emailController.signUp);
-
-router.post('/users/auth/register', ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
-
-  EmptySignUpBodyPropertyValue, validationForSignUp, SendVerificationToken, userController.addUser);
-
-router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
 
 export default router;
