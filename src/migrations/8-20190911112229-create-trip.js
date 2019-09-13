@@ -16,7 +16,7 @@ module.exports = {
     },
     accommodationId: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'accommodations',
         key: 'id'

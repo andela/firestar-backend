@@ -2,13 +2,11 @@ import models from '../models';
 import { checkIfExistsInDb } from '../utils/searchDb';
 import { validateTripObj, validateRequestObj, validateTrip } from '../helpers/validation/tripValidation';
 
-// CROSS CHECK DATE REGEX!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 export const validateRequestInput = async (req, res, next) => {
   try {
     const errors = {};
     const { trips, tripType } = req.body;
-    validateRequestObj(req.body, errors);
+    req.body = validateRequestObj(req.body, errors);
     validateTrip(req.body, errors);
     req.body.trips = await Promise.all(await validateTripObj(trips, tripType, errors));
     if (Object.keys(errors).length) {
@@ -49,7 +47,7 @@ export const validateTripData = async (req, res, next) => {
   }
 };
 
-export const validateTripInput = async (req, res, next) => {
+export const checkPreviousRequest = async (req, res, next) => {
   try {
     const foundRequest = await models.requests.findOne({
       where: {

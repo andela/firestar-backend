@@ -23,7 +23,7 @@ module.exports = {
       noOfRooms: 2,
       type: 'standard',
       timesVisited: 1,
-      destinationId: 2,
+      destinationId: 3,
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -32,7 +32,7 @@ module.exports = {
       noOfRooms: 4,
       type: 'suite',
       timesVisited: 1,
-      destinationId: 3,
+      destinationId: 4,
       createdAt: new Date(),
       updatedAt: new Date()
     },

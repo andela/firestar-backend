@@ -26,10 +26,12 @@ export const validateTripObj = async (arr, type, err) => {
     } else if (!Validator.validateInteger(obj.departureLocationId)) {
       err[`trip ${index + 1} departure`] = `Invalid departure location id provided for the trip number ${index + 1}`;
     }
-    if (!obj.accommodationId) {
+    if (!obj.accommodationId && type !== 'return') {
       err[`trip ${index + 1} accommodation`] = `No accommodation provided for the trip number ${index + 1}`;
     } else if (!Validator.validateInteger(obj.accommodationId) && obj.accommodationId) {
       err[`trip ${index + 1} accommodation`] = `Invalid accommodation id provided for the trip number ${index + 1}`;
+    } else if (obj.accommodationId && type === 'return ' && index > 1) {
+      err.returnTrip = 'Return trip should have no accommodation';
     }
     if (obj.departureLocationId === obj.destinationLocationId) {
       err[`trip ${index + 1}`] = 'A trip\'s destination cannot be the same as the departure location';
@@ -69,8 +71,9 @@ export const validateRequestObj = (body, errors) => {
   const stringRegex = /^[a-z\s]+$/i;
   const typeOfTrip = ['oneWay', 'return', 'multiCity'];
   const {
-    reason, tripType, departmentId
+    reason, departmentId
   } = body;
+  let { tripType } = body;
   if (!reason) {
     errors.reason = 'Trip reason not provided';
   } else {
@@ -82,9 +85,9 @@ export const validateRequestObj = (body, errors) => {
   if (!tripType) {
     errors.tripType = 'Type of trip not provided';
   } else {
-    body.tripType = body.tripType.trim();
+    tripType = tripType.trim();
     if (!typeOfTrip.includes(tripType)) {
-      errors.reason = 'Invalid trip type';
+      errors.tripType = 'Invalid trip type';
     }
   }
   if (!departmentId) {
@@ -93,6 +96,7 @@ export const validateRequestObj = (body, errors) => {
   if (!Validator.validateInteger(departmentId) && !errors.department) {
     errors.department = 'Invalid department provided';
   }
+  return body;
 };
 
 export const validateTrip = (body, error) => {
