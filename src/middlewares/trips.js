@@ -10,7 +10,7 @@ export const validateRequestInput = async (req, res, next) => {
     const { trips, tripType } = req.body;
     validateRequestObj(req.body, errors);
     validateTrip(req.body, errors);
-    req.body.trips = await validateTripObj(trips, tripType, errors);
+    req.body.trips = await Promise.all(await validateTripObj(trips, tripType, errors));
     if (Object.keys(errors).length) {
       return res.status(400).json({
         success: false,

@@ -1,16 +1,17 @@
 import Validator from '../validation';
+import models from '../../models';
 
-export const validateTripObj = (arr, type, err) => {
+export const validateTripObj = async (arr, type, err) => {
   let presentLocation = '';
   let date = '';
   const dateRegex = /([0-9]{4}-|\/(0[1-9]|1[0-2])-|\(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]/;
   if (!Array.isArray(arr)) {
-    err.trips = 'Invalid Trips'; 
+    err.trips = 'Invalid Trips';
   }
   if (!arr.length) {
     err.trips = 'No trip selected';
   }
-  const trips = arr.map((obj, index) => {
+  const trips = arr.map(async (obj, index) => {
     if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
       err.trip = `Invalid Trip ${index + 1}`;
     }
@@ -42,6 +43,8 @@ export const validateTripObj = (arr, type, err) => {
         err[`trip ${index + 1} departureDate`] = 'Invalid Trip Date. Give at least a week\'s notice for initial trip';
       } else if (Date.parse(obj.departureDate) - Date.parse(date) < 86400000) {
         err[`trip ${index + 1} departureDate`] = 'Invalid Trip Date. Give at least a day difference from previous trip';
+      } else {
+        date = obj.departureDate;
       }
     }
     if ((type === 'multiCity' || type === 'return') && presentLocation && obj.departureLocationId !== presentLocation) {
@@ -49,7 +52,12 @@ export const validateTripObj = (arr, type, err) => {
     } else {
       presentLocation = obj.destinationLocationId;
     }
-    date = obj.departureDate;
+    const accommodation = await models.accommodations.findOne(
+      { where: { id: obj.accommodationId } }
+    );
+    if (accommodation && obj.destinationLocationId !== accommodation.destinationId) {
+      err[`trip ${index + 1} accomodation`] = 'Selected accommodation does not belong to the trip destination';
+    }
     return obj;
   });
   return trips;

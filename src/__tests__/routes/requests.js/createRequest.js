@@ -24,14 +24,13 @@ describe.only('REQUESTS', () => {
       await models.destinations.bulkCreate(destinations);
       await models.accommodations.bulkCreate(accommodations);
       await models.departments.bulkCreate(departments);
-
     } catch (error) {
       console.log(error);
     }
   });
   after(async () => {
-    await models.destinations.destroy({ where: {} });
     await models.accommodations.destroy({ where: {} });
+    await models.destinations.destroy({ where: {} });
     await models.trips.destroy({ where: {} });
     await models.requests.destroy({ where: {} });
     await models.departments.destroy({ where: {} });
@@ -67,15 +66,6 @@ describe.only('REQUESTS', () => {
       assert.equal(res.status, 401);
       assert.equal(res.body.success, false);
     });
-    // it('Calls next for permitted role ', async () => {
-    //     const res = await chai.request(server)
-    //         .post(route)
-    //         .set('authorization', 'hgvy565eheu3y87d2dhb2vdu62276t72gd7')
-    //         .send(requests.oneWay);
-    //     assert.equal(res.status, 400);
-    //     assert.equal(res.body.success, false);
-    //     assert.ca
-    // });
   });
 
   describe('Should validate user input', () => {
@@ -84,7 +74,7 @@ describe.only('REQUESTS', () => {
         .post(route)
         .set('authorization', token.requester)
         .send(requests.noReason);
-        console.log(res.body)
+
       assert.equal(res.status, 400);
       assert.equal(res.body.success, false);
     });
@@ -120,7 +110,7 @@ describe.only('REQUESTS', () => {
         .post(route)
         .set('authorization', token.requester)
         .send(requests.noDepartment);
-      console.log(res.body);
+
       assert.equal(res.status, 400);
       assert.equal(res.body.success, false);
     });
@@ -278,51 +268,60 @@ describe.only('REQUESTS', () => {
       assert.equal(res.status, 400);
       assert.equal(res.body.success, false);
     });
-      it('Returns 400 for a one way trip having more than on trip', async () => {
-          const res = await chai.request(server)
-              .post(route)
-              .set('authorization', token.requester)
-              .send(requests.invalidOneWay);
+    it('Returns 400 for a trip with accommodation destination not corresponding to trip destination', async () => {
+      const res = await chai.request(server)
+        .post(route)
+        .set('authorization', token.requester)
+        .send(requests.invalidOneWay);
 
-          assert.equal(res.status, 400);
-          assert.equal(res.body.success, false);
-      });
-      it('Returns 400 for a request without trips array', async () => {
-          const res = await chai.request(server)
-              .post(route)
-              .set('authorization', token.requester)
-              .send(requests.invalidRequest3);
+      assert.equal(res.status, 400);
+      assert.equal(res.body.success, false);
+    });
+    it('Returns 400 for a one way trip having more than on trip', async () => {
+      const res = await chai.request(server)
+        .post(route)
+        .set('authorization', token.requester)
+        .send(requests.invalidOneWay2);
 
-          assert.equal(res.status, 400);
-          assert.equal(res.body.success, false);
-      });
-      it('Returns 400 for a request without a trip object', async () => {
-          const res = await chai.request(server)
-              .post(route)
-              .set('authorization', token.requester)
-              .send(requests.invalidRequest4);
+      assert.equal(res.status, 400);
+      assert.equal(res.body.success, false);
+    });
+    it('Returns 400 for a request without trips array', async () => {
+      const res = await chai.request(server)
+        .post(route)
+        .set('authorization', token.requester)
+        .send(requests.invalidRequest3);
 
-          assert.equal(res.status, 400);
-          assert.equal(res.body.success, false);
-      });
-      it('Returns 400 if return trip has more than two trips', async () => {
-          const res = await chai.request(server)
-              .post(route)
-              .set('authorization', token.requester)
-              .send(requests.invalidReturn4);
+      assert.equal(res.status, 400);
+      assert.equal(res.body.success, false);
+    });
+    it('Returns 400 for a request without a trip object', async () => {
+      const res = await chai.request(server)
+        .post(route)
+        .set('authorization', token.requester)
+        .send(requests.invalidRequest4);
 
-          assert.equal(res.status, 400);
-          assert.equal(res.body.success, false);
-      });
-      it('Returns 400 if multi-city trip has less than two trips', async () => {
-          const res = await chai.request(server)
-              .post(route)
-              .set('authorization', token.requester)
-              .send(requests.invalidMultiCity);
+      assert.equal(res.status, 400);
+      assert.equal(res.body.success, false);
+    });
+    it('Returns 400 if return trip has more than two trips', async () => {
+      const res = await chai.request(server)
+        .post(route)
+        .set('authorization', token.requester)
+        .send(requests.invalidReturn4);
 
-          assert.equal(res.status, 400);
-          assert.equal(res.body.success, false);
-      });
+      assert.equal(res.status, 400);
+      assert.equal(res.body.success, false);
+    });
+    it('Returns 400 if multi-city trip has less than two trips', async () => {
+      const res = await chai.request(server)
+        .post(route)
+        .set('authorization', token.requester)
+        .send(requests.invalidMultiCity);
+
+      assert.equal(res.status, 400);
+      assert.equal(res.body.success, false);
+    });
   });
 
   describe('Should Create Trip Request', () => {
@@ -368,7 +367,7 @@ describe.only('REQUESTS', () => {
   });
 
   describe('Should Create Trip Request', () => {
-      it('should return 404 id departure does not exist', async () => {
+    it('should return 404 id departure does not exist', async () => {
       const res = await chai.request(server)
         .post(route)
         .set('authorization', token.requester)

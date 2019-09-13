@@ -94,7 +94,7 @@ export const requests = {
   nonExistentDestination: {
     trips: [
       {
-        destinationLocationId: 100, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
+        destinationLocationId: 100, departureLocationId: 1, accommodationId: 100, departureDate: '2019/10/10 18:00'
       }
     ],
     reason: 'Business',
@@ -184,6 +184,16 @@ export const requests = {
   oneWay: {
     trips: [
       {
+        destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
+      }
+    ],
+    reason: 'Business',
+    departmentId: 2,
+    tripType: 'oneWay',
+  },
+  invalidOneWay: {
+    trips: [
+      {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
       }
     ],
@@ -194,7 +204,7 @@ export const requests = {
   return: {
     trips: [
       {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
+        destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
       {
         destinationLocationId: 1, departureLocationId: 2, accommodationId: 1, departureDate: '2020/10/11 18:00'
@@ -207,10 +217,10 @@ export const requests = {
   invalidReturn: {
     trips: [
       {
-        destinationLocationId: 1, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
+        destinationLocationId: 1, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
       {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/11 18:00'
+        destinationLocationId: 2, departureLocationId: 1, accommodationId: 3, departureDate: '2020/10/11 18:00'
       }
     ],
     reason: 'Business',
@@ -220,10 +230,10 @@ export const requests = {
   invalidReturn2: {
     trips: [
       {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
+        destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
       {
-        destinationLocationId: 3, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/11 18:00'
+        destinationLocationId: 3, departureLocationId: 1, accommodationId: 3, departureDate: '2020/10/11 18:00'
       }
     ],
     reason: 'Business',
@@ -243,13 +253,13 @@ export const requests = {
   invalidReturn4: {
     trips: [
       {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
+        destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
       {
-        destinationLocationId: 3, departureLocationId: 2, accommodationId: 1, departureDate: '2020/10/11 18:00'
+        destinationLocationId: 3, departureLocationId: 2, accommodationId: 3, departureDate: '2020/10/11 18:00'
       },
       {
-        destinationLocationId: 4, departureLocationId: 4, accommodationId: 1, departureDate: '2020/10/12 18:00'
+        destinationLocationId: 4, departureLocationId: 4, accommodationId: 4, departureDate: '2020/10/12 18:00'
       }
     ],
     reason: 'Business',
@@ -259,23 +269,23 @@ export const requests = {
   multiCity: {
     trips: [
       {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
+        destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
       {
-        destinationLocationId: 3, departureLocationId: 2, accommodationId: 1, departureDate: '2020/10/11 18:00'
+        destinationLocationId: 3, departureLocationId: 2, accommodationId: 3, departureDate: '2020/10/11 18:00'
       }
     ],
     reason: 'Business',
     departmentId: 2,
     tripType: 'multiCity',
   },
-  invalidOneWay: {
+  invalidOneWay2: {
     trips: [
       {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
+        destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
       {
-        destinationLocationId: 3, departureLocationId: 2, accommodationId: 1, departureDate: '2020/10/11 18:00'
+        destinationLocationId: 3, departureLocationId: 2, accommodationId: 3, departureDate: '2020/10/11 18:00'
       }
     ],
     reason: 'Business',
@@ -285,10 +295,10 @@ export const requests = {
   invalidRequest: {
     trips: [
       {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2018/10/10 18:00'
+        destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2018/10/10 18:00'
       },
       {
-        destinationLocationId: 3, departureLocationId: 2, accommodationId: 1, departureDate: '2020/10/10 18:00'
+        destinationLocationId: 3, departureLocationId: 2, accommodationId: 3, departureDate: '2020/10/10 18:00'
       }
     ],
     reason: 'Business',
@@ -298,10 +308,10 @@ export const requests = {
   invalidRequest2: {
     trips: [
       {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
+        destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
       {
-        destinationLocationId: 3, departureLocationId: 2, accommodationId: 1, departureDate: '2020/10/10 18:00'
+        destinationLocationId: 3, departureLocationId: 2, accommodationId: 3, departureDate: '2020/10/10 18:00'
       }
     ],
     reason: 'Business',
