@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 const { assert } = chai;
 const route = '/api/v1/requests';
 
-describe.only('REQUESTS', () => {
+describe('REQUESTS', () => {
   before(async () => {
     try {
       await models.users.sync({ force: true });

@@ -1,10 +1,10 @@
+import moment from 'moment';
 import Validator from '../validation';
 import models from '../../models';
 
 export const validateTripObj = async (arr, type, err) => {
   let presentLocation = '';
   let date = '';
-  const dateRegex = /([0-9]{4}-|\/(0[1-9]|1[0-2])-|\(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]/;
   if (!Array.isArray(arr)) {
     err.trips = 'Invalid Trips';
   }
@@ -12,6 +12,7 @@ export const validateTripObj = async (arr, type, err) => {
     err.trips = 'No trip selected';
   }
   const trips = arr.map(async (obj, index) => {
+    const isValidDate = moment(obj.departureDate, 'YYYY-|/MM-|/DD hh:mm-ss').isValid();
     if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
       err.trip = `Invalid Trip ${index + 1}`;
     }
@@ -37,7 +38,7 @@ export const validateTripObj = async (arr, type, err) => {
       err[`trip ${index + 1} departureDate`] = `Trip date not provided for trip ${index + 1}`;
     } else {
       obj.departureDate = obj.departureDate.trim();
-      if (!dateRegex.test(obj.departureDate)) {
+      if (!isValidDate) {
         err[`trip ${index + 1} departureDate`] = `Invalid Trip date/time format for trip ${index + 1}`;
       } else if (Date.parse(obj.departureDate) - Date.now() < 432000000 && index === 0) {
         err[`trip ${index + 1} departureDate`] = 'Invalid Trip Date. Give at least a week\'s notice for initial trip';
