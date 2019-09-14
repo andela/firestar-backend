@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-import { signUpValidationSchema, validateData } from '../../helpers/validation/signupValidation';
-import Util from '../../utils/response';
-import { isEmptyBody, isMissingBodyProperty, isMissingBodyPropertyValue } from '../../utils/index';
+import { signUpValidationSchema, validateData } from '../validation/signupValidation';
+import Util from '../utils/response';
+import { isEmptyBody, isMissingBodyProperty, isMissingBodyPropertyValue } from '../utils/index';
 
 
 const util = new Util();

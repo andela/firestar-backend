@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../index';
 import models from '../models';
-import { users } from '../__mocks__/userRoles';
+import { users } from '../mocks/userRoles';
 
 chai.use(chaiHttp);
 

@@ -1,4 +1,4 @@
-import setRoleValidator from '../helpers/validation/roles';
+import setRoleValidator from '../validation/roles';
 import models from '../models';
 import { checkIfExistsInDb, findByEmail } from '../utils/searchDb';
 

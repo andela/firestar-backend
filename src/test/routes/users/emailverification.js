@@ -7,7 +7,7 @@ import { handleEmptyEmailBody } from '../../../middlewares/mail';
 import emailverification from '../../../controllers/emailController';
 import { emailVerifyToken } from '../../../utils/index';
 import validation from '../../../helpers/validation';
-import { idUnset, idWrong } from '../../../__mocks__/emailVerification';
+import { idUnset, idWrong } from '../../../mocks/emailVerification';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);

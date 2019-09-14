@@ -4,13 +4,13 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import app from '../../../index';
 
-import { jwtVerifyUserToken, emailVerifyToken } from '../../../utils/index';
+import { jwtVerifyUserToken, emailVerifyToken, isMissingBodyProperty } from '../../../utils/index';
 import { hashPassword, comparePassword } from '../../../helpers/hashpassword';
-import { validateData, signUpValidationSchema } from '../../../helpers/validation/signupValidation';
-import { jwtVerify, authorization } from '../../../middlewares/auth/auth';
+import { validateData, signUpValidationSchema } from '../../../validation/signupValidation';
+import { authorization } from '../../../middlewares/auth';
 import userController from '../../../controllers/userController';
 import db from '../../../models';
-import { roles } from '../../../__mocks__/userRoles';
+import { roles } from '../../../mocks/userRoles';
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -54,9 +54,10 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       token = response.body.data.token;
-      const verifyTokenForUser = await jwtVerifyUserToken(token);
+      const { id } = await jwtVerifyUserToken(token);
+      console.log(id)
       tokenEmail = await emailVerifyToken(token);
-      UserId = verifyTokenForUser.id;
+      UserId = id;
       expect(response.status).to.equal(201);
       expect(response.body).to.be.a('object');
     }).timeout(0);
@@ -68,6 +69,20 @@ describe('SIGNUP ROUTE', () => {
       expect(response.id).to.equal(UserId);
     }).timeout(0);
   });
+
+  describe('JWT VERIFY SIGNUP TOKEN should not be generated', () => {
+    it('should verify token', async () => {
+      const body = {
+        email: 'akps.dd@yahoo.com',
+        firstName: 'Aniefiok',
+        lastName: 'Akpan',
+        password: 'EMma340##@@'
+      };
+      const response = await isMissingBodyProperty(body);
+      expect(response.length).to.equal(0);
+    }).timeout(0);
+  });
+
 
   describe('HASHPASWORD AND COMPAREPASSWORD', () => {
     it('should hash passowrd for user', async () => {
@@ -367,39 +382,7 @@ describe('SIGNUP ROUTE', () => {
   });
 
   describe('STUBS FOR AUTH MIDDLEWARE', () => {
-    it('reproduce server response when token is not valid /JWTVERIFY', async () => {
-      const req = {
-        token: tokenEmail,
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
 
-      sinon.stub(res, 'status').returnsThis();
-      sinon.stub(req, 'token').throws();
-
-      await jwtVerify(req, res);
-
-      expect(res.status).to.have.been.calledWith(401);
-    });
-
-    it('Go to the next middleware when no error in JWTVERIFY', async () => {
-      const req = {
-        token: `bearer ${token}`,
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      const next = () => 2;
-
-      sinon.stub(res, 'status').returnsThis();
-      sinon.stub(req, 'token').throws();
-
-      await jwtVerify(req, res, next);
-    });
 
 
     it('reproduce server response when token is not available in Header as Authorization', async () => {
@@ -411,9 +394,12 @@ describe('SIGNUP ROUTE', () => {
         json() {},
       };
 
+      const next = () => 2;
+
+
       sinon.stub(res, 'status').returnsThis();
 
-      await authorization(req, res);
+      await authorization(req, res, next);
 
       expect(res.status).to.have.been.calledWith(401);
     });

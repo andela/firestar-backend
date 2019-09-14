@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { SendVerificationToken, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
-import { authorization, jwtVerify } from '../../middlewares/auth/auth';
+import { authorization } from '../../middlewares/auth';
 import {
   validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
   EmptySignUpBodyPropertyValue
-} from '../../middlewares/validation/validation';
+} from '../../middlewares/validation';
 import emailController from '../../controllers/emailController';
 import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/users';
 import isLoggedIn from '../../middlewares/login';
@@ -35,7 +35,7 @@ router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
  * Simply call the authorization and jwtVerify middleware in the route you want
  * to protect
  */
-router.get('/users/myaccount', authorization, jwtVerify, indexController.Welcome);
+router.get('/users/myaccount', authorization, indexController.Welcome);
 
 router.patch('/users/roles', [isLoggedIn, validateSetRole, permit([roleIds.superAdmin]), checkRoleConflict], userController.changeRole);
 
