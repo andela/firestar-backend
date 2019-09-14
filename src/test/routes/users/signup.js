@@ -54,10 +54,9 @@ describe('SIGNUP ROUTE', () => {
       };
       const response = await request.post('/api/v1/users/auth/register').send(body);
       token = response.body.data.token;
-      const { id } = await jwtVerifyUserToken(token);
-      console.log(id)
+      const { user } = await jwtVerifyUserToken(token);
       tokenEmail = await emailVerifyToken(token);
-      UserId = id;
+      UserId = user.id;
       expect(response.status).to.equal(201);
       expect(response.body).to.be.a('object');
     }).timeout(0);
@@ -65,7 +64,8 @@ describe('SIGNUP ROUTE', () => {
 
   describe('JWT VERIFY SIGNUP TOKEN', () => {
     it('should verify token', async () => {
-      const response = await jwtVerifyUserToken(token);
+      const { user } = await jwtVerifyUserToken(token);
+      console.log(response)
       expect(response.id).to.equal(UserId);
     }).timeout(0);
   });

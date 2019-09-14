@@ -91,7 +91,6 @@ export default class UserController {
       await resets.destroy({
         where: { email: newReset.dataValues.email }
       });
-      // console.log('newReset', newReset);
       await newReset.save();
       // Send reset link to user email
       if (!resetToken) {
