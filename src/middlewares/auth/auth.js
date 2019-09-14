@@ -3,26 +3,27 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const authorization = (req, res, next) => {
-  const header = req.header('Authorization');
-
-  if (typeof header !== 'undefined') {
-    const [, token] = header.split(' ');
-    req.token = token;
-    next();
-  } else {
-    res.status(401).json({ status: 401, error: 'You are not authorized to access this route' });
+export const authorization = async (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'Token required'
+    });
   }
-};
-
-export const jwtVerify = (req, res, next) => {
-  const { token } = req;
-  jwt.verify(token, process.env.SECRET_KEY_SIGN_UP, (err, result) => {
-    if (err) {
-      res.status(401).json({ status: 401, error: 'Invalid Token provided' });
-    } else {
-      req.result = result;
-      next();
+  try {
+    // eslint-disable-next-line no-unused-vars
+    const [, realToken] = token.split(' ');
+    const decoded = await jwt.decode(realToken, process.env.JWT_SECRET);
+    if (decoded) {
+      req.result = decoded;
+      return next();
     }
-  });
+    throw new Error('Invalid Token Provided');
+  } catch (error) {
+    return res.status(400).json({
+      status: 'error',
+      message: error.message
+    });
+  }
 };

@@ -99,6 +99,7 @@ export const validateProfileData = async (req, res, next) => {
       gender: Joi.string(),
       company: Joi.string(),
       lineManager: Joi.string(),
+      phoneNumber: Joi.string().max(13),
       dateOfBirth: Joi.string(),
       department: Joi.string(),
       countryCode: Joi.string().min(2),

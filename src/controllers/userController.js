@@ -151,7 +151,7 @@ export default class UserController {
             {
               token: '',
               password: hashed,
-              lastLogin: new Date()
+              lastLogin: new Date(),
             },
             { where: { email: userRequestReset.email } }
           );
@@ -190,7 +190,7 @@ export default class UserController {
         });
       return res.status(200).json({
         status: 'success',
-        data: updatedUser[1].dataValues
+        data: updatedUser[1].dataValues,
       });
     } catch (error) {
       error.status = 404;
@@ -206,19 +206,16 @@ export default class UserController {
    * @description get details of registered user
    */
   static async getUserProfile(req, res) {
-    const { id } = req.params;
-    const converToString = req.result.user.id.toString()
+    const { id } = req.result.user
+
     try {
       const user = await findUserById(id);
+
       if (!user) {
-        util.setError(401, `User not found`);
-        return util.send(res);
+        util.setError(401, 'User not found')
+        return util.send(res)
       }
 
-      if (converToString !== id) {
-        util.setError(403, 'Unauthorized');
-        return util.send(res);
-      }
       util.setSuccess(200, 'Succesfully found user', user);
       return util.send(res);
     } catch (error) {
@@ -235,29 +232,53 @@ export default class UserController {
    * @description get's details of registered user
    */
   static async updateUserProfile(req, res) {
-    const { id } = req.params;
-    const converToString = req.result.user.id.toString()
-    if (converToString !== id) {
-      util.setError(403, 'Unauthorized')
+    console.log(req.result)
+    const { id } = req.result.user
+
+    const {
+      firstName,
+      lastName,
+      username,
+      dateOfBirth,
+      preferredLanguage,
+      preferredCurrency,
+      gender,
+      company,
+      lineManager,
+      residentialLocation,
+      countryCode,
+      department,
+      phoneNumber,
+    } = req.body;
+
+    const user = await findUserById(id);
+
+    if (!user) {
+      util.setError(401, 'User not found')
       return util.send(res)
     }
 
-    const {
-      firstName, lastName, username, dateOfBirth, preferredLanguage,
-      preferredCurrency, gender, company, lineManager,
-      residentialLocation, countryCode, department, phoneNumber
-    } = req.body;
-
     try {
       const userDetails = {
-        firstName, lastName, username, dateOfBirth, preferredLanguage,
-        preferredCurrency, gender, company, lineManager,
-        residentialLocation, countryCode, department, phoneNumber
+        firstName,
+        lastName,
+        username,
+        dateOfBirth,
+        preferredLanguage,
+        preferredCurrency,
+        gender,
+        company,
+        lineManager,
+        residentialLocation,
+        countryCode,
+        department,
+        phoneNumber,
       };
       const updatedUser = await updateUser(id, userDetails);
 
-      delete updatedUser.saveProfile
-      delete updatedUser.isVerified
+
+      delete updatedUser.saveProfile;
+      delete updatedUser.isVerified;
 
       util.setSuccess(
         201,

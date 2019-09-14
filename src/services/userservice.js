@@ -65,6 +65,7 @@ class userService {
  * @param {Integer} id - user's id
  * @returns {Promise} - sequelize response
 */
+
   static async findUserById(id) {
     try {
       const user = await users.findOne({
