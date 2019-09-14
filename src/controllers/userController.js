@@ -232,9 +232,7 @@ export default class UserController {
    * @description get's details of registered user
    */
   static async updateUserProfile(req, res) {
-    console.log(req.result)
     const { id } = req.result.user
-
     const {
       firstName,
       lastName,
@@ -275,7 +273,6 @@ export default class UserController {
         phoneNumber,
       };
       const updatedUser = await updateUser(id, userDetails);
-
 
       delete updatedUser.saveProfile;
       delete updatedUser.isVerified;
