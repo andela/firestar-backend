@@ -66,7 +66,14 @@ export default class UserController {
    */
   static async loginAUser(req, res) {
     try {
-      const { email, password } = req.body;
+      let { email, password } = req.body;
+      if (req.body.email) {
+        email = email.trim();
+      }
+      if (req.body.password) {
+        password = password.trim();
+      }
+
       const user = await findUserInUsersDb(email);
       if (!user) {
         return errorResponse(res, 404, 'You don\'t have have an account. Please signup');
