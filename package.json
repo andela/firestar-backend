@@ -18,9 +18,9 @@
     "migrate:prod": "cross-env NODE_ENV=production sequelize db:migrate",
     "undo:dev": "sequelize db:migrate:undo:all",
     "undo:test": "cross-env NODE_ENV=test sequelize db:migrate:undo:all",
-    "undo:prod": "cross-env NODE_ENV=production sequelize db:migrate:undo:all",
-    "seed:dev": "sequelize db:seed:all",
-    "seed:test": "cross-env NODE_ENV=test sequelize db:seed:all"
+    "seed:dev": "cross-env NODE_ENV=development sequelize db:seed:all",
+    "seed:test": "cross-env NODE_ENV=test sequelize db:seed:all",
+    "undo:seed": "cross-env NODE_ENV=development npx sequelize-cli db:seed:undo:all"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
@@ -63,8 +63,10 @@
     "request": "^2.87.0",
     "sequelize": "^5.15.2",
     "sequelize-cli": "^5.5.0",
+    "superagent": "^5.1.0",
     "swagger-ui-express": "^4.0.7",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "validatorjs": "^3.15.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",

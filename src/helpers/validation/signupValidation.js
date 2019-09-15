@@ -27,3 +27,21 @@ export const validateData = (data, schema) => {
   const values = { error, value };
   return values;
 };
+
+
+export const signInValidationSchema = Joi.object().keys({
+  password: Joi.string().regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!.@$%^&*-]).{8,}$/)
+    .error((errors) => ({
+      message: 'Password must be at leat 8 character long, with at least an uppercase, lowercase, digit and special character'
+    })),
+  email: Joi.string().email()
+    .error((errors) => ({
+      message: 'Your email is not valid'
+    }))
+});
+
+export const validateSignInData = (data, schema) => {
+  const { error, value } = Joi.validate(data, schema);
+  const values = { error, value };
+  return values;
+};
