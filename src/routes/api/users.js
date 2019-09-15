@@ -42,9 +42,6 @@ router.get('/users/myaccount', authorization, jwtVerify, indexController.Welcome
 
 router.patch('/users/roles', [isLoggedIn, validateSetRole, permit([roleIds.superAdmin]), checkRoleConflict], userController.changeRole);
 
-router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
-router.patch('/users/roles', [isLoggedIn, validateSetRole, permit([roleIds.superAdmin]), checkRoleConflict], userController.changeRole);
-
 // @route POST /api/v1/users/passwords/forgot
 // @desc Generate User Password Reset / Returning JWT Token
 // @access Public
