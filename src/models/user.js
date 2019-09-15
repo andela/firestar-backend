@@ -12,6 +12,10 @@ const users = (sequelize, DataTypes) => {
     username: {
       type: DataTypes.STRING
     },
+    username: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
     firstName: {
       allowNull: false,
       type: DataTypes.STRING

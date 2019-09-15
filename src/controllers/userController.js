@@ -3,20 +3,19 @@ import crypto from 'crypto';
 import Response from '../utils/response';
 import Hash from '../utils/hash';
 import db from '../models';
-import userService from '../services/userservice';
+import userService from '../services/userService';
 import { jwtSignUser } from '../utils/index';
 import { hashPassword } from '../helpers/hashpassword';
-const { findUserById, updateUser } = userService;
+const { findUserById, updateUser, findUserInUsersDb } = userService;
 
 const util = new Response();
 
 const { users, logins, resets } = db;
 const { errorResponse, successResponse } = Response;
-import dotenv from 'dotenv';
-
-dotenv.config();
+const { compareWithHash } = Hash;
 /**
- @description Class based Controller for Roles
+ * @class UsersController
+ * @description Class based Controller for Roles
 */
 export default class UserController {
   /**
@@ -52,6 +51,61 @@ export default class UserController {
       }
       util.setError(500, error);
       return util.send(res);
+    }
+  }
+
+
+  /** Login User
+   * @description Logins a user
+   * @static
+   * @param {object} req - HTTP Request
+   * @param {object} res - HTTP Response
+   * @returns {string} loginUsers
+   */
+  static async loginAUser(req, res) {
+    try {
+      let { email, password } = req.body;
+      if (req.body.email) {
+        email = email.trim();
+      }
+      if (req.body.password) {
+        password = password.trim();
+      }
+
+      const user = await findUserInUsersDb(email);
+      if (!user) {
+        return errorResponse(res, 404, 'You don\'t have have an account. Please signup');
+      }
+
+      const loggedUser = await logins.findOne({ where: { email } });
+
+      if (loggedUser) {
+        const correctPassword = await compareWithHash(password, loggedUser.password);
+        if (!correctPassword) {
+          return errorResponse(res, 401, 'Email or password incorrect');
+        }
+        const loginData = {
+          lastLogin: new Date(),
+        };
+
+        const token = await jwtSignUser({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          lastLogin: loggedUser.lastLogin
+        });
+
+        await userService.updateLogins(loginData);
+        return res.status(200).json({
+          message: 'Welcome back, your login was successful',
+          token,
+        });
+      }
+      return errorResponse(res, 401, 'Email or password incorrect');
+    } catch (error) {
+      return errorResponse(res, 500, error);
     }
   }
 
@@ -132,7 +186,6 @@ export default class UserController {
           where: { email: user.email }
         }))
         : null;
-
 
       // Check if user has requested password reset
       if (user && userRequestReset) {
