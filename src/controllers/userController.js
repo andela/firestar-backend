@@ -206,14 +206,14 @@ export default class UserController {
    * @description get details of registered user
    */
   static async getUserProfile(req, res) {
-    const { id } = req.result.user
+    const { id } = req.result.user;
 
     try {
       const user = await findUserById(id);
 
       if (!user) {
-        util.setError(401, 'User not found')
-        return util.send(res)
+        util.setError(401, 'User not found');
+        return util.send(res);
       }
 
       util.setSuccess(200, 'Succesfully found user', user);
@@ -232,7 +232,7 @@ export default class UserController {
    * @description get's details of registered user
    */
   static async updateUserProfile(req, res) {
-    const { id } = req.result.user
+    const { id } = req.result.user;
     const {
       firstName,
       lastName,
@@ -252,8 +252,8 @@ export default class UserController {
     const user = await findUserById(id);
 
     if (!user) {
-      util.setError(401, 'User not found')
-      return util.send(res)
+      util.setError(401, 'User not found');
+      return util.send(res);
     }
 
     try {
@@ -280,7 +280,7 @@ export default class UserController {
       util.setSuccess(
         201,
         'You ve successfully updated your profile',
-        updatedUser
+        updatedUser,
       );
       return util.send(res);
     } catch (error) {

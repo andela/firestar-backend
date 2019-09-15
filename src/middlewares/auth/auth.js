@@ -8,7 +8,7 @@ export const authorization = async (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       status: 'error',
-      message: 'Token required'
+      message: 'Token required',
     });
   }
   try {
@@ -23,7 +23,7 @@ export const authorization = async (req, res, next) => {
   } catch (error) {
     return res.status(400).json({
       status: 'error',
-      message: error.message
+      message: error.message,
     });
   }
 };
