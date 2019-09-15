@@ -65,8 +65,7 @@ describe('SIGNUP ROUTE', () => {
   describe('JWT VERIFY SIGNUP TOKEN', () => {
     it('should verify token', async () => {
       const { user } = await jwtVerifyUserToken(token);
-      console.log(response)
-      expect(response.id).to.equal(UserId);
+      expect(user.id).to.equal(UserId);
     }).timeout(0);
   });
 
