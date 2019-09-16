@@ -4,7 +4,7 @@ const logins = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
     email: {
       type: DataTypes.STRING

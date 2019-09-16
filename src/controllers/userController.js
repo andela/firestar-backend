@@ -3,19 +3,19 @@ import crypto from 'crypto';
 import Response from '../utils/response';
 import Hash from '../utils/hash';
 import db from '../models';
-import userService from '../services/userservice';
+import userService from '../services/userService';
 import { jwtSignUser } from '../utils/index';
 import { hashPassword } from '../helpers/hashpassword';
-
+const { findUserById, updateUser, findUserInUsersDb } = userService;
 
 const util = new Response();
 
 const { users, logins, resets } = db;
 const { errorResponse, successResponse } = Response;
-
-
+const { compareWithHash } = Hash;
 /**
- @description Class based Controller for Roles
+ * @class UsersController
+ * @description Class based Controller for Roles
 */
 export default class UserController {
   /**
@@ -51,6 +51,61 @@ export default class UserController {
       }
       util.setError(500, error);
       return util.send(res);
+    }
+  }
+
+
+  /** Login User
+   * @description Logins a user
+   * @static
+   * @param {object} req - HTTP Request
+   * @param {object} res - HTTP Response
+   * @returns {string} loginUsers
+   */
+  static async loginAUser(req, res) {
+    try {
+      let { email, password } = req.body;
+      if (req.body.email) {
+        email = email.trim();
+      }
+      if (req.body.password) {
+        password = password.trim();
+      }
+
+      const user = await findUserInUsersDb(email);
+      if (!user) {
+        return errorResponse(res, 404, 'You don\'t have have an account. Please signup');
+      }
+
+      const loggedUser = await logins.findOne({ where: { email } });
+
+      if (loggedUser) {
+        const correctPassword = await compareWithHash(password, loggedUser.password);
+        if (!correctPassword) {
+          return errorResponse(res, 401, 'Email or password incorrect');
+        }
+        const loginData = {
+          lastLogin: new Date(),
+        };
+
+        const token = await jwtSignUser({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          lastLogin: loggedUser.lastLogin
+        });
+
+        await userService.updateLogins(loginData);
+        return res.status(200).json({
+          message: 'Welcome back, your login was successful',
+          token,
+        });
+      }
+      return errorResponse(res, 401, 'Email or password incorrect');
+    } catch (error) {
+      return errorResponse(res, 500, error);
     }
   }
 
@@ -132,7 +187,6 @@ export default class UserController {
         }))
         : null;
 
-
       // Check if user has requested password reset
       if (user && userRequestReset) {
         // Check if reset token is not expired
@@ -150,7 +204,7 @@ export default class UserController {
             {
               token: '',
               password: hashed,
-              lastLogin: new Date()
+              lastLogin: new Date(),
             },
             { where: { email: userRequestReset.email } }
           );
@@ -189,11 +243,102 @@ export default class UserController {
         });
       return res.status(200).json({
         status: 'success',
-        data: updatedUser[1].dataValues
+        data: updatedUser[1].dataValues,
       });
     } catch (error) {
       error.status = 404;
       return next(error);
+    }
+  }
+
+  /**
+   * get user profile
+   * @param {Object} req - server request
+   * @param {Object} res - server response
+   * @returns {Object} - custom response
+   * @description get details of registered user
+   */
+  static async getUserProfile(req, res) {
+    const { id } = req.result.user;
+
+    try {
+      const user = await findUserById(id);
+
+      if (!user) {
+        util.setError(401, 'User not found');
+        return util.send(res);
+      }
+
+      util.setSuccess(200, 'Succesfully found user', user);
+      return util.send(res);
+    } catch (error) {
+      util.setError(500, error.message);
+      return util.send(res);
+    }
+  }
+
+  /**
+   * update user profile
+   * @param {Object} req - server request
+   * @param {Object} res - server response
+   * @returns {Object} - custom response
+   * @description get's details of registered user
+   */
+  static async updateUserProfile(req, res) {
+    const { id } = req.result.user;
+    const {
+      firstName,
+      lastName,
+      username,
+      dateOfBirth,
+      preferredLanguage,
+      preferredCurrency,
+      gender,
+      company,
+      lineManager,
+      residentialLocation,
+      countryCode,
+      department,
+      phoneNumber,
+    } = req.body;
+
+    const user = await findUserById(id);
+
+    if (!user) {
+      util.setError(401, 'User not found');
+      return util.send(res);
+    }
+
+    try {
+      const userDetails = {
+        firstName,
+        lastName,
+        username,
+        dateOfBirth,
+        preferredLanguage,
+        preferredCurrency,
+        gender,
+        company,
+        lineManager,
+        residentialLocation,
+        countryCode,
+        department,
+        phoneNumber,
+      };
+      const updatedUser = await updateUser(id, userDetails);
+
+      delete updatedUser.saveProfile;
+      delete updatedUser.isVerified;
+
+      util.setSuccess(
+        201,
+        'You ve successfully updated your profile',
+        updatedUser,
+      );
+      return util.send(res);
+    } catch (error) {
+      util.setError(500, error.message);
+      return util.send(res);
     }
   }
 }

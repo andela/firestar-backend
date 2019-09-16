@@ -7,245 +7,218 @@ export const token = {
 
 export const requests = {
   noReason: {
-    trips: [
+    trip:
       {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     departmentId: 2,
     tripType: 'oneWay'
   },
   invalidReason: {
-    trips: [
-      {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+    trips:{
+      destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
+    },
     reason: '23231',
     departmentId: 2,
     tripType: 'oneWay'
   },
   noTrips: {
-    trips: [],
+    trips: {},
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay'
   },
   noTripType: {
-    trips: [
-      {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+    trips:{
+      destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
+    },
     reason: 'Business',
     departmentId: 2,
     tripType: '',
   },
   invalidTripType: {
-    trips: [
-      {
-        destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+    trip: {
+      destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
+    },
     reason: 'Business',
     departmentId: 2,
     tripType: 'one',
   },
   noDepartment: {
-    trips: [
+    trip:
       {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: null,
     tripType: 'oneWay'
   },
   invalidDepartment: {
-    trips: [
+    trip:
       {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 'p',
     tripType: 'oneWay'
   },
   noDestination: {
-    trips: [
+    trip:
       {
         destinationLocationId: null, departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   invalidDestination: {
-    trips: [
+    trip: 
       {
         destinationLocationId: 'p', departureLocationId: 1, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   nonExistentDestination: {
-    trips: [
+    trip:
       {
         destinationLocationId: 100, departureLocationId: 1, accommodationId: 100, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   noDeparture: {
-    trips: [
+    trip:
       {
         destinationLocationId: 1, departureLocationId: null, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   invalidDeparture: {
-    trips: [
+    trip:
       {
         destinationLocationId: 1, departureLocationId: 'k', accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   nonExistentDeparture: {
-    trips: [
+    trip:
       {
         destinationLocationId: 1, departureLocationId: 100, accommodationId: 1, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   noAccommodation: {
-    trips: [
-      {
+    trip:{
         destinationLocationId: 1, departureLocationId: 1, accommodationId: null, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   invalidAccommodation: {
-    trips: [
+    trip:
       {
         destinationLocationId: 1, departureLocationId: 1, accommodationId: 'k', departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   noExistentAccommodation: {
-    trips: [
+    trip:
       {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 200, departureDate: '2019/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   noDate: {
-    trips: [
+    trip:
       {
         destinationLocationId: 1, departureLocationId: 1, accommodationId: 1, departureDate: ''
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   invalidDate: {
-    trips: [
+    trip:
       {
         destinationLocationId: 1, departureLocationId: 1, accommodationId: 1, departureDate: 'dd32dce'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   oneWay: {
-    trips: [
+    trip:
       {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   invalidOneWay: {
-    trips: [
+    trip:
       {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'oneWay',
   },
   return: {
-    trips: [
+    initialTrip:
       {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
-      {
-        destinationLocationId: 1, departureLocationId: 2, accommodationId: 1, departureDate: '2020/10/11 18:00'
-      }
-    ],
+    returnTrip: {
+      destinationLocationId: 1, departureLocationId: 2, accommodationId: 1, departureDate: '2020/10/11 18:00'
+    },
     reason: 'Business',
     departmentId: 2,
     tripType: 'return',
   },
   invalidReturn: {
-    trips: [
+    initialTrip:
       {
         destinationLocationId: 1, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
-      {
+      returnTrip: {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 3, departureDate: '2020/10/11 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'return',
   },
   invalidReturn2: {
-    trips: [
+    initialTrip:
       {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 2, departureDate: '2020/10/10 18:00'
       },
-      {
+      returnTrip: {
         destinationLocationId: 3, departureLocationId: 1, accommodationId: 3, departureDate: '2020/10/11 18:00'
-      }
-    ],
+      },
     reason: 'Business',
     departmentId: 2,
     tripType: 'return',
   },
   invalidReturn3: {
-    trips: [
+    initialTrip:
       {
         destinationLocationId: 2, departureLocationId: 1, accommodationId: 1, departureDate: '2020/10/10 18:00'
       },
-    ],
     reason: 'Business',
     departmentId: 2,
     tripType: 'return',

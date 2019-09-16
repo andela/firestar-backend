@@ -1,80 +1,117 @@
 import moment from 'moment';
 import Validator from '../validation';
 import models from '../../models';
+import { checkIfExistsInDb } from '../../utils/searchDb';
 
-export const validateTripObj = async (arr, type, err) => {
+
+const validateDate = (date, errors) => {
+  if (!date) {
+    errors.departureDate = 'No departure date provided';
+  } else {
+    const isValidDate = moment(date, 'YYYY-|/MM-|/DD hh:mm-ss').isValid();
+    if (!isValidDate) {
+      errors.departureDate = 'Invalid daparture date';
+    }
+  }
+};
+
+const validateLocationId = (id, idType, errors) => {
+  if (!id) {
+    errors[idType] = `No ${idType} location provided`;
+  } else if (!Validator.validateInteger(id)) {
+    errors[idType] = `Invalid ${idType} location provided`;
+  }
+};
+
+const checkOnewayTrip = (trip, errors) => {
+  validateDate(trip.departureDate, errors);
+  validateLocationId(trip.departureLocationId, 'Departure', errors);
+  validateLocationId(trip.destinationLocationId, 'Destination', errors);
+  validateLocationId(trip.accommodationId, 'Accommodation', errors);
+  if (trip.departureLocationId === trip.destinationLocationId) {
+    errors.destination = 'You cannot choose your departure location as your destination location';
+  }
+};
+
+export const validateOnewayTrip = (trip, errors) => {
+  if (!trip || typeof trip !== 'object' || Array.isArray(trip)) {
+    errors.trip = 'No Trip Provided';
+  } else {
+    checkOnewayTrip(trip, errors);
+    if (Date.parse(trip.departureDate) - Date.now() < 432000000) {
+      errors.departureDate = 'Invalid Trip Date. Give at least a week\'s notice for trip';
+    }
+  }
+};
+
+const checkReturnTrip = (trip, errors) => {
+  validateDate(trip.departureDate, errors);
+  validateLocationId(trip.departureLocationId, errors);
+  validateLocationId(trip.destinationLocationId, errors);
+  if (trip.accommodationId) {
+    errors.accommodation = 'Return trip should not have accommodation';
+  }
+};
+
+export const validateReturnTrip = (initialTrip, returnTrip, errors) => {
+  if (!returnTrip || typeof returnTrip !== 'object' || Array.isArray(returnTrip)) {
+    errors.returnTrip = 'No Return Trip Provided';
+  } else {
+    checkReturnTrip(returnTrip, errors);
+    if (Date.parse(returnTrip.departureDate) - Date.parse(initialTrip) < 86400000) {
+      errors.departureDate = 'Invalid Trip Date. Give at least a day difference from initial trip';
+    }
+    const initialLocation = initialTrip.departureLocationId;
+    const returningLocation = returnTrip.destinationLocationId;
+    const initialDestination = initialTrip.destinationLocationId;
+    const returningDestination = returnTrip.departureLocationId;
+    if (initialLocation !== returningLocation) {
+      errors.returnTripDeapature = 'Departure location of the initial trip must be the same as the destination of the return trip';
+    } else if (initialDestination !== returningDestination) {
+      errors.returnTripDestination = 'Departure location of the return trip must be the same as the destination of the initial trip';
+    }
+  }
+};
+
+export const validateMuticityTrip = async (trips, errors) => {
   let presentLocation = '';
   let date = '';
-  if (!Array.isArray(arr)) {
-    err.trips = 'Invalid Trips';
+  if (!Array.isArray(trips)) {
+    errors.trips = 'Invalid Trips';
   }
-  if (!arr.length) {
-    err.trips = 'No trip selected';
+  if (!trips.length) {
+    errors.trips = 'No trips selected';
   }
-  const trips = arr.map(async (obj, index) => {
-    const isValidDate = moment(obj.departureDate, 'YYYY-|/MM-|/DD hh:mm-ss').isValid();
-    if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
-      err.trip = `Invalid Trip ${index + 1}`;
-    }
-    if (!obj.destinationLocationId) {
-      err[`trip ${index + 1} destination`] = `No destination provided for the trip ${index + 1}`;
-    } else if (!Validator.validateInteger(obj.destinationLocationId) && obj.destinationLocationId) {
-      err[`trip ${index + 1} destination`] = `Invalid destination provided for the trip number ${index + 1}`;
-    }
-    if (!obj.departureLocationId) {
-      err[`trip ${index + 1} departure`] = `No depature location provided for the trip number ${index + 1}`;
-    } else if (!Validator.validateInteger(obj.departureLocationId)) {
-      err[`trip ${index + 1} departure`] = `Invalid departure location id provided for the trip number ${index + 1}`;
-    }
-    if (!obj.accommodationId && type !== 'return' && index < 1) {
-      err[`trip ${index + 1} accommodation`] = `No accommodation provided for the trip number ${index + 1}`;
-    } else if (!Validator.validateInteger(obj.accommodationId) && obj.accommodationId) {
-      err[`trip ${index + 1} accommodation`] = `Invalid accommodation id provided for the trip number ${index + 1}`;
-    } else if (obj.accommodationId && type === 'return ' && index > 1) {
-      err.returnTrip = 'Return trip should have no accommodation';
-    }
-    if (obj.departureLocationId === obj.destinationLocationId) {
-      err[`trip ${index + 1}`] = 'A trip\'s destination cannot be the same as the departure location';
-    }
-    if (!obj.departureDate) {
-      err[`trip ${index + 1} departureDate`] = `Trip date not provided for trip ${index + 1}`;
+  if (Object.keys(errors).length) {
+    return errors;
+  }
+  trips.map(async (trip, index) => {
+    if (!trip || typeof trip !== 'object' || Array.isArray(trip)) {
+      errors[`Trip ${index + 1}`] = `No Trip Provided for trip ${index + 1}`;
     } else {
-      obj.departureDate = obj.departureDate.trim();
-      if (!isValidDate) {
-        err[`trip ${index + 1} departureDate`] = `Invalid Trip date/time format for trip ${index + 1}`;
-      } else if (Date.parse(obj.departureDate) - Date.now() < 432000000 && index === 0) {
-        err[`trip ${index + 1} departureDate`] = 'Invalid Trip Date. Give at least a week\'s notice for initial trip';
-      } else if (Date.parse(obj.departureDate) - Date.parse(date) < 86400000) {
-        err[`trip ${index + 1} departureDate`] = 'Invalid Trip Date. Give at least a day difference from previous trip';
+      checkOnewayTrip(trip, errors);
+      if (index > 0) {
+        if (Date.parse(trip.departureDate) - Date.parse(date) < 86400000) {
+          errors[`Trip ${index + 1} departure date`] = `Invalid Trip Date for trip ${index + 1}. Give at least a day difference from initial trip`;
+        }
+        if (trip.departureLocationId !== presentLocation) {
+          errors[`trip ${index + 1} destination`] = `Your departure location for trip ${index + 1} should be the same with destination Location for trip ${index}`;
+        }
       } else {
-        date = obj.departureDate;
+        if (Date.parse(trip.departureDate) - Date.now() < 432000000) {
+          errors.departureDate = 'Invalid Trip Date. Give at least a week\'s notice for trip';
+        }
+        date = trip.departureDate;
+        presentLocation = trip.destinationLocationId;
       }
     }
-    if ((type === 'multiCity' || type === 'return') && presentLocation && obj.departureLocationId !== presentLocation) {
-      err[`trip ${index + 1} departure`] = `Invalid departure Location in trip ${index + 1}`;
-    } else {
-      presentLocation = obj.destinationLocationId;
-    }
-    if (type !== 'return' && obj.accommodationId && index !== 1) {
-      const accommodation = await models.accommodations.findOne(
-        { where: { id: obj.accommodationId } }
-      );
-      if (accommodation && obj.destinationLocationId !== accommodation.destinationId) {
-        err[`trip ${index + 1} accomodation`] = 'Selected accommodation does not belong to the trip destination';
-      }
-    }
-
-    return obj;
   });
-  return trips;
 };
 
 
 export const validateRequestObj = (body, errors) => {
   const stringRegex = /^[a-z\s]+$/i;
   const typeOfTrip = ['oneWay', 'return', 'multiCity'];
-  body.tripType = !body.tripType ? null : body.tripType.trim();
-  body.reason = !body.reason ? null : body.reason.trim();
   const {
     reason, departmentId, tripType
   } = body;
@@ -90,35 +127,24 @@ export const validateRequestObj = (body, errors) => {
   }
   if (!departmentId) {
     errors.department = 'No department provided';
-  }
-  if (!Validator.validateInteger(departmentId) && !errors.department) {
+  } else if (!Validator.validateInteger(departmentId)) {
     errors.department = 'Invalid department provided';
   }
-  return body;
 };
 
-export const validateTrip = (body, error) => {
-  const { tripType, trips } = body;
-  if (tripType === 'oneWay' && trips.length > 1) {
-    throw new Error('One-way trips can only have one trip');
-  }
-  if (tripType === 'return' && trips.length < 2) {
-    error.returnTrip = 'Return trip not provided';
-  } else if (tripType === 'return' && trips.length > 2) {
-    error.returnTrip = 'Return trip can only be a two way trip';
-  } else if (tripType === 'return' && trips.length === 2) {
-    const currentLocation = trips[0].departureLocationId;
-    const returningLocation = trips[1].destinationLocationId;
-    const initialDestination = trips[0].destinationLocationId;
-    const returningDestination = trips[1].departureLocationId;
-    if (currentLocation !== returningLocation) {
-      error.returnTripDeapature = 'Departure location of the initial trip must be the same as the destination of the return trip';
+export const findTripData = async (trip, type, errors, message) => {
+  try {
+    await checkIfExistsInDb(models.destinations, trip.destinationLocationId, 'Destination does not exist');
+    await checkIfExistsInDb(models.destinations, trip.departureLocationId, 'Departure does not exist');
+    if (type === 'return') {
+      return null;
     }
-    if (initialDestination !== returningDestination) {
-      error.returnTripDestination = 'Departure location of the return trip must be the same as the destination of the initial trip';
+    const accommodation = await checkIfExistsInDb(models.accommodations, trip.accommodationId, 'Accommodation does not exist');
+    if (trip.destinationLocationId !== accommodation.destinationId) {
+      errors.status = 422;
+      throw new Error(message);
     }
-  }
-  if (tripType === 'multiCity' && trips.length < 2) {
-    throw new Error('Multi-city must have more than a trip ');
+  } catch (error) {
+    throw Error(error.message);
   }
 };

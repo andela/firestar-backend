@@ -43,7 +43,7 @@ module.exports = {
     preferredCurrency: {
       type: Sequelize.STRING,
     },
-    residetialLocation: {
+    residentialLocation: {
       type: Sequelize.STRING
     },
     department: {
@@ -64,6 +64,12 @@ module.exports = {
         model: 'roles',
         key: 'id',
       }
+    },
+    lineManager: {
+      type: Sequelize.STRING
+    },
+    departmentId: {
+      type: Sequelize.INTEGER
     },
     createdAt: {
       allowNull: false,

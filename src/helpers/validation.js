@@ -1,6 +1,4 @@
-/**
- * @description Validation class
- */
+/* eslint-disable require-jsdoc */
 export default class Validation {
   /**
    * @description Checks if an object is empty
@@ -22,12 +20,13 @@ export default class Validation {
  * @returns {boolean} returns true or false
  */
   static isValidEmail(email) {
-    const re = /^\S+@\S+[\.][0-9a-z]+$/;
+    const re = /^\S+@\S+[.][0-9a-z]+$/;
     return re.test(email);
   }
 
   static isValidPassword(password) {
-    return password.length >= 6;
+    const re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!.@$%^&*-]).{8,}$/;
+    return re.test(password);
   }
 
   static validateEmail(email) {
@@ -58,7 +57,6 @@ export default class Validation {
         errors.password = 'Passwords must match';
       }
     }
-
     return {
       errors,
       isValid: this.isEmpty(errors)

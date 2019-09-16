@@ -1,14 +1,29 @@
 import models from '../models';
 import { checkIfExistsInDb } from '../utils/searchDb';
-import { validateTripObj, validateRequestObj, validateTrip } from '../helpers/validation/tripValidation';
+import {
+  validateRequestObj, validateOnewayTrip, validateReturnTrip, validateMuticityTrip, findTripData
+} from '../helpers/validation/tripValidation';
 
-export const validateRequestInput = async (req, res, next) => {
+export const validateTripRequest = async (req, res, next) => {
+  req.body.tripType = !req.body.tripType ? null : req.body.tripType.trim();
+  req.body.reason = !req.body.reason ? null : req.body.reason.trim();
   try {
     const errors = {};
-    const { trips, tripType } = req.body;
-    req.body = validateRequestObj(req.body, errors);
-    validateTrip(req.body, errors);
-    req.body.trips = await Promise.all(await validateTripObj(trips, tripType, errors));
+    const { tripType, reason, departmentId } = req.body;
+    const requestObj = {
+      reason,
+      departmentId,
+      tripType
+    };
+    validateRequestObj(requestObj, errors);
+    if (tripType === 'oneWay') {
+      validateOnewayTrip(req.body.trip, errors);
+    } else if (tripType === 'return') {
+      validateOnewayTrip(req.body.initialTrip, errors);
+      validateReturnTrip(req.body.initialTrip, req.body.returnTrip, errors);
+    } else if (tripType === 'multiCity') {
+      validateMuticityTrip(req.body.trips, errors);
+    }
     if (Object.keys(errors).length) {
       return res.status(400).json({
         success: false,
@@ -17,7 +32,7 @@ export const validateRequestInput = async (req, res, next) => {
     }
     return next();
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       message: error.message
     });
@@ -25,24 +40,36 @@ export const validateRequestInput = async (req, res, next) => {
 };
 
 export const validateTripData = async (req, res, next) => {
+  const errors = {};
   try {
-    const validatedData = req.body.trips.map(async (trip, index) => {
-      if (req.body.tripType !== 'return' && index !== 1) {
-        await checkIfExistsInDb(models.accommodations, parseInt(trip.accommodationId, 10), 'The accommodation in trip does not exist');
-      }
-      await checkIfExistsInDb(models.destinations, parseInt(trip.destinationLocationId, 10), 'Trip  destination does not exist');
-      await checkIfExistsInDb(models.destinations, parseInt(trip.departureLocationId, 10), 'Trip  departure location does not exist');
-      return trip;
-    });
-    await Promise.all(validatedData);
-
+    const { tripType } = req.body;
+    if (tripType === 'oneWay') {
+      await findTripData(req.body.trip, tripType, errors, 'The selected accommodation is not available at the choosen destination');
+    } else if (tripType === 'return') {
+      const { initialTrip, returnTrip } = req.body;
+      await findTripData(initialTrip, tripType, errors, 'The selected accommodation is not available at the choosen initial trip destination');
+      await findTripData(returnTrip, tripType, errors, 'The selected accommodation is not available at the choosenreturn trip destination');
+    } else if (tripType === 'multiCity') {
+      const { trips } = req.body;
+      const tripsPromise = trips.map(async (trip, index) => {
+        await findTripData(trip, tripType, errors, `The selected accommodation for trip ${index + 1} is not available at the choosen destination`);
+        return trip;
+      });
+      await Promise.all(tripsPromise);
+    }
+    if (Object.keys(errors).length) {
+      return res.status(404).json({
+        success: false,
+        errors
+      });
+    }
     const foundDepartment = await checkIfExistsInDb(models.departments, req.body.departmentId, 'Department does not exist');
     if (foundDepartment) {
       req.managerId = foundDepartment.managerId;
     }
     next();
   } catch (error) {
-    res.status(404).json({
+    res.status(errors.status || 404).json({
       success: false,
       message: error.message
     });

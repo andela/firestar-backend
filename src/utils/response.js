@@ -1,6 +1,5 @@
-/**
- * @description Response class
- */
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable require-jsdoc */
 export default class Response {
   constructor() {
     this.statusCode = null;
@@ -24,17 +23,17 @@ export default class Response {
 
   static errorResponse(res, statusCode, err) {
     return res.status(statusCode).json({
-		  success: false,
-		  error: err
+      success: false,
+      error: err
     });
-	  }
+  }
 
-	  static successResponse(res, statusCode, msg) {
+  static successResponse(res, statusCode, msg) {
     return res.status(statusCode).json({
-		  success: true,
-		  message: msg
+      success: true,
+      message: msg
     });
-	  }
+  }
 
   send(res) {
     const result = {

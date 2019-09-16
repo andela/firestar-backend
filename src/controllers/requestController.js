@@ -15,7 +15,7 @@ export default class Requests {
    */
   static async createTrip(req, res, next) {
     const {
-      tripType, departmentId, reason, trips
+      tripType, departmentId, reason
     } = req.body;
     const requesterId = req.user.id;
     const { managerId } = req;
@@ -27,13 +27,25 @@ export default class Requests {
         managerId,
         reason
       });
-
-      const createdTrips = trips.map(async (trip) => {
+      if (tripType === 'oneWay') {
+        const { trip } = req.body;
         trip.requestId = newRequest.id;
-        const createdTrip = await models.trips.create(trip);
-        return createdTrip.dataValues;
-      });
-      await Promise.all(createdTrips);
+        await models.trips.create(trip);
+      } else if (tripType === 'return') {
+        const { initialTrip, returnTrip } = req.body;
+        initialTrip.requestId = newRequest.id;
+        returnTrip.requestId = newRequest.id;
+        await models.trips.create(initialTrip);
+        await models.trips.create(returnTrip);
+      } else {
+        const { trips } = req.body;
+        const createdTrips = trips.map(async (trip) => {
+          trip.requestId = newRequest.id;
+          const createdTrip = await models.trips.create(trip);
+          return createdTrip.dataValues;
+        });
+        await Promise.all(createdTrips);
+      }
       const request = await models.requests.findOne(
         {
           include: [
