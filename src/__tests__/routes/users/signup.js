@@ -361,62 +361,9 @@ describe('SIGNUP ROUTE', () => {
     it('should say proctected route when token is not present', async () => {
       const response = await request.get('/api/v1/users/myaccount')
         .set('Authorization', tokenEmail);
-      expect(response.status).to.equal(401);
+      expect(response.status).to.equal(400);
       expect(response.body).to.be.a('object');
     }).timeout(0);
-  });
-
-  describe('STUBS FOR AUTH MIDDLEWARE', () => {
-    it('reproduce server response when token is not valid /JWTVERIFY', async () => {
-      const req = {
-        token: tokenEmail,
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      sinon.stub(res, 'status').returnsThis();
-      sinon.stub(req, 'token').throws();
-
-      await jwtVerify(req, res);
-
-      expect(res.status).to.have.been.calledWith(401);
-    });
-
-    it('Go to the next middleware when no error in JWTVERIFY', async () => {
-      const req = {
-        token: `bearer ${token}`,
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      const next = () => 2;
-
-      sinon.stub(res, 'status').returnsThis();
-      sinon.stub(req, 'token').throws();
-
-      await jwtVerify(req, res, next);
-    });
-
-
-    it('reproduce server response when token is not available in Header as Authorization', async () => {
-      const req = {
-        header() {}
-      };
-      const res = {
-        status() {},
-        json() {},
-      };
-
-      sinon.stub(res, 'status').returnsThis();
-
-      await authorization(req, res);
-
-      expect(res.status).to.have.been.calledWith(401);
-    });
   });
 
   describe('STUBS FOR USERCONTROLLER', () => {
@@ -431,8 +378,8 @@ describe('SIGNUP ROUTE', () => {
         tokenEmail
       };
       const res = {
-        status() {},
-        json() {},
+        status() { },
+        json() { },
       };
 
       sinon.stub(res, 'status').returnsThis();
@@ -453,8 +400,8 @@ describe('SIGNUP ROUTE', () => {
         tokenEmail
       };
       const res = {
-        status() {},
-        json() {},
+        status() { },
+        json() { },
       };
 
       sinon.stub(res, 'status').returnsThis();

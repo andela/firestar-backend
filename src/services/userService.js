@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-catch */
 import db from '../models/index';
+const { users } = db
 /**
  * @param { class } provide response to user signup activity.
  */
@@ -122,6 +123,53 @@ class userService {
       });
     } catch (error) {
       return error.message;
+    }
+  }
+
+  /**
+* Helper function to find a user by id
+* @param {Integer} id - user's id
+* @returns {Promise} - sequelize response
+*/
+
+  static async findUserById(id) {
+    try {
+      const user = await users.findOne({
+        where: { id },
+        attributes: {
+          exclude: ['isVerified', 'saveProfile']
+        },
+      });
+      return user;
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+ * Helper function to find and update user
+ * @returns {Promise} - sequelize response
+ * @param {Integer} id - user's id
+ * @param {Object} user
+*/
+  static async updateUser(id, user) {
+    try {
+      const userToUpdate = await users.findOne({
+        where: { id }
+      });
+      if (userToUpdate) {
+        const newProfile = await db.users.update(user, {
+          where: { id },
+          attributes: {
+            exclude: ['firstName']
+          },
+          returning: true,
+        });
+        return newProfile[1][0].dataValues;
+      }
+      return null;
+    } catch (error) {
+      throw error;
     }
   }
 }
