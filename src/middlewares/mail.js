@@ -17,7 +17,6 @@ export const SendVerificationToken = async (req, res, next) => {
    * @var {id} id is the user unique id from Table column
    */
   const id = req.user ? req.user.email : 'nodedeweb@yahoo.com';
-
   try {
     const token = await emailVerifyToken(id);
     if (token) {

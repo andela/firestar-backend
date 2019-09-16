@@ -5,7 +5,7 @@ import models from '../../../models';
 import {
   unauthorizedToken, authorizedToken, validInfoRole, unauthorisedRoleUser, invalidInfoRole1,
   invalidInfoRole2, invalidInfoRole3, users, roles
-} from '../../../__mocks__/userRoles';
+} from '../../../mocks/userRoles';
 
 
 chai.use(chaiHttp);

@@ -17,8 +17,7 @@ export default class Index {
  * @returns {object} Welcome user to dashboard page
  */
   static Welcome(req, res) {
-    const { id } = req.result;
-    util.setSuccess(200, 'Welcome, you are accessing a proctected route', id);
+    util.setSuccess(200, 'Welcome, you are accessing a proctected route', req.user);
     return util.send(res);
   }
 }

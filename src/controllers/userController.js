@@ -33,12 +33,12 @@ export default class UserController {
       const hashpassword = await hashPassword(user.password);
       user.password = hashpassword;
       const {
-        id, email, firstName, lastName
+        id, email, firstName, lastName, roleId, isVerified, username,
       } = await userService.addUser(user);
-      const newLoggedDetails = { email, password: user.password, lastLogin };
+      const newLoggedDetails = { email, password: user.password, lastLogin, isVerified, username };
       await userService.addLogin(email, newLoggedDetails);
       const token = await jwtSignUser({
-        id, email, firstName, lastName
+        id, email, firstName, lastName, roleId, isVerified, username,
       });
       util.setSuccess(201, 'Successfully signed up', { token });
       return util.send(res);
@@ -96,7 +96,7 @@ export default class UserController {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
-          lastLogin: loggedUser.lastLogin
+          lastLogin: loggedUser.lastLogin,
         });
 
         await userService.updateLogins(loginData);
@@ -148,7 +148,6 @@ export default class UserController {
       await resets.destroy({
         where: { email: newReset.dataValues.email }
       });
-      // console.log('newReset', newReset);
       await newReset.save();
       // Send reset link to user email
       if (!resetToken) {
