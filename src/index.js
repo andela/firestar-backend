@@ -6,6 +6,8 @@ import swaggerUi from 'swagger-ui-express';
 import routes from './routes';
 import swaggerDocument from '../swagger.json';
 
+// Configure dotEnv
+dotEnv.config();
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -16,8 +18,6 @@ const app = express();
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.enable('trust proxy');
 
-// Configure dotEnv
-dotEnv.config();
 // Normal express config defaults
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
@@ -35,6 +35,7 @@ app.use(routes);
 app.use('*', (req, res) => {
   res.status(404).json({ status: 404, message: 'That routes is not a known route' });
 });
+
 
 // / error handlers
 
@@ -55,7 +56,7 @@ if (!isProduction) {
 // eslint-disable-next-line no-unused-vars
 
 // finally, let's start our server...
-const server = app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT || 3000, () => {
   console.log(`Listening on port ${server.address().port}`);
 });
 

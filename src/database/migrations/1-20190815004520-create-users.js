@@ -64,6 +64,12 @@ module.exports = {
         key: 'id',
       }
     },
+    residentialLocation: {
+      type: Sequelize.STRING
+    },
+    departmentId: {
+      type: Sequelize.INTEGER
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE

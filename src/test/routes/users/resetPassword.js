@@ -129,8 +129,8 @@ describe('Forgot and Reset Password Test', () => {
           .request(app)
           .post(`${resetPasswordURL}/${validId}?token=${resetToken}`)
           .send({
-            password: 'password10',
-            confirmPassword: 'password10'
+            password: 'Pas@sword10',
+            confirmPassword: 'Pas@sword10'
           })
           .end((err, res) => {
             expect(res).to.have.status(400);
@@ -145,8 +145,8 @@ describe('Forgot and Reset Password Test', () => {
           .request(app)
           .post(`${resetPasswordURL}/10?token=${resetToken}`)
           .send({
-            password: 'password10',
-            confirmPassword: 'password10'
+            password: 'Pas@sword10',
+            confirmPassword: 'Pas@sword10'
           })
           .end((err, res) => {
             expect(res).to.have.status(400);

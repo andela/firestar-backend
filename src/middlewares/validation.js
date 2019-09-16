@@ -1,8 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-import { signUpValidationSchema, validateData } from '../validation/signupValidation';
+import { signUpValidationSchema, validateData, signInValidationSchema, validateSignInData } from '../validation/signupValidation';
 import Util from '../utils/response';
 import { isEmptyBody, isMissingBodyProperty, isMissingBodyPropertyValue } from '../utils/index';
-
 
 const util = new Util();
 
@@ -88,4 +87,37 @@ export const ValidateEmptySignUpBodyProperty = async (req, res, next) => {
     return util.send(res);
   }
   return next();
+};
+
+export const validationForSignIn = (req, res, next) => {
+  let {
+    email, password
+  } = req.body;
+
+  if (req.body.email) {
+    email = email.trim();
+  }
+  if (req.body.password) {
+    password = password.trim();
+  }
+
+  const signInBody = {
+    email: email.trim(),
+    password: password.trim()
+  };
+
+  try {
+    const { error, value } = validateSignInData(signInBody, signInValidationSchema);
+    const errMessage = error ? error.details[0].message : null;
+    if (error) {
+      util.setError(400, errMessage);
+      return util.send(res);
+    }
+
+    req.user = value;
+    return next();
+  } catch (error) {
+    util.setError(400, error);
+    return util.send(res);
+  }
 };

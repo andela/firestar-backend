@@ -14,7 +14,7 @@ export const emailVerifyToken = (id) => new Promise((resolve) => {
 });
 
 /**
- * @param {user} user of newly registered user from the user Table.
+ * @param {user } user public details of newly registered user from the user table
  * @return {string} generated token that is a string data type.
  */
 export const jwtSignUser = (user) => new Promise((resolve) => {

@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 export default class Validation {
   static isEmpty(value) {
     return (
@@ -14,7 +15,8 @@ export default class Validation {
   }
 
   static isValidPassword(password) {
-    return password.length >= 6;
+    const re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!.@$%^&*-]).{8,}$/;
+    return re.test(password);
   }
 
   static validateEmail(email) {
@@ -45,7 +47,6 @@ export default class Validation {
         errors.password = 'Passwords must match';
       }
     }
-
     return {
       errors,
       isValid: this.isEmpty(errors)
