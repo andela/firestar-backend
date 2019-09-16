@@ -1,10 +1,7 @@
 import { Router } from 'express';
 import { SendVerificationToken, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
-import { authorization, jwtVerify } from '../../middlewares/auth/auth';
-import {
-  validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
-  EmptySignUpBodyPropertyValue, validationForSignIn
-} from '../../middlewares/validation/validation';
+import { authorization } from '../../middlewares/auth/auth';
+import { validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty, EmptySignUpBodyPropertyValue, validateProfileData, validationForSignIn } from '../../middlewares/validation/validation';
 import emailController from '../../controllers/emailController';
 import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/users';
 import isLoggedIn from '../../middlewares/login';
@@ -14,16 +11,16 @@ import indexController from '../../controllers/indexController';
 import validate from '../../middlewares/validate';
 
 const { forgotPasswordCheck, resetPasswordCheck } = validate;
-const { forgotPassword, resetPassword, loginAUser } = userController;
+
+const { forgotPassword, resetPassword, loginAUser, getUserProfile, updateUserProfile } = userController;
 
 const router = Router();
 
-router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationToken,
-  emailController.signUp);
+router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationToken, emailController.signUp);
 
-router.post('/users/auth/register', ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty,
-
-  EmptySignUpBodyPropertyValue, validationForSignUp, SendVerificationToken, userController.addUser);
+router.post('/users/auth/register', ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty, EmptySignUpBodyPropertyValue,
+  validationForSignUp, SendVerificationToken, userController.addUser
+);
 
 router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
 
@@ -32,13 +29,12 @@ router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
 // @access Public
 router.post('/users/auth/login', validationForSignIn, loginAUser);
 
-
 /**
  * Example of how to make use of a protected route
  * Simply call the authorization and jwtVerify middleware in the route you want
  * to protect
  */
-router.get('/users/myaccount', authorization, jwtVerify, indexController.Welcome);
+router.get('/users/myaccount', authorization, indexController.Welcome);
 
 router.patch('/users/roles', [isLoggedIn, validateSetRole, permit([roleIds.superAdmin]), checkRoleConflict], userController.changeRole);
 
@@ -52,5 +48,7 @@ router.post('/users/passwords/forgot', forgotPasswordCheck, forgotPassword);
 // @access Public
 router.post('/users/passwords/reset/:userId', resetPasswordCheck, resetPassword);
 
+router.get('/users/profile', authorization, getUserProfile);
+router.patch('/users/profile', validateProfileData, authorization, updateUserProfile);
 
 export default router;

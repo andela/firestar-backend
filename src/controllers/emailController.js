@@ -29,7 +29,7 @@ export default class emailVerificationController {
       data: {
         token: emailToken,
         message:
-        'Message successfully sent, please check your email'
+          'Message successfully sent, please check your email'
       }
     });
   }
