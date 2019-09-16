@@ -274,7 +274,7 @@ describe('REQUESTS', () => {
         .set('authorization', token.requester)
         .send(requests.invalidOneWay);
 
-      assert.equal(res.status, 400);
+      assert.equal(res.status, 422);
       assert.equal(res.body.success, false);
     });
     it('Returns 400 for a one way trip having more than on trip', async () => {

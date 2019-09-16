@@ -81,7 +81,10 @@ export const validateMuticityTrip = async (trips, errors) => {
   }
   if (!trips.length) {
     errors.trips = 'No trips selected';
+  } else if (trips.length < 2) {
+    errors.trip = 'Multi city trip should have more than one trip';
   }
+
   if (Object.keys(errors).length) {
     return errors;
   }
