@@ -6,6 +6,7 @@ import db from '../models';
 import userService from '../services/userService';
 import { jwtSignUser } from '../utils/index';
 import { hashPassword } from '../helpers/hashpassword';
+
 const { findUserById, updateUser, findUserInUsersDb } = userService;
 
 const util = new Response();

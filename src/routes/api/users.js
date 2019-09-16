@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { SendVerificationToken, handleInvalidEmail, handleEmptyEmailBody } from '../../middlewares/mail';
 import { authorization } from '../../middlewares/auth/auth';
-import { validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty, EmptySignUpBodyPropertyValue, validateProfileData, validationForSignIn } from '../../middlewares/validation/validation';
+import {
+  validationForSignUp, ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty, EmptySignUpBodyPropertyValue, validateProfileData, validationForSignIn
+} from '../../middlewares/validation/validation';
 import emailController from '../../controllers/emailController';
 import { validateSetRole, permit, checkRoleConflict } from '../../middlewares/users';
 import isLoggedIn from '../../middlewares/login';
@@ -12,15 +14,16 @@ import validate from '../../middlewares/validate';
 
 const { forgotPasswordCheck, resetPasswordCheck } = validate;
 
-const { forgotPassword, resetPassword, loginAUser, getUserProfile, updateUserProfile } = userController;
+const {
+  forgotPassword, resetPassword, loginAUser, getUserProfile, updateUserProfile
+} = userController;
 
 const router = Router();
 
 router.post('/users/email/test', handleEmptyEmailBody, handleInvalidEmail, SendVerificationToken, emailController.signUp);
 
 router.post('/users/auth/register', ValidationForEmptySignUpBody, ValidateEmptySignUpBodyProperty, EmptySignUpBodyPropertyValue,
-  validationForSignUp, SendVerificationToken, userController.addUser
-);
+  validationForSignUp, SendVerificationToken, userController.addUser);
 
 router.get('/users/email/verify', emailController.confirmEmailVerificaionToken);
 
