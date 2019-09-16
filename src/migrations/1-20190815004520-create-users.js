@@ -42,7 +42,7 @@ module.exports = {
     preferredCurrency: {
       type: Sequelize.STRING,
     },
-    residentialLocation: {
+    residetialLocation: {
       type: Sequelize.STRING
     },
     department: {
@@ -64,7 +64,7 @@ module.exports = {
         key: 'id',
       }
     },
-    lineManager: {
+    residentialLocation: {
       type: Sequelize.STRING
     },
     departmentId: {
