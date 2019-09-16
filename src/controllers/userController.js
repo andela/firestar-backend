@@ -96,7 +96,7 @@ export default class UserController {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
-          lastLogin: loggedUser.lastLogin
+          lastLogin: loggedUser.lastLogin,
         });
 
         await userService.updateLogins(loginData);
